@@ -4,6 +4,7 @@ import { Menu } from 'antd';
 import {  MdOutlineSupervisedUserCircle,MdOutlineDashboard, MdOutlineInventory2, MdOutlineShoppingCart, MdLogout } from 'react-icons/md';
 import { PiInvoice } from 'react-icons/pi';
 import { FaUserCircle } from 'react-icons/fa';
+import './Sidebar.css'
 const items = [
   {
     key: 'shopname',
@@ -89,8 +90,9 @@ const AdminSidebar = () => {
   };
   return (
     <Menu
+      className='custom-sidebar'
       onClick={onClick}
-      style={{ width: 256 }}
+      style={{ width: 256 , height: '100vh',position: 'fixed'}}
       defaultSelectedKeys={['1']}
       defaultOpenKeys={['sub1']}
       mode="inline"
