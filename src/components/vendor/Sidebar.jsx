@@ -1,14 +1,92 @@
-import { Link } from "react-router-dom";
+import React from 'react';
+import { WindowsOutlined,PullRequestOutlined, ShoppingCartOutlined, DropboxOutlined, UserSwitchOutlined, PlusOutlined } from '@ant-design/icons';
+import { Menu } from 'antd';
+import {  MdOutlineSupervisedUserCircle,MdOutlineDashboard, MdOutlineInventory2, MdOutlineShoppingCart, MdLogout } from 'react-icons/md';
+import { PiInvoice } from 'react-icons/pi';
+import { FaUserCircle } from 'react-icons/fa';
+import { LuScrollText } from 'react-icons/lu';
+const items = [
+  {
+    key: 'shopname',
+    label: 'EMart Grocerry Shop',
+    icon: <MdOutlineShoppingCart />,
+    
+  },
+  {
+    type: 'divider',
+  },
+  {
+    key: 'dashboard',
+    label: 'Dashboard',
+    icon: <MdOutlineDashboard />,
+      },
+  {
+      type: 'divider',
+  },
+  {
+    key: 'request',
+    label: 'Requests',
+    icon: <PullRequestOutlined />,
+  },
+  {
+      type: 'divider',
+  },
+  {
+    key: 'outlet',
+    label: 'Manage Outlet',
+    icon: <MdOutlineInventory2 />,
+  },
+  {
+      type: 'divider',
+  },
 
-export default function VendorSidebar() {
+  {
+    key: 'billing',
+    label: 'Billing',
+    icon: <LuScrollText />
+   
+  },
+  {
+      type: 'divider',
+  },
+{
+    key: 'invoice',
+    label: 'Invoice',
+    icon: <PiInvoice />
+,
+   
+  },
+  {
+    type: 'divider',
+  },
+  {
+    key: 'profile',
+    label: 'My Profile',
+    icon: <FaUserCircle />
+    
+  },
+  {
+    type: 'divider',
+  },
+  {
+    key: 'logout',
+    label: 'Logout',
+    icon: <MdLogout/>,
+  }
+];
+const AdminSidebar = () => {
+  const onClick = e => {
+    console.log('click ', e);
+  };
   return (
-    <aside className="w-[30%] bg-amber-200 h-screen">
-      <h3>Vendor Panel</h3>
-      <ul>
-        <li><Link to="/vendor/dashboard">Dashboard</Link></li>
-        <li><Link to="/vendor/orders">Orders</Link></li>
-      </ul>
-    </aside>
+    <Menu
+      onClick={onClick}
+      style={{ width: 256 }}
+      defaultSelectedKeys={['1']}
+      defaultOpenKeys={['sub1']}
+      mode="inline"
+      items={items}
+    />
   );
-}
- 
+};
+export default AdminSidebar;
