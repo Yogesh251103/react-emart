@@ -1,9 +1,9 @@
-import Sidebar from "../../components/admin/SideBar"
+import React from 'react'
 
-const Home = () => {
+function Home() {
   return (
     <div>
-
+      <h1>ADMIN HOME PAGE</h1>
     </div>
   )
 }
