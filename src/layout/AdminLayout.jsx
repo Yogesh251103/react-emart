@@ -8,6 +8,6 @@ export default function AdminLayout() {
       <main className="w-[70%]">
         <Outlet />
       </main>
-    </div>
+    </div> 
   );
 }
