@@ -1,73 +1,74 @@
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import React from 'react';
+import { WindowsOutlined,PullRequestOutlined, ShoppingCartOutlined, DropboxOutlined, UserSwitchOutlined, PlusOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
+import { MdOutlineSupervisedUserCircle,MdOutlineDashboard, MdOutlineInventory2, MdOutlineShoppingCart } from 'react-icons/md';
+import { PiInvoice } from 'react-icons/pi';
 const items = [
   {
-    key: 'sub1',
-    label: 'Navigation One',
-    icon: <MailOutlined />,
-    children: [
-      {
-        key: 'g1',
-        label: 'Item 1',
-        type: 'group',
-        children: [
-          { key: '1', label: 'Option 1' },
-          { key: '2', label: 'Option 2' },
-        ],
-      },
-      {
-        key: 'g2',
-        label: 'Item 2',
-        type: 'group',
-        children: [
-          { key: '3', label: 'Option 3' },
-          { key: '4', label: 'Option 4' },
-        ],
-      },
-    ],
-  },
-  {
-    key: 'sub2',
-    label: 'Navigation Two',
-    icon: <AppstoreOutlined />,
-    children: [
-      { key: '5', label: 'Option 5' },
-      { key: '6', label: 'Option 6' },
-      {
-        key: 'sub3',
-        label: 'Submenu',
-        children: [
-          { key: '7', label: 'Option 7' },
-          { key: '8', label: 'Option 8' },
-        ],
-      },
-    ],
+    key: 'shopname',
+    label: 'EMart Grocerry Shop',
+    icon: <MdOutlineShoppingCart />,
+    
   },
   {
     type: 'divider',
   },
   {
-    key: 'sub4',
-    label: 'Navigation Three',
-    icon: <SettingOutlined />,
+    key: 'dashboard',
+    label: 'Dashboard',
+    icon: <MdOutlineDashboard />,
+      },
+  {
+      type: 'divider',
+  },
+  {
+    key: 'request',
+    label: 'Requests',
+    icon: <PullRequestOutlined />,
+  },
+  {
+      type: 'divider',
+  },
+  {
+    key: 'inventory',
+    label: 'Inventory',
+    icon: <MdOutlineInventory2 />,
+  },
+  {
+      type: 'divider',
+  },
+
+  {
+    key: 'user',
+    label: 'User Management',
+    icon: <MdOutlineSupervisedUserCircle />,
     children: [
-      { key: '9', label: 'Option 9' },
-      { key: '10', label: 'Option 10' },
-      { key: '11', label: 'Option 11' },
-      { key: '12', label: 'Option 12' },
+      { key: 'warehouse', label: 'Warehouse', icon: <PlusOutlined /> },
+      { key: 'outlet', label: 'Outlet', icon: <PlusOutlined /> },
+      { key: 'suplier', label: 'Supplier', icon: <PlusOutlined /> },
+      
     ],
   },
   {
-    key: 'grp',
-    label: 'Group',
-    type: 'group',
+      type: 'divider',
+  },
+{
+    key: 'invoice',
+    label: 'Invoice',
+    icon: <PiInvoice />
+,
     children: [
-      { key: '13', label: 'Option 13' },
-      { key: '14', label: 'Option 14' },
+
+      { key: 'outlet', label: 'Outlet', icon: <PlusOutlined /> },
+      { key: 'suplier', label: 'Supplier', icon: <PlusOutlined /> },
+      
     ],
   },
+  {
+    type: 'divider',
+  },
 ];
-const Sidebar = () => {
+const AdminSidebar = () => {
   const onClick = e => {
     console.log('click ', e);
   };
@@ -82,4 +83,4 @@ const Sidebar = () => {
     />
   );
 };
-export default Sidebar;
+export default AdminSidebar;
