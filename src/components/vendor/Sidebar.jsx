@@ -5,6 +5,7 @@ import {  MdOutlineSupervisedUserCircle,MdOutlineDashboard, MdOutlineInventory2,
 import { PiInvoice } from 'react-icons/pi';
 import { FaUserCircle } from 'react-icons/fa';
 import { LuScrollText } from 'react-icons/lu';
+import './Sidebar.css';
 const items = [
   {
     key: 'shopname',
@@ -75,13 +76,15 @@ const items = [
   }
 ];
 const AdminSidebar = () => {
+  
   const onClick = e => {
     console.log('click ', e);
   };
   return (
     <Menu
+      className='custom-sidebar'
       onClick={onClick}
-      style={{ width: 256 }}
+      style={{ width: 256, height: '100vh', position: 'fixed' }}
       defaultSelectedKeys={['1']}
       defaultOpenKeys={['sub1']}
       mode="inline"
