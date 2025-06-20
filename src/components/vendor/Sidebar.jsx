@@ -1,4 +1,3 @@
-import React from 'react';
 import {PullRequestOutlined} from '@ant-design/icons';
 import { Menu } from 'antd';
 import {MdOutlineDashboard, MdOutlineInventory2, MdOutlineShoppingCart, MdLogout } from 'react-icons/md';

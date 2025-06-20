@@ -1,13 +1,13 @@
 import Login from "../pages/admin/Login";
 import AdminLayout from "../layout/AdminLayout";
-import Home from "../pages/admin/Home";
+import Dasboard from "../pages/admin/Dashboard";
 
 const adminRoute = [
   { path: "/admin/login", element: <Login /> },
   {
     path: "/admin",
     element: <AdminLayout />,
-    children: [{ path: "", element: <Home /> }],
+    children: [{ path: "", element: <Dasboard /> }],
   },
 ];
 export default adminRoute;
