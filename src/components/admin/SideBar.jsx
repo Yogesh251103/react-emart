@@ -1,8 +1,9 @@
 import React from 'react';
 import { WindowsOutlined,PullRequestOutlined, ShoppingCartOutlined, DropboxOutlined, UserSwitchOutlined, PlusOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
-import { MdOutlineSupervisedUserCircle,MdOutlineDashboard, MdOutlineInventory2, MdOutlineShoppingCart } from 'react-icons/md';
+import {  MdOutlineSupervisedUserCircle,MdOutlineDashboard, MdOutlineInventory2, MdOutlineShoppingCart, MdLogout } from 'react-icons/md';
 import { PiInvoice } from 'react-icons/pi';
+import { FaUserCircle } from 'react-icons/fa';
 const items = [
   {
     key: 'shopname',
@@ -44,8 +45,8 @@ const items = [
     icon: <MdOutlineSupervisedUserCircle />,
     children: [
       { key: 'warehouse', label: 'Warehouse', icon: <PlusOutlined /> },
-      { key: 'outlet', label: 'Outlet', icon: <PlusOutlined /> },
-      { key: 'suplier', label: 'Supplier', icon: <PlusOutlined /> },
+      { key: 'user-outlet', label: 'Outlet', icon: <PlusOutlined /> },
+      { key: 'user-suplier', label: 'Supplier', icon: <PlusOutlined /> },
       
     ],
   },
@@ -59,14 +60,28 @@ const items = [
 ,
     children: [
 
-      { key: 'outlet', label: 'Outlet', icon: <PlusOutlined /> },
-      { key: 'suplier', label: 'Supplier', icon: <PlusOutlined /> },
+      { key: 'invoice-outlet', label: 'Outlet', icon: <PlusOutlined /> },
+      { key: 'invoice-suplier', label: 'Supplier', icon: <PlusOutlined /> },
       
     ],
   },
   {
     type: 'divider',
   },
+  {
+    key: 'profile',
+    label: 'My Profile',
+    icon: <FaUserCircle />
+    
+  },
+  {
+    type: 'divider',
+  },
+  {
+    key: 'logout',
+    label: 'Logout',
+    icon: <MdLogout/>,
+  }
 ];
 const AdminSidebar = () => {
   const onClick = e => {
