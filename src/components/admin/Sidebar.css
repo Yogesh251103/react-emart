@@ -1,0 +1,40 @@
+/* Sidebar background */
+.custom-sidebar {
+  background-color: #FF4C4B !important; /* your desired bg */
+}
+
+/* Menu item default style */
+.custom-sidebar .ant-menu-item {
+  color: white; /* text color */
+}
+
+/* Menu item hover */
+.custom-sidebar .ant-menu-item:hover {
+  background-color: #fff !important; /* hover bg */
+  color: #000;
+}
+.custom-sidebar .ant-menu-item-selected {
+  background-color: #fff !important; /* hover bg */
+  color: #000;
+}
+/* Selected menu item */
+.custom-sidebar .ant-menu-submenu-title { /* selected bg */
+  color: #fff !important;
+  font-weight: bold;
+  font-size: large;
+}
+
+/* Submenu title */
+.custom-sidebar .ant-menu-submenu-title {
+  color: white;
+}
+
+/* Submenu title hover */
+.custom-sidebar .ant-menu-submenu-title:hover {
+  background-color: #FF7875 !important;
+}
+
+/* Selected item text */
+.custom-sidebar .ant-menu-item-selected a {
+  color: white !important;
+}
