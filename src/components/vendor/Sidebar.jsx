@@ -1,7 +1,7 @@
 import React from 'react';
-import { WindowsOutlined,PullRequestOutlined, ShoppingCartOutlined, DropboxOutlined, UserSwitchOutlined, PlusOutlined } from '@ant-design/icons';
+import {PullRequestOutlined} from '@ant-design/icons';
 import { Menu } from 'antd';
-import {  MdOutlineSupervisedUserCircle,MdOutlineDashboard, MdOutlineInventory2, MdOutlineShoppingCart, MdLogout } from 'react-icons/md';
+import {MdOutlineDashboard, MdOutlineInventory2, MdOutlineShoppingCart, MdLogout } from 'react-icons/md';
 import { PiInvoice } from 'react-icons/pi';
 import { FaUserCircle } from 'react-icons/fa';
 import { LuScrollText } from 'react-icons/lu';
@@ -11,7 +11,7 @@ const items = [
     key: 'shopname',
     label: 'EMart Grocerry Shop',
     icon: <MdOutlineShoppingCart />,
-    
+    disabled: true
   },
   {
     type: 'divider',

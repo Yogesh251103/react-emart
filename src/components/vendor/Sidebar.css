@@ -7,7 +7,12 @@
 .custom-sidebar .ant-menu-item {
   color: white; /* text color */
 }
-
+.custom-sidebar .ant-menu-item-disabled {
+  color: white !important; /* 👈 force white */
+  background-color: transparent !important;
+  pointer-events: none;
+  opacity: 1 !important; /* Remove grayed-out look */
+}
 /* Menu item hover */
 .custom-sidebar .ant-menu-item:hover {
   background-color: #fff !important; /* hover bg */

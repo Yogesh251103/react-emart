@@ -3,6 +3,12 @@
   background-color: #FF4C4B !important; /* your desired bg */
 }
 
+.custom-sidebar .ant-menu-item-disabled {
+  color: white !important; /* 👈 force white */
+  background-color: transparent !important;
+  pointer-events: none;
+  opacity: 1 !important; /* Remove grayed-out look */
+}
 /* Menu item default style */
 .custom-sidebar .ant-menu-item {
   color: white; /* text color */

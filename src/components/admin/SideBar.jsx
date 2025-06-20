@@ -10,7 +10,8 @@ const items = [
     key: 'shopname',
     label: 'EMart Grocerry Shop',
     icon: <MdOutlineShoppingCart />,
-    
+    disabled: true,
+  
   },
   {
     type: 'divider',
