@@ -7,85 +7,80 @@ import { LuScrollText } from 'react-icons/lu';
 import './Sidebar.css';
 const items = [
   {
-    key: 'shopname',
-    label: 'EMart Grocerry Shop',
+    key: "shopname",
+    label: "EMart Grocerry Shop",
     icon: <MdOutlineShoppingCart />,
     disabled: true
   },
   {
-    type: 'divider',
+    type: "divider",
   },
   {
-    key: 'dashboard',
-    label: 'Dashboard',
+    key: "dashboard",
+    label: "Dashboard",
     icon: <MdOutlineDashboard />,
-      },
-  {
-      type: 'divider',
   },
   {
-    key: 'request',
-    label: 'Requests',
+    type: "divider",
+  },
+  {
+    key: "request",
+    label: "Requests",
     icon: <PullRequestOutlined />,
   },
   {
-      type: 'divider',
+    type: "divider",
   },
   {
-    key: 'outlet',
-    label: 'Manage Outlet',
+    key: "outlet",
+    label: "Manage Outlet",
     icon: <MdOutlineInventory2 />,
   },
   {
-      type: 'divider',
+    type: "divider",
   },
 
   {
-    key: 'billing',
-    label: 'Billing',
-    icon: <LuScrollText />
-   
+    key: "billing",
+    label: "Billing",
+    icon: <LuScrollText />,
   },
   {
-      type: 'divider',
-  },
-{
-    key: 'invoice',
-    label: 'Invoice',
-    icon: <PiInvoice />
-,
-   
+    type: "divider",
   },
   {
-    type: 'divider',
+    key: "invoice",
+    label: "Invoice",
+    icon: <PiInvoice />,
   },
   {
-    key: 'profile',
-    label: 'My Profile',
-    icon: <FaUserCircle />
-    
+    type: "divider",
   },
   {
-    type: 'divider',
+    key: "profile",
+    label: "My Profile",
+    icon: <FaUserCircle />,
   },
   {
-    key: 'logout',
-    label: 'Logout',
-    icon: <MdLogout/>,
-  }
+    type: "divider",
+  },
+  {
+    key: "logout",
+    label: "Logout",
+    icon: <MdLogout />,
+  },
 ];
 const AdminSidebar = () => {
-  
-  const onClick = e => {
-    console.log('click ', e);
+  const onClick = (e) => {
+    console.log("click ", e);
   };
   return (
     <Menu
-      className='custom-sidebar'
+      className="custom-sidebar"
       onClick={onClick}
-      style={{ width: 256, height: '100vh', position: 'fixed' }}
-      defaultSelectedKeys={['1']}
-      defaultOpenKeys={['sub1']}
+      style={{ width: 256, height: "100vh" }}
+      defaultSelectedKeys={["shopname"]}
+      defaultOpenKeys={["sub1"]}
       mode="inline"
       items={items}
     />

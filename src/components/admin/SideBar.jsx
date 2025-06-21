@@ -18,13 +18,11 @@ import {
 import { PiInvoice } from "react-icons/pi";
 import { FaUserCircle } from "react-icons/fa";
 import "./Sidebar.css";
-import { useNavigate } from "react-router-dom";
 const items = [
   {
     key: "shopname",
     label: "EMart Grocerry Shop",
     icon: <MdOutlineShoppingCart />,
-    disabled: true,
   },
   {
     type: "divider",
@@ -83,6 +81,9 @@ const items = [
     key: "profile",
     label: "My Profile",
     icon: <FaUserCircle />,
+    key: "profile",
+    label: "My Profile",
+    icon: <FaUserCircle />,
   },
   {
     type: "divider",
@@ -118,8 +119,8 @@ const AdminSidebar = () => {
     <Menu
       className="custom-sidebar"
       onClick={onClick}
-      style={{ width: 256, height: "100vh", position: "fixed" }}
-      defaultSelectedKeys={["1"]}
+      style={{ width: 256, height: "100vh" }}
+      defaultSelectedKeys={["shopname"]}
       defaultOpenKeys={["sub1"]}
       mode="inline"
       items={items}
