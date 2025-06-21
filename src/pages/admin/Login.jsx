@@ -35,6 +35,7 @@ function Login() {
           isLoggedIn: true,
           tokenVendor: token,
         }));
+        navigate("/")
       }
       alert(`Login successful as ${role.toUpperCase()}`);
     } else if (error) {

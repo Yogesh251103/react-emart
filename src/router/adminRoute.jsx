@@ -4,6 +4,7 @@ import ProtectedRoutes from "../ProtectedRoutes";
 import Dashboard from "../pages/admin/Dashboard";
 import Inventory from "../pages/admin/Inventory";
 import Requests from "../pages/admin/Requests";
+
 const adminRoute = [
   { path: "/login", element: <Login /> },
   {
@@ -15,17 +16,18 @@ const adminRoute = [
         element: <AdminLayout />,
         children: [
           { path: "", element: <Dashboard /> },
-          {
-            path: "/admin/inventory",
-            element: <Inventory />,
-          },
-          {
-            path: "/admin/request",
-            element: <Requests/>
-          }
+          { path: "inventory", element: <Inventory /> },
+          { path: "request", element: <Requests /> },
+          { path: "user/outlet", element: <div>Outlet Page</div> },
+          { path: "user/supplier", element: <div>Supplier Page</div> },
+          { path: "user/warehouse", element: <div>Warehouse Page</div> },
+          { path: "invoice/outlet", element: <div>Invoice Outlet Page</div> },
+          { path: "invoice/supplier", element: <div>Invoice Supplier Page</div> },
+          { path: "profile", element: <div>Profile Page</div> },
         ],
       },
     ],
   },
 ];
+
 export default adminRoute;

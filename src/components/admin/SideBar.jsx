@@ -27,24 +27,23 @@ const AdminSidebar = () => {
         data: {
           accessToken: auth.tokenAdmin,
         },
-      });
+      }); 
+      console.log(localStorage.getItem("adminToken"))
 
       console.log("Logout response:", response);
 
-      if(
-        response === "Logged out user successfully"
-      ){
-        setAuth((prev)=>({
+      if (response === "Logged out user successfully") {
+        setAuth((prev) => ({
           ...prev,
           userName: "",
           password: "",
           isLoggedIn: false,
-          tokenAdmin: ""
-        }))
+          tokenAdmin: "",
+        }));
+        navigate("/login");
       }
       localStorage.removeItem("adminToken");
-      alert("You have been logged out")
-      navigate("/login")
+      alert("You have been logged out");
     } catch (err) {
       console.error("Logout error:", err);
       alert("Something went wrong during logout.");

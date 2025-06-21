@@ -1,5 +1,9 @@
 import {PullRequestOutlined} from '@ant-design/icons';
 import { Menu } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import useAxios from '../../hooks/useAxios/useAxios';
+import { authAtom } from '../../atoms/sampleAtom';
+import { useRecoilState,useRecoilValue } from 'recoil';
 import {MdOutlineDashboard, MdOutlineInventory2, MdOutlineShoppingCart, MdLogout } from 'react-icons/md';
 import { PiInvoice } from 'react-icons/pi';
 import { FaUserCircle } from 'react-icons/fa';
@@ -70,10 +74,60 @@ const items = [
     icon: <MdLogout />,
   },
 ];
-const AdminSidebar = () => {
-  const onClick = (e) => {
-    console.log("click ", e);
+const VendorSidebar = () => {
+  const navigate = useNavigate();
+  const { fetchData, error } = useAxios();
+  const [auth, setAuth] = useRecoilState(authAtom);
+  const handleLogout = async () => {
+    try {
+      const response = await fetchData({
+        url: "/auth/logout",
+        method: "POST",
+        data: {
+          accessToken: auth.tokenAdmin,
+        },
+      });
+
+      console.log("Logout response:", response);
+
+      if(
+        response === "Logged out user successfully"
+      ){
+        setAuth((prev)=>({
+          ...prev,
+          userName: "",
+          password: "",
+          isLoggedIn: false,
+          tokenVendor: ""
+        }))
+        navigate("/login")
+      }
+      localStorage.removeItem("vendorToken");
+      alert("You have been logged out")
+      
+    } catch (err) {
+      console.error("Logout error:", err);
+      alert("Something went wrong during logout.");
+    }
   };
+
+  const routeMap = {
+    dashboard: "/",
+    request: "/request",
+    outlet : "/manage-outlet",
+    billing: "/billing",
+    invoice: "/invoice",
+    profile: "/profile",
+  };
+
+  const onClick = ({ key }) => {
+    if (key === "logout") {
+      handleLogout();
+    } else if (routeMap[key]) {
+      navigate(routeMap[key]);
+    }
+  };
+
   return (
     <Menu
       className="custom-sidebar"
@@ -86,4 +140,4 @@ const AdminSidebar = () => {
     />
   );
 };
-export default AdminSidebar;
+export default VendorSidebar;
