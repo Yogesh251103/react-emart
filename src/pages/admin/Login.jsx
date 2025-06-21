@@ -1,9 +1,11 @@
 import { authAtom } from "../../atoms/sampleAtom";
 import { useRecoilState } from "recoil";
 import useAxios from "../../hooks/useAxios/useAxios";
+import { useNavigate } from "react-router-dom";
 function Login() {
+  const navigate = useNavigate();
   const [auth, setAuth] = useRecoilState(authAtom);
-  const { response, error, fetchData } = useAxios();
+  const { error, fetchData } = useAxios();
   const handleLogin = async (e, role) => {
     e.preventDefault();
     const response = await fetchData({
@@ -25,6 +27,7 @@ function Login() {
           isLoggedIn: true,
           tokenAdmin: token,
         }));
+        navigate("/admin")
       } else {
         localStorage.setItem("vendorToken", token);
         setAuth((prev) => ({

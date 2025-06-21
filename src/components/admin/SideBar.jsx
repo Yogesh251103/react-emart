@@ -1,12 +1,4 @@
-import React from "react";
-import {
-  WindowsOutlined,
-  PullRequestOutlined,
-  ShoppingCartOutlined,
-  DropboxOutlined,
-  UserSwitchOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { PullRequestOutlined, PlusOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
@@ -19,103 +11,105 @@ import {
 import { PiInvoice } from "react-icons/pi";
 import { FaUserCircle } from "react-icons/fa";
 import "./Sidebar.css";
-const items = [
-  {
-    key: "shopname",
-    label: "EMart Grocerry Shop",
-    icon: <MdOutlineShoppingCart />,
-    disabled: true
-  },
-  {
-    type: "divider",
-  },
-  {
-    key: "dashboard",
-    label: "Dashboard",
-    icon: <MdOutlineDashboard />,
-  },
-  {
-    type: "divider",
-  },
-  {
-    key: "request",
-    label: "Requests",
-    icon: <PullRequestOutlined />,
-  },
-  {
-    type: "divider",
-  },
-  {
-    key: "inventory",
-    label: "Inventory",
-    icon: <MdOutlineInventory2 />,
-  },
-  {
-    type: "divider",
-  },
-
-  {
-    key: "user",
-    label: "User Management",
-    icon: <MdOutlineSupervisedUserCircle />,
-    children: [
-      { key: "warehouse", label: "Warehouse", icon: <PlusOutlined /> },
-      { key: "user-outlet", label: "Outlet", icon: <PlusOutlined /> },
-      { key: "user-suplier", label: "Supplier", icon: <PlusOutlined /> },
-    ],
-  },
-  {
-    type: "divider",
-  },
-  {
-    key: "invoice",
-    label: "Invoice",
-    icon: <PiInvoice />,
-    children: [
-      { key: "invoice-outlet", label: "Outlet", icon: <PlusOutlined /> },
-      { key: "invoice-suplier", label: "Supplier", icon: <PlusOutlined /> },
-    ],
-  },
-  {
-    type: "divider",
-  },
-  {
-    key: "profile",
-    label: "My Profile",
-    icon: <FaUserCircle />,
-    key: "profile",
-    label: "My Profile",
-    icon: <FaUserCircle />,
-  },
-  {
-    type: "divider",
-  },
-  {
-    key: "logout",
-    label: "Logout",
-    icon: <MdLogout />,
-  },
-];
+import useAxios from "../../hooks/useAxios/useAxios";
+import { authAtom } from "../../atoms/sampleAtom";
+import { useRecoilState } from "recoil";
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
-  const onClick = ({ key }) => {
-    console.log("click ", key);
-    const routeMap = {
-      dashboard: "/admin",
-      request: "/admin/request",
-      outlet: "/admin/outlet",
-      billing: "/admin/billing",
-      invoice: "/admin/invoice",
-      profile: "/admin/profile",
-    };
+  const { fetchData, error } = useAxios();
+  const [auth, setAuth] = useRecoilState(authAtom);
+  const handleLogout = async () => {
+    try {
+      const response = await fetchData({
+        url: "/auth/logout",
+        method: "POST",
+        data: {
+          accessToken: auth.tokenAdmin,
+        },
+      });
 
+      console.log("Logout response:", response);
+
+      if(
+        response === "Logged out user successfully"
+      ){
+        setAuth((prev)=>({
+          ...prev,
+          userName: "",
+          password: "",
+          isLoggedIn: false,
+          tokenAdmin: ""
+        }))
+      }
+      localStorage.removeItem("adminToken");
+      alert("You have been logged out")
+      navigate("/login")
+    } catch (err) {
+      console.error("Logout error:", err);
+      alert("Something went wrong during logout.");
+    }
+  };
+
+  const routeMap = {
+    dashboard: "/admin",
+    inventory: "/admin/inventory",
+    request: "/admin/request",
+    "user-outlet": "/admin/user/outlet",
+    "user-suplier": "/admin/user/supplier",
+    warehouse: "/admin/user/warehouse",
+    "invoice-outlet": "/admin/invoice/outlet",
+    "invoice-suplier": "/admin/invoice/supplier",
+    profile: "/admin/profile",
+  };
+
+  const onClick = ({ key }) => {
     if (key === "logout") {
-      console.log("Logout");
+      handleLogout();
     } else if (routeMap[key]) {
       navigate(routeMap[key]);
     }
   };
+
+  const items = [
+    {
+      key: "shopname",
+      label: "EMart Grocerry Shop",
+      icon: <MdOutlineShoppingCart />,
+      disabled: true,
+    },
+    { type: "divider" },
+    { key: "dashboard", label: "Dashboard", icon: <MdOutlineDashboard /> },
+    { type: "divider" },
+    { key: "request", label: "Requests", icon: <PullRequestOutlined /> },
+    { type: "divider" },
+    { key: "inventory", label: "Inventory", icon: <MdOutlineInventory2 /> },
+    { type: "divider" },
+    {
+      key: "user",
+      label: "User Management",
+      icon: <MdOutlineSupervisedUserCircle />,
+      children: [
+        { key: "warehouse", label: "Warehouse", icon: <PlusOutlined /> },
+        { key: "user-outlet", label: "Outlet", icon: <PlusOutlined /> },
+        { key: "user-suplier", label: "Supplier", icon: <PlusOutlined /> },
+      ],
+    },
+    { type: "divider" },
+    {
+      key: "invoice",
+      label: "Invoice",
+      icon: <PiInvoice />,
+      children: [
+        { key: "invoice-outlet", label: "Outlet", icon: <PlusOutlined /> },
+        { key: "invoice-suplier", label: "Supplier", icon: <PlusOutlined /> },
+      ],
+    },
+    { type: "divider" },
+    { key: "profile", label: "My Profile", icon: <FaUserCircle /> },
+    { type: "divider" },
+    { key: "logout", label: "Logout", icon: <MdLogout /> },
+  ];
 
   return (
     <Menu
@@ -123,10 +117,10 @@ const AdminSidebar = () => {
       onClick={onClick}
       style={{ width: 256, height: "100vh" }}
       defaultSelectedKeys={["shopname"]}
-      defaultOpenKeys={["sub1"]}
       mode="inline"
       items={items}
     />
   );
 };
+
 export default AdminSidebar;
