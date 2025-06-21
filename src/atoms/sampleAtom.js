@@ -13,3 +13,15 @@ export const axiosAtom = atom({
     error: '',
   },
 });
+
+export const authAtom = atom({
+  key: 'authState',
+  default:{
+    userName: "",
+    password: "",
+    isLoggedIn: false,
+    tokenAdmin: "",
+    tokenVendor: ""
+
+  }
+})
