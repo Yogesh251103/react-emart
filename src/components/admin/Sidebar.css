@@ -4,10 +4,10 @@
 }
 
 .custom-sidebar .ant-menu-item-disabled {
-  color: white !important; /* 👈 force white */
+  color: white !important; 
   background-color: transparent !important;
   pointer-events: none;
-  opacity: 1 !important; /* Remove grayed-out look */
+  opacity: 1 !important; 
 }
 /* Menu item default style */
 .custom-sidebar .ant-menu-item {

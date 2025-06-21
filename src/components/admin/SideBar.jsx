@@ -8,6 +8,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
+import { useNavigate } from "react-router-dom";
 import {
   MdOutlineSupervisedUserCircle,
   MdOutlineDashboard,
@@ -23,6 +24,7 @@ const items = [
     key: "shopname",
     label: "EMart Grocerry Shop",
     icon: <MdOutlineShoppingCart />,
+    disabled: true
   },
   {
     type: "divider",
