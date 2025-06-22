@@ -1,4 +1,4 @@
-import Login from "../pages/admin/Login";
+import Login from "../pages/vendor/Login"
 import VendorLayout from "../layout/VendorLayout";
 import Home from "../pages/vendor/Home";
 import ProtectedRoutes from '../ProtectedRoutes'

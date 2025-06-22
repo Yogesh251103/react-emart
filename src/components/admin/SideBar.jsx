@@ -40,7 +40,7 @@ const AdminSidebar = () => {
           isLoggedIn: false,
           tokenAdmin: "",
         }));
-        navigate("/login");
+        navigate("admin/login");
       }
       localStorage.removeItem("adminToken");
       alert("You have been logged out");
@@ -50,17 +50,18 @@ const AdminSidebar = () => {
     }
   };
 
-  const routeMap = {
-    dashboard: "/admin",
-    inventory: "/admin/inventory",
-    request: "/admin/request",
-    "user-outlet": "/admin/user/outlet",
-    "user-suplier": "/admin/user/supplier",
-    warehouse: "/admin/user/warehouse",
-    "invoice-outlet": "/admin/invoice/outlet",
-    "invoice-suplier": "/admin/invoice/supplier",
-    profile: "/admin/profile",
-  };
+const routeMap = {
+  dashboard: "/admin",
+  inventory: "/admin/inventory",
+  request: "/admin/request",
+  "user-outlet": "/admin/user-management/outlet",
+  "user-suplier": "/admin/user-management/supplier",
+  warehouse: "/admin/user-management/warehouse",
+  "invoice-outlet": "/admin/invoice/outlet",
+  "invoice-suplier": "/admin/invoice/supplier",
+  profile: "/admin/profile",
+};
+
 
   const onClick = ({ key }) => {
     if (key === "logout") {

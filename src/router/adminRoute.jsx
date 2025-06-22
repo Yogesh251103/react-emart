@@ -6,7 +6,7 @@ import Inventory from "../pages/admin/Inventory";
 import Requests from "../pages/admin/Requests";
 
 const adminRoute = [
-  { path: "/login", element: <Login /> },
+  { path: "admin/login", element: <Login /> },
   {
     path: "/admin",
     element: <ProtectedRoutes allowedRoles={["admin"]} />,
@@ -18,9 +18,9 @@ const adminRoute = [
           { path: "", element: <Dashboard /> },
           { path: "inventory", element: <Inventory /> },
           { path: "request", element: <Requests /> },
-          { path: "user/outlet", element: <div>Outlet Page</div> },
-          { path: "user/supplier", element: <div>Supplier Page</div> },
-          { path: "user/warehouse", element: <div>Warehouse Page</div> },
+          { path: "user-management/outlet", element: <div>Outlet Page</div> },
+          { path: "user-management/supplier", element: <div>Supplier Page</div> },
+          { path: "user-management/warehouse", element: <div>Warehouse Page</div> },
           { path: "invoice/outlet", element: <div>Invoice Outlet Page</div> },
           { path: "invoice/supplier", element: <div>Invoice Supplier Page</div> },
           { path: "profile", element: <div>Profile Page</div> },
@@ -29,5 +29,6 @@ const adminRoute = [
     ],
   },
 ];
+
 
 export default adminRoute;

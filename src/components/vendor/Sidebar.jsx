@@ -84,7 +84,7 @@ const VendorSidebar = () => {
         url: "/auth/logout",
         method: "POST",
         data: {
-          accessToken: auth.tokenAdmin,
+          accessToken: auth.tokenVendor,
         },
       });
 
