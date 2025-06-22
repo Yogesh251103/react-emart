@@ -3,11 +3,13 @@ import { useRecoilState } from "recoil";
 import useAxios from "../../hooks/useAxios/useAxios";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useSnackbar } from "../../contexts/SnackbarContexts";
 
 function Login() {
   const navigate = useNavigate();
   const [auth, setAuth] = useRecoilState(authAtom);
-  const { error, fetchData, loading } = useAxios(); // pulling loading from the hook
+  const { error, fetchData, loading } = useAxios(); 
+  const showSnackBar = useSnackbar();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,7 +24,7 @@ function Login() {
       });
 
       if (!response || !response.accessToken) {
-        alert("Login failed: Invalid credentials");
+        showSnackBar("Login Failed, Invalid Credentials",'error')
         return;
       }
 
@@ -37,9 +39,9 @@ function Login() {
           tokenAdmin: token,
         }));
         navigate("/admin");
-        alert("Login successful as Admin");
+        showSnackBar("You are logged in Admin", 'success')
       } else {
-        alert("Access denied: Not an Admin");
+        showSnackBar("Access Denied , Not an Admin", 'error')
         setAuth((prev)=>({
         ...prev,
         userName: "",
@@ -47,7 +49,7 @@ function Login() {
       }))
       }
     } catch (err) {
-      alert(err?.message || "Login failed due to network/server error");
+      showSnackBar("Login failed due to network/server error",'error')
       console.error("Login error:", err);
       setAuth((prev)=>({
         ...prev,

@@ -9,6 +9,7 @@ import { PiInvoice } from 'react-icons/pi';
 import { FaUserCircle } from 'react-icons/fa';
 import { LuScrollText } from 'react-icons/lu';
 import './Sidebar.css';
+import { useSnackbar } from '../../contexts/SnackbarContexts';
 const items = [
   {
     key: "shopname",
@@ -76,6 +77,7 @@ const items = [
 ];
 const VendorSidebar = () => {
   const navigate = useNavigate();
+  const showSnackBar = useSnackbar();
   const { fetchData, error } = useAxios();
   const [auth, setAuth] = useRecoilState(authAtom);
   const handleLogout = async () => {
@@ -103,11 +105,11 @@ const VendorSidebar = () => {
         navigate("/login")
       }
       localStorage.removeItem("vendorToken");
-      alert("You have been logged out")
+      showSnackBar("You were logged out",'success')
       
     } catch (err) {
       console.error("Logout error:", err);
-      alert("Something went wrong during logout.");
+      showSnackBar("Something went wrong during logout.",'error');
     }
   };
 

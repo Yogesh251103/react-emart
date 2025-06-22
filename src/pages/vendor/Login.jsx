@@ -3,8 +3,10 @@ import { useRecoilState } from "recoil";
 import useAxios from "../../hooks/useAxios/useAxios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "../../contexts/SnackbarContexts";
 function Login() {
   const navigate = useNavigate();
+  const showSnackBar = useSnackbar();
   const [auth, setAuth] = useRecoilState(authAtom);
   const { error, fetchData } = useAxios();
   const handleLogin = async (e) => {
@@ -19,7 +21,7 @@ function Login() {
       },
     });
     if (!response || !response.accessToken) {
-      alert("Login failed: Invalid credentials")
+      showSnackBar("Login failed: Invalid credentials",'error')
       return;
     }
     const token = response.accessToken;
@@ -32,9 +34,9 @@ function Login() {
         tokenVendor: token,
       }));
       navigate("/");
-      alert("Login successful as Vendor")
+      showSnackBar("Login successful as Vendor",'success')
     }else{
-      alert("Access Denied: Not an Vendor")
+      showSnackBar("Access Denied: Not an Vendor",'error')
       setAuth((prev)=>({
         ...prev,
         userName: "",
@@ -42,7 +44,7 @@ function Login() {
       }))
     }
   } catch (err){
-    alert(err?.message || "Login Faled Due to network/server Error");
+    showSnackBar(err?.message || "Login Faled Due to network/server Error",'error');
     console.error("Login Error",err);
     setAuth((prev)=>({
         ...prev,
