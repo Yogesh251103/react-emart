@@ -26,3 +26,12 @@ export const authAtom = atom({
 
   }
 })
+
+export const snackBarAtom = atom({
+  key: "snackBar",
+  default: {
+    open: false,
+    message: "",
+    type: "info"
+  }
+})

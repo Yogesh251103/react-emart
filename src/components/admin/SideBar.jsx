@@ -14,9 +14,11 @@ import "./Sidebar.css";
 import useAxios from "../../hooks/useAxios/useAxios";
 import { authAtom } from "../../atoms/sampleAtom";
 import { useRecoilState } from "recoil";
+import { useSnackbar } from "../../contexts/SnackbarContexts";
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
+  const showSnackBar = useSnackbar
   const { fetchData, error } = useAxios();
   const [auth, setAuth] = useRecoilState(authAtom);
   const handleLogout = async () => {
@@ -43,10 +45,10 @@ const AdminSidebar = () => {
         navigate("admin/login");
       }
       localStorage.removeItem("adminToken");
-      alert("You have been logged out");
+      showSnackBar("You were logged out",'success');
     } catch (err) {
       console.error("Logout error:", err);
-      alert("Something went wrong during logout.");
+      showSnackBar("Something went wrong during logout.",'error');
     }
   };
 
