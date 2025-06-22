@@ -7,7 +7,7 @@ export default function AdminLayout() {
     <div className="w-screen flex overflow-x-hidden">
       <AdminSidebar />
       
-      <main className="w-[70%]">
+      <main className="flex-grow p-4">
         <Outlet />
       </main>
     </div> 

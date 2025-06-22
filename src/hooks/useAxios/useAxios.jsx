@@ -57,7 +57,7 @@ const useAxios = () => {
         ...prev,
         response: result.data,
       }));
-
+      return result.data;
     } catch (err) {
       if (axios.isCancel(error)) {
         console.error("request has been cancelled ", err.message);
