@@ -13,45 +13,49 @@ function Login() {
     e.preventDefault();
     try {
       const response = await fetchData({
-      url: "/auth/login",
-      method: "POST",
-      data: {
-        username: auth.userName,
-        password: auth.password,
-      },
-    });
-    if (!response || !response.accessToken) {
-      showSnackBar("Login failed: Invalid credentials",'error')
-      return;
-    }
-    const token = response.accessToken;
-    const decodedToken = jwtDecode(token);
-    if(decodedToken.role === "ROLE_VENDOR"){
-      localStorage.setItem("vendorToken",token)
-      setAuth((prev)=>({
+        url: "/auth/login",
+        method: "POST",
+        data: {
+          username: auth.userName,
+          password: auth.password,
+        },
+      });
+      console.log(response);
+      if (!response || !response.accessToken) {
+        showSnackBar("Login failed: Invalid credentials", "error");
+        return;
+      }
+      const token = response.accessToken;
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.role === "ROLE_VENDOR") {
+        localStorage.setItem("vendorToken", token);
+        setAuth((prev) => ({
+          ...prev,
+          isLoggedIn: true,
+          tokenVendor: token,
+        }));
+        navigate("/");
+        showSnackBar("Login successful as Vendor", "success");
+      } else {
+        showSnackBar("Access Denied: Not an Vendor", "error");
+        setAuth((prev) => ({
+          ...prev,
+          userName: "",
+          password: "",
+        }));
+      }
+    } catch (err) {
+      showSnackBar(
+        err?.message || "Login Faled Due to network/server Error",
+        "error"
+      );
+      console.error("Login Error", err);
+      setAuth((prev) => ({
         ...prev,
-        isLoggedIn:true,
-        tokenVendor: token,
+        userName: "",
+        password: "",
       }));
-      navigate("/");
-      showSnackBar("Login successful as Vendor",'success')
-    }else{
-      showSnackBar("Access Denied: Not an Vendor",'error')
-      setAuth((prev)=>({
-        ...prev,
-        userName: "",
-        password: ""
-      }))
     }
-  } catch (err){
-    showSnackBar(err?.message || "Login Faled Due to network/server Error",'error');
-    console.error("Login Error",err);
-    setAuth((prev)=>({
-        ...prev,
-        userName: "",
-        password: ""
-      }))
-  }
   };
   return (
     <div className="flex bg-[#FF4C4B] w-full h-screen justify-center items-center ">

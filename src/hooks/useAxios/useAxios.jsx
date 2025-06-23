@@ -1,10 +1,12 @@
 import axios from "axios";
-import { useRecoilState } from "recoil";
-import { axiosAtom } from "../../atoms/sampleAtom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const useAxios = () => {
-  const [axiosState, setAxiosState] = useRecoilState(axiosAtom);
+  const [axiosState, setAxiosState] = useState({
+    response: null,
+    error: "",
+    loading: false,
+  });
 
   const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_APP_API_URL,
@@ -18,6 +20,7 @@ const useAxios = () => {
       return Promise.reject(error);
     }
   );
+
   axiosInstance.interceptors.response.use(
     (response) => {
       return response;
@@ -35,13 +38,19 @@ const useAxios = () => {
     };
   }, []);
 
-  const fetchData = async ({ url, method, data = {}, params = {} }) => {
-    setAxiosState((prev) => ({
-      ...prev,
-      loading: true,
-      error: "",
-    }));
-
+  const fetchData = async ({
+    url,
+    method,
+    data = {},
+    params = {},
+    headers = {},
+  }) => {
+    setAxiosState((prev) => {
+      return {
+        ...prev,
+        loading: true,
+      };
+    });
     controller.abort();
     controller = new AbortController();
 
@@ -51,16 +60,20 @@ const useAxios = () => {
         method,
         data,
         params,
+        headers,
         signal: controller.signal,
       });
-      setAxiosState((prev) => ({
-        ...prev,
-        response: result.data,
-      }));
+      setAxiosState((prev) => {
+        return {
+          ...prev,
+          response: result.data,
+          error: "",
+        };
+      });
       return result.data;
     } catch (err) {
-      if (axios.isCancel(error)) {
-        console.error("request has been cancelled ", err.message);
+      if (axios.isCancel(err)) {
+        console.error("Request has been cancelled ", err.message);
       } else {
         setAxiosState((prev) => ({
           ...prev,
@@ -69,10 +82,9 @@ const useAxios = () => {
       }
     } finally {
       setAxiosState((prev) => ({
-      ...prev,
-      loading: false,
-      error: "",
-    }));
+        ...prev,
+        loading: false,
+      }));
     }
   };
   const { response, error, loading } = axiosState;

@@ -1,8 +1,17 @@
+import { useState } from "react"
+import WarehouseDropDown from "../../components/admin/WarehouseDropDown";
+
 function Inventory() {
+  const [search,setSearch] = useState();
+  const [warehouseId,setWareHouseId] = useState();
   return (
-    <div>
-      Inventory Page
-    </div>
+    <>
+      <h1 className="h1 pb-20">Inventory</h1>
+      {/* <div className="flex gap-x-10">
+        <input type="text" onChange={(e)=>setSearch(e.target.value)} className="border rounded p-3"/>
+        <WarehouseDropDown/>
+      </div> */}
+    </>
   )
 }
 
