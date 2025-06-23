@@ -1,4 +1,4 @@
-import { MdOutlineAdd } from "react-icons/md";
+import { MdOutlineAdd, MdOutlineEdit, MdOutlineUpdate } from "react-icons/md";
 import { Table } from "antd";
 import useAxios from "../../hooks/useAxios/useAxios";
 import { useEffect, useState } from "react";
@@ -11,6 +11,8 @@ function Warehouse() {
   const { loading, fetchData } = useAxios();
   const [warehouse, setWarehouse] = useRecoilState(warehouseAtom);
   const [modalOpen, setModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editingWarehouse, setEditingWarehouse] = useState(null);
   const [warehouseData, setWarehouseData] = useState({
     name: "",
     address: "",
@@ -67,7 +69,7 @@ function Warehouse() {
       });
 
       if (response) {
-        console.log(response)
+        console.log(response);
         showSnackBar("New Warehouse Created", "success");
         setModalOpen(false);
         setWarehouseData({ name: "", address: "" }); // reset after submit
@@ -77,7 +79,44 @@ function Warehouse() {
       showSnackBar(err.message || "Something went wrong", "error");
     }
   };
-
+  const handleEdit = (record) => {
+    setEditingWarehouse({
+      id: record.id,
+      name: record.warehouse_name,
+      address: record.location,
+      active: record.status === "Active",
+    });
+    setEditModalOpen(true);
+  };
+  const updateWarehouse = async () => {
+    if (!editingWarehouse.name && !editingWarehouse.address) {
+      showSnackBar("Please Fill all fields", "error");
+      return;
+    }
+    try {
+      const response = await fetchData({
+        method: "PUT",
+        url: "/admin/warehouse",
+        data: {
+          id: editingWarehouse.id,
+          name: editingWarehouse.name,
+          address: editingWarehouse.address,
+          active: editingWarehouse.active,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response) {
+        showSnackBar("Warehouse Details Updated", "success");
+        setEditModalOpen(false);
+        setEditingWarehouse(false);
+        getWarehouse();
+      }
+    } catch (err) {
+      showSnackBar(err.message || "Error Updating Data", "error");
+    }
+  };
   const columns = [
     {
       title: "Warehouse Name",
@@ -98,6 +137,19 @@ function Warehouse() {
       title: "Status",
       dataIndex: "status",
       key: "status",
+    },
+    {
+      title: "Action",
+      dataIndex: "Action",
+      key: "action",
+      render: (_, record) => (
+        <button
+          onClick={() => handleEdit(record)}
+          className="p-2 cursor-pointer "
+        >
+          <MdOutlineEdit size={20} color="#FC4C4B" />
+        </button>
+      ),
     },
   ];
 
@@ -163,8 +215,82 @@ function Warehouse() {
           </Modal>
         </div>
       </div>
+      {/* EDIT WAREHOUSE MODAL */}
       <div>
-        <Table loading={loading} dataSource={warehouse} columns={columns} />
+        <Modal
+          title="Edit Warehouse"
+          centered
+          open={editModalOpen}
+          onOk={updateWarehouse}
+          onCancel={() => {
+            setEditModalOpen(false);
+            setEditingWarehouse(false);
+          }}
+          okButtonProps={{ style: { backgroundColor: "#FC4C4B" } }}
+        >
+          <div className="flex flex-col gap-2">
+            <input
+              type="text"
+              placeholder="Name"
+              className="p-2 border-2 border-gray-200 rounded-md"
+              value={editingWarehouse?.name || "Name"}
+              onChange={(e) =>
+                setEditingWarehouse((prev) => ({
+                  ...prev,
+                  name: e.target.value,
+                }))
+              }
+            />
+            <input
+              type="text"
+              placeholder="Name"
+              className="p-2 border-2 border-gray-200 rounded-md"
+              value={editingWarehouse?.address || "Name"}
+              onChange={(e) =>
+                setEditingWarehouse((prev) => ({
+                  ...prev,
+                  address: e.target.value,
+                }))
+              }
+            />
+            <select
+              className="p-2 border-2 border-gray-200 rounded-md"
+              value={editingWarehouse?.active ? "active" : "inactive"}
+              onChange={(e) =>
+                setEditingWarehouse((prev) => ({
+                  ...prev,
+                  active: e.target.value === "active",
+                }))
+              }
+            >
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+        </Modal>
+      </div>
+      <div>
+        <Table
+          components={{
+            header: {
+              cell: (props) => (
+                <th
+                  {...props}
+                  className="bg-red-100 text-black"
+                  style={{
+                    ...props.style,
+                    backgroundColor: "#FC4C4B", 
+                    color: "white",
+                    fontWeight: "bold",
+                  }}
+                />
+              ),
+            },
+          }}
+          loading={loading}
+          dataSource={warehouse}
+          columns={columns}
+        />
       </div>
     </div>
   );

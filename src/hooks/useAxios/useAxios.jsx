@@ -14,7 +14,12 @@ const useAxios = () => {
 
   axiosInstance.interceptors.request.use(
     (config) => {
-      return config;
+      const isAdmin = config.url.includes("/admin");
+      const token = localStorage.getItem(isAdmin ? "adminToken" : "vendorToken");
+      if (token){
+        config.headers.Authorization = `Bearer ${token}`
+      }
+      return config
     },
     (error) => {
       return Promise.reject(error);
@@ -22,13 +27,40 @@ const useAxios = () => {
   );
 
   axiosInstance.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    (error) => {
-      return Promise.reject(error);
+  (response) => response, 
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url.includes("/auth/refresh-token")
+    ) {
+      originalRequest._retry = true;
+      const isAdmin = originalRequest.url.includes("/admin");
+      const refreshUrl = `${import.meta.env.VITE_APP_API_URL}/auth/refresh-token`;
+      const tokenKey = isAdmin ? "adminToken" : "vendorToken";
+
+      try {
+        const refreshResponse = await axios.post(refreshUrl);
+        const newAccessToken = refreshResponse.data.accessToken;
+
+        if (newAccessToken) {
+          localStorage.setItem(tokenKey, newAccessToken);
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return axiosInstance(originalRequest);
+        }
+      } catch (refreshErr) {
+        localStorage.removeItem("adminToken");
+        localStorage.removeItem("vendorToken");
+        window.location.href = "/login";
+      }
     }
-  );
+
+    return Promise.reject(error); 
+  }
+);
+
 
   let controller = new AbortController();
 
