@@ -7,6 +7,7 @@ import {
   MdOutlineInventory2,
   MdOutlineShoppingCart,
   MdLogout,
+  MdOutlineWarehouse,
 } from "react-icons/md";
 import { PiInvoice } from "react-icons/pi";
 import { FaUserCircle } from "react-icons/fa";
@@ -56,9 +57,10 @@ const routeMap = {
   dashboard: "/admin",
   inventory: "/admin/inventory",
   request: "/admin/request",
+  warehouse: "/admin/warehouse",
   "user-outlet": "/admin/user-management/outlet",
   "user-suplier": "/admin/user-management/supplier",
-  warehouse: "/admin/user-management/warehouse",
+  "user-warehouse": "/admin/user-management/warehouse",
   "invoice-outlet": "/admin/invoice/outlet",
   "invoice-suplier": "/admin/invoice/supplier",
   profile: "/admin/profile",
@@ -87,12 +89,14 @@ const routeMap = {
     { type: "divider" },
     { key: "inventory", label: "Inventory", icon: <MdOutlineInventory2 /> },
     { type: "divider" },
+    { key: "warehouse", label: "Warehouse", icon: <MdOutlineWarehouse /> },
+    { type: "divider" },
     {
       key: "user",
       label: "User Management",
       icon: <MdOutlineSupervisedUserCircle />,
       children: [
-        { key: "warehouse", label: "Warehouse", icon: <PlusOutlined /> },
+        { key: "user-warehouse", label: "Warehouse", icon: <PlusOutlined /> },
         { key: "user-outlet", label: "Outlet", icon: <PlusOutlined /> },
         { key: "user-suplier", label: "Supplier", icon: <PlusOutlined /> },
       ],

@@ -45,6 +45,7 @@ const useAxios = () => {
     params = {},
     headers = {},
   }) => {
+    console.log(headers);
     setAxiosState((prev) => {
       return {
         ...prev,
