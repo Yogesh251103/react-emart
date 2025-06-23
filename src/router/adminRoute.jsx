@@ -4,6 +4,7 @@ import ProtectedRoutes from "../ProtectedRoutes";
 import Dashboard from "../pages/admin/Dashboard";
 import Inventory from "../pages/admin/Inventory";
 import Requests from "../pages/admin/Requests";
+import Product from "../pages/admin/User Management/Product";
 
 const adminRoute = [
   { path: "admin/login", element: <Login /> },
@@ -21,6 +22,7 @@ const adminRoute = [
           { path: "user-management/outlet", element: <div>Outlet Page</div> },
           { path: "user-management/supplier", element: <div>Supplier Page</div> },
           { path: "user-management/warehouse", element: <div>Warehouse Page</div> },
+          { path: "user-management/product", element: <Product/> },
           { path: "invoice/outlet", element: <div>Invoice Outlet Page</div> },
           { path: "invoice/supplier", element: <div>Invoice Supplier Page</div> },
           { path: "profile", element: <div>Profile Page</div> },

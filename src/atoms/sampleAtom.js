@@ -35,3 +35,8 @@ export const snackBarAtom = atom({
     type: "info"
   }
 })
+
+export const productList = atom({
+  key:"productList",
+  default:[],
+})

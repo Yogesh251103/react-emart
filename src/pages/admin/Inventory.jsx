@@ -1,5 +1,4 @@
 import { useState } from "react"
-import WarehouseDropDown from "../../components/admin/WarehouseDropDown";
 
 function Inventory() {
   const [search,setSearch] = useState();

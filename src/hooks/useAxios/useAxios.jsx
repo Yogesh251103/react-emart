@@ -75,6 +75,7 @@ const useAxios = () => {
       if (axios.isCancel(err)) {
         console.error("Request has been cancelled ", err.message);
       } else {
+        console.log(err)
         setAxiosState((prev) => ({
           ...prev,
           error: err.response ? err.response.data : err.message,

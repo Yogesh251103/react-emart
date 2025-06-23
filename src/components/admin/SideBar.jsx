@@ -59,6 +59,7 @@ const routeMap = {
   "user-outlet": "/admin/user-management/outlet",
   "user-suplier": "/admin/user-management/supplier",
   warehouse: "/admin/user-management/warehouse",
+  product:"/admin/user-management/product",
   "invoice-outlet": "/admin/invoice/outlet",
   "invoice-suplier": "/admin/invoice/supplier",
   profile: "/admin/profile",
@@ -95,6 +96,7 @@ const routeMap = {
         { key: "warehouse", label: "Warehouse", icon: <PlusOutlined /> },
         { key: "user-outlet", label: "Outlet", icon: <PlusOutlined /> },
         { key: "user-suplier", label: "Supplier", icon: <PlusOutlined /> },
+        {key: "product", label:"Product",  icon: <PlusOutlined />}
       ],
     },
     { type: "divider" },

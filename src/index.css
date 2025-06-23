@@ -1,9 +1,13 @@
 @import "tailwindcss";
 
 .h1 {
-    @apply font-bold text-3xl
+    @apply font-bold text-3xl pb-5
 }
 
 .input {
     @apply border rounded p-3
+}
+
+.add-button {
+    @apply p-3 bg-red-700 rounded-lg text-white
 }
