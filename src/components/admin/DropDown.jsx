@@ -1,41 +1,42 @@
 import { Dropdown, Space } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useAxios from "../../hooks/useAxios/useAxios";
 
-const DropDown = ({ url, method, setter }) => {
-  console.log("URL:", url, "Method:", method);
-  const [menuItems, setMenuItems] = useState([]);
-  const { response, error, loading, fetchData } = useAxios();
+const DropDown = ({ url, method, setter, globalState, setGlobalState }) => {
+  const { fetchData } = useAxios();
+  const splittedURL = url.split("/")
+  const filterName = splittedURL[splittedURL.length - 1];
 
   useEffect(() => {
-    const token = localStorage.getItem("adminToken");
     const fetchDropDownData = async () => {
+      if (globalState.length > 0) return; 
+      const token = localStorage.getItem("adminToken");
       const result = await fetchData({
-        url: url,
-        method: method,
+        url,
+        method,
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      const filteredResponse = response
+      const items = result
         .filter((item) => item.active)
         .map((item) => ({
           key: item.id,
           label: item.name,
         }));
-      setMenuItems(filteredResponse);
+      setGlobalState(items); 
     };
     fetchDropDownData();
   }, []);
 
   const handleItemClick = (e) => {
-      setter(e.key);
-  }
+    setter((prev)=>prev === e.key ? "" : e.key);
+  };
 
   return (
-    <Dropdown menu={{ items: menuItems, onClick: handleItemClick }} arrow>
+    <Dropdown menu={{ items: globalState, onClick: handleItemClick }} arrow className="border rounded p-3">
       <a onClick={(e) => e.preventDefault()}>
-        <Space>{menuItems.length > 0 ? menuItems[0].label : ""}</Space>
+        <Space>{filterName}</Space>
       </a>
     </Dropdown>
   );

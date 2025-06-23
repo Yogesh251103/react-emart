@@ -1,10 +1,6 @@
 import { atom } from "recoil";
 const adminToken = localStorage.getItem("adminToken")  || " ";
-const vendorToken = localStorage.getItem("vendorToken") || ""
-export const countAtom = atom({
-    key:"countAtom",
-    default:0
-})
+const vendorToken = localStorage.getItem("vendorToken") || "";
 
 export const axiosAtom = atom({
   key: 'axiosState',
@@ -23,7 +19,6 @@ export const authAtom = atom({
     isLoggedIn: !!adminToken || !!vendorToken,
     tokenAdmin: adminToken,
     tokenVendor: vendorToken
-
   }
 })
 
@@ -39,4 +34,14 @@ export const snackBarAtom = atom({
 export const productList = atom({
   key:"productList",
   default:[],
+})
+
+export const warehouseAtom = atom({
+  key: "warehouseList",
+  default: []
+})
+
+export const supplierList = atom({
+  key:"supplierList",
+  default: []
 })
