@@ -26,10 +26,6 @@ const adminRoute = [
           { path: "warehouse", element: <Warehouse /> },
           { path: "user-management/outlet", element: <div>Outlet Page</div> },
           { path: "user-management/supplier", element: <Supplier /> },
-          {
-            path: "user-management/warehouse",
-            element: <div>Warehouse Page</div>,
-          },
           { path: "user-management/product", element: <Product /> },
           { path: "invoice/outlet", element: <InvOutlet /> },
           {

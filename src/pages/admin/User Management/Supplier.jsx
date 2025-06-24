@@ -10,6 +10,7 @@ const { Option } = Select;
 
 function Supplier() {
   const [suppliersList, setsuppliersList] = useRecoilState(supplierList);
+  const [searchQuery,setSearchQuery] = useState("");
   const [supplierData, setSupplierData] = useState({
     id: "",
     logo: "",
@@ -112,7 +113,9 @@ function Supplier() {
       showSnackBar(error.message || "Failed to fetch suppliers", "error");
     }
   };
-
+  const filteredSuppliers = suppliersList.filter((supplier)=>
+    `${supplier.name} ${supplier.email} ${supplier.phone}`.toLowerCase().includes(searchQuery.toLowerCase())
+  )
   useEffect(() => {
     getSuppliers();
   }, []);
@@ -177,7 +180,7 @@ function Supplier() {
 
       <div className="">
         <div className="flex justify-between gap-2 p-5">
-          <input type="search" className="p-2 border-2 w-[30vw] border-gray-200 rounded-md" placeholder="Search" name="" id="" />
+          <input type="search" className="p-2 border-2 w-[30vw] border-gray-200 rounded-md" onChange={(e)=>setSearchQuery(e.target.value)} value={searchQuery} placeholder="Search" name="" id="" />
           <button
             onClick={() => {
               resetForm();
@@ -247,7 +250,7 @@ function Supplier() {
 
       <div className="overflow-x-scroll mt-4">
         <Table
-          dataSource={suppliersList}
+          dataSource={filteredSuppliers}
           columns={columns}
           rowKey="id"
           loading={loading}

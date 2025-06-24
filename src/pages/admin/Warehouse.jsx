@@ -10,6 +10,7 @@ import { Modal } from "antd";
 function Warehouse() {
   const { loading, fetchData } = useAxios();
   const [warehouse, setWarehouse] = useRecoilState(warehouseAtom);
+  const [searchQuery, setSearchQuery] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editingWarehouse, setEditingWarehouse] = useState(null);
@@ -49,6 +50,12 @@ function Warehouse() {
       showSnackBar("Error Fetching Data", "error");
     }
   };
+  const filteredWarehouse = warehouse.filter((w) => {
+    return `${w.warehouse_name} ${w.location}`
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+  });
+
   const addWarehouse = async () => {
     if (!warehouseData.name || !warehouseData.address) {
       showSnackBar("Please fill in all fields", "warning");
@@ -137,6 +144,17 @@ function Warehouse() {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      render: (status) => (
+        <span
+          className={`px-2 py-1 text-xs rounded-full font-medium ${
+            status === "Active"
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
+          }`}
+        >
+          {status}
+        </span>
+      ),
     },
     {
       title: "Action",
@@ -162,11 +180,13 @@ function Warehouse() {
             type="search"
             className="border-2 border-gray-200 rounded-md p-2 w-[30vw]"
             placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <div>
           <button
-            className="flex justify-center gap-2 items-center md:p-2 bg-[#FC4B4B] rounded-md text-white cursor-pointer"
+            className="flex justify-center gap-2 items-center md:p-2 bg-[#8a0000] rounded-md text-white cursor-pointer"
             onClick={() => setModalOpen(true)}
           >
             Add New Warehouse <MdOutlineAdd />
@@ -279,7 +299,7 @@ function Warehouse() {
                   className="bg-red-100 text-black"
                   style={{
                     ...props.style,
-                    backgroundColor: "#FC4C4B", 
+                    backgroundColor: "#8a0000",
                     color: "white",
                     fontWeight: "bold",
                   }}
@@ -288,7 +308,7 @@ function Warehouse() {
             },
           }}
           loading={loading}
-          dataSource={warehouse}
+          dataSource={filteredWarehouse}
           columns={columns}
         />
       </div>
