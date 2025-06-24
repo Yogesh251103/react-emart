@@ -1,6 +1,6 @@
 import { PullRequestOutlined, PlusOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   MdOutlineSupervisedUserCircle,
   MdOutlineDashboard,
@@ -9,51 +9,21 @@ import {
   MdLogout,
   MdOutlineWarehouse,
 } from "react-icons/md";
-import { PiInvoice } from "react-icons/pi";
 import { FaUserCircle } from "react-icons/fa";
-import useAxios from "../../hooks/useAxios/useAxios";
-import { authAtom } from "../../atoms/sampleAtom";
-import { useRecoilState } from "recoil";
-import { useSnackbar } from "../../contexts/SnackbarContexts";
-import MenuIcon from "../MenuIcon";
 import { FaFileInvoice, FaShop } from "react-icons/fa6";
 import { BsPersonVcardFill } from "react-icons/bs";
+import { useRecoilState } from "recoil";
+import useAxios from "@/hooks/useAxios/useAxios";
+import { useSnackbar } from "@/contexts/SnackbarContexts";
+import { authAtom } from "@/atoms/sampleAtom";
+import MenuIcon from "@/components/MenuIcon";
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
-  const showSnackBar = useSnackbar;
-  const { fetchData, error } = useAxios();
+  const { pathname } = useLocation();
+  const showSnackBar = useSnackbar();
+  const { fetchData } = useAxios();
   const [auth, setAuth] = useRecoilState(authAtom);
-  const handleLogout = async () => {
-    try {
-      const response = await fetchData({
-        url: "/auth/logout",
-        method: "POST",
-        data: {
-          accessToken: auth.tokenAdmin,
-        },
-      });
-      console.log(localStorage.getItem("adminToken"));
-
-      console.log("Logout response:", response);
-
-      if (response === "Logged out user successfully") {
-        setAuth((prev) => ({
-          ...prev,
-          userName: "",
-          password: "",
-          isLoggedIn: false,
-          tokenAdmin: "",
-        }));
-        navigate("admin/login");
-      }
-      localStorage.removeItem("adminToken");
-      showSnackBar("You were logged out", "success");
-    } catch (err) {
-      console.error("Logout error:", err);
-      showSnackBar("Something went wrong during logout.", "error");
-    }
-  };
 
   const routeMap = {
     dashboard: "/admin",
@@ -67,6 +37,36 @@ const AdminSidebar = () => {
     "invoice-outlet": "/admin/invoice/outlet",
     "invoice-suplier": "/admin/invoice/supplier",
     profile: "/admin/profile",
+  };
+
+  const activeKey =
+    Object.keys(routeMap).find((key) => routeMap[key] === pathname) ?? "dashboard";
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetchData({
+        url: "/auth/logout",
+        method: "POST",
+        data: {
+          accessToken: auth.tokenAdmin,
+        },
+      });
+
+      if (response === "Logged out user successfully") {
+        setAuth({
+          userName: "",
+          password: "",
+          isLoggedIn: false,
+          tokenAdmin: "",
+        });
+        localStorage.removeItem("adminToken");
+        navigate("/admin/login");
+        showSnackBar("You were logged out", "success");
+      }
+    } catch (err) {
+      console.error("Logout error:", err);
+      showSnackBar("Something went wrong during logout.", "error");
+    }
   };
 
   const onClick = ({ key }) => {
@@ -233,7 +233,7 @@ const AdminSidebar = () => {
       className="custom-sidebar"
       onClick={onClick}
       style={{ width: 256, height: "100vh" }}
-      defaultSelectedKeys={["dashboard"]}
+      selectedKeys={[activeKey]}
       mode="inline"
       items={items}
     />
