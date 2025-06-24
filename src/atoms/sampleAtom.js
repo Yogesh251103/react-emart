@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-const adminToken = localStorage.getItem("adminToken") || " ";
+const adminToken = localStorage.getItem("adminToken") || "";
 const vendorToken = localStorage.getItem("vendorToken") || "";
 
 export const axiosAtom = atom({
