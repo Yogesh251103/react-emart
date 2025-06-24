@@ -289,8 +289,9 @@ function Warehouse() {
           </div>
         </Modal>
       </div>
-      <div>
+      <div className="pl-4">
         <Table
+          className="border-2 border-grey shadow-sm rounded-lg"
           components={{
             header: {
               cell: (props) => (
