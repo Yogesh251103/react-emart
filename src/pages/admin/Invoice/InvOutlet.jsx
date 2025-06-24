@@ -34,6 +34,7 @@ function InvOutlet() {
           loaded: true,
           data: response.map((item, index) => ({
             key: index + 1,
+            id: item.id,
             product: item.productDTO?.name || "N/A",
             warehouse: item.warehouseDTO?.name || "N/A",
             outlet: item.outletDTO?.name || "N/A",
@@ -65,11 +66,7 @@ function InvOutlet() {
     doc.setFontSize(12);
     doc.setTextColor(0);
     doc.text(`Date: ${supply.date}`, leftX, currentY);
-    doc.text(
-      `Invoice No: INV-${supply.key.toString().padStart(5, "0")}`,
-      leftX,
-      currentY + 7
-    );
+    doc.text(`Invoice No: INV-${supply.id.toUpperCase()}`, leftX, currentY + 7);
     currentY += 20;
 
     const pairs = [
@@ -109,7 +106,11 @@ function InvOutlet() {
       const sealY = currentY + 10;
       doc.setFontSize(12);
       doc.setTextColor("#8a0000");
-      doc.text("Digitally Verified by E-Mart Inventory Management System", leftX, sealY);
+      doc.text(
+        "Digitally Verified by E-Mart Inventory Management System",
+        leftX,
+        sealY
+      );
 
       // Add seal image
       doc.addImage(img, "PNG", 150, sealY - 5, 40, 40);
