@@ -1,11 +1,12 @@
-import React from 'react'
+import React from "react";
+import OutletStock from "@/components/vendor/OutletStock";
 
 function ManageOutlet() {
   return (
     <div>
-      This is manage outlet page
+      <OutletStock />
     </div>
-  )
+  );
 }
 
-export default ManageOutlet
+export default ManageOutlet;

@@ -4,8 +4,8 @@ import jsPDF from "jspdf";
 import useAxios from "@/hooks/useAxios/useAxios";
 import { useSnackbar } from "@/contexts/SnackbarContexts";
 import { useRecoilState } from "recoil";
-import { outletInvoice } from "@/atoms/sampleAtom";
 import seal from "@/assets/seal.png";
+import { outletInvoice } from "@/atoms/vendor-profile";
 
 function Invoice() {
   const { fetchData, loading } = useAxios();
