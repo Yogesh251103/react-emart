@@ -30,9 +30,9 @@ const useAxios = () => {
   (response) => response, 
   async (error) => {
     const originalRequest = error.config;
-
     if (
       error.response?.status === 401 &&
+      error.response?.data.message !== "Invalid Credentials" &&
       !originalRequest._retry &&
       !originalRequest.url.includes("/auth/refresh-token")
     ) {
