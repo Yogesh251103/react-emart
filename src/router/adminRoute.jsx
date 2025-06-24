@@ -25,11 +25,10 @@ const adminRoute = [
           { path: "inventory", element: <Product /> },
           { path: "request", element: <Requests /> },
           { path: "warehouse", element: <Warehouse /> },
-          { path: "user-management/outlet", element: <Outlet/>},
+          { path: "user-management/outlet", element: <Outlet /> },
           { path: "user-management/supplier", element: <Supplier /> },
           {
-            path: "user-management/warehouse",
-            element: <div>Warehouse Page</div>,
+            path: "user-management/warehouse", element: <div>Warehouse Page</div>,
           },
           { path: "invoice/outlet", element: <InvOutlet /> },
           {
