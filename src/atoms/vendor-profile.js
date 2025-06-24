@@ -14,3 +14,20 @@ export const vendorUserDetails = atom({
   },
   dangerouslyAllowMutability: true,
 });
+
+export const outletInvoice = atom({
+  key: "vendorOutletInvoice",
+  default: {
+    loaded: false,
+    data: [],
+  },
+});
+
+export const outletStock = atom({
+  key: "outletStock",
+  default: {
+    loaded: false,
+    data: [],
+  },
+  dangerouslyAllowMutability: true,
+});

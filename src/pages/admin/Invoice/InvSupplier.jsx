@@ -34,6 +34,7 @@ function InvSupplier() {
           loaded: true,
           data: response.map((item, index) => ({
             key: index + 1,
+            id: item.id,
             product: item.productDTO?.name || "N/A",
             supplier: item.supplierDTO?.name || "NA",
             warehouse: item.warehouseDTO?.name || "N/A",
@@ -65,11 +66,7 @@ function InvSupplier() {
     doc.setFontSize(12);
     doc.setTextColor(0);
     doc.text(`Date: ${supply.date}`, leftX, currentY);
-    doc.text(
-      `Invoice No: INV-${supply.key.toString().padStart(5, "0")}`,
-      leftX,
-      currentY + 7
-    );
+    doc.text(`Invoice No: INV-${supply.id.toUpperCase()}`, leftX, currentY + 7);
     currentY += 20;
 
     const pairs = [
@@ -161,7 +158,9 @@ function InvSupplier() {
   return (
     <div>
       <div className="flex justify-between items-center px-5 pt-5">
-        <h1 className="md:text-2xl font-bold">Supplier to Warehouse Invoices</h1>
+        <h1 className="md:text-2xl font-bold">
+          Supplier to Warehouse Invoices
+        </h1>
       </div>
       <div className="p-5">
         <Table

@@ -6,7 +6,7 @@ export default function VendorLayout() {
   return (
     <div className="w-screen flex overflow-x-hidden">
       <VendorSidebar />
-      <main className="w-[70%] p-4">
+      <main className="w-full h-screen overflow-y-scroll p-4">
         <Outlet />
       </main>
     </div>
