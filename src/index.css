@@ -1,13 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+  --color-brown: #3b060a;
+  --color-dark-red: #8a0000;
+  --color-light-red: #ff4c4b;
+  --color-grey: #eaebed;
+}
 .h1 {
-    @apply font-bold text-3xl pb-5
+  @apply font-bold text-3xl pb-5;
 }
 
 .input {
-    @apply border rounded p-3
+  @apply border rounded p-3;
 }
 
 .add-button {
-    @apply p-3 bg-red-700 rounded-lg text-white
+  @apply p-3 bg-red-700 rounded-lg text-white;
 }
