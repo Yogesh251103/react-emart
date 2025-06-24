@@ -1,13 +1,14 @@
-import Login from "../pages/admin/Login";
-import AdminLayout from "../layout/AdminLayout";
-import ProtectedRoutes from "../ProtectedRoutes";
-import Dashboard from "../pages/admin/Dashboard";
-import Inventory from "../pages/admin/Inventory";
-import Requests from "../pages/admin/Requests";
-import Product from "../pages/admin/User Management/Product";
-import Warehouse from "../pages/admin/Warehouse";
-import Supplier from "../pages/admin/User Management/Supplier";
-import InvOutlet from "../pages/admin/Invoice/InvOutlet";
+import Login from "@/pages/admin/Login";
+import AdminLayout from "@/layout/AdminLayout";
+import ProtectedRoutes from "@/ProtectedRoutes";
+import Dashboard from "@/pages/admin/Dashboard";
+import Inventory from "@/pages/admin/Inventory";
+import Requests from "@/pages/admin/Requests";
+import Product from "@/pages/admin/User Management/Product";
+import Warehouse from "@/pages/admin/Warehouse";
+import Supplier from "@/pages/admin/User Management/Supplier";
+import InvOutlet from "@/pages/admin/Invoice/InvOutlet";
+import InvSupplier from "@/pages/admin/Invoice/InvSupplier";
 
 const adminRoute = [
   { path: "admin/login", element: <Login /> },
@@ -33,7 +34,7 @@ const adminRoute = [
           { path: "invoice/outlet", element: <InvOutlet /> },
           {
             path: "invoice/supplier",
-            element: <div>Invoice Supplier Page</div>,
+            element: <InvSupplier />,
           },
           { path: "profile", element: <div>Profile Page</div> },
         ],

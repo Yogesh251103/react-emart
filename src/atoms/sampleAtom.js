@@ -59,3 +59,12 @@ export const outletInvoice = atom({
   },
   dangerouslyAllowMutability: true,
 });
+
+export const supplierInvoice = atom({
+  key: "supplierInvoice",
+  default: {
+    loaded: false,
+    data: [],
+  },
+  dangerouslyAllowMutability: true,
+});

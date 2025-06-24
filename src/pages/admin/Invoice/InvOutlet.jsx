@@ -1,12 +1,11 @@
 import { useEffect } from "react";
 import { Table, Button } from "antd";
 import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import useAxios from "@/hooks/useAxios/useAxios";
 import { useSnackbar } from "@/contexts/SnackbarContexts";
 import { useRecoilState } from "recoil";
 import { outletInvoice } from "@/atoms/sampleAtom";
-import seal from "@/assets/seal.png"; // Seal image
+import seal from "@/assets/seal.png";
 
 function InvOutlet() {
   const { fetchData, loading } = useAxios();
@@ -158,7 +157,7 @@ function InvOutlet() {
   return (
     <div>
       <div className="flex justify-between items-center px-5 pt-5">
-        <h1 className="md:text-2xl font-bold">Outlet Supply Listing</h1>
+        <h1 className="md:text-2xl font-bold">Warehouse to Outlet Invoices</h1>
       </div>
       <div className="p-5">
         <Table
