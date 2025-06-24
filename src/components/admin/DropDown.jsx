@@ -1,46 +1,70 @@
 import { Dropdown, Space } from "antd";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import useAxios from "../../hooks/useAxios/useAxios";
 
 const DropDown = ({ url, method, setter, globalState, setGlobalState }) => {
   const { fetchData } = useAxios();
-  const splittedURL = url.split("/");
-  const filterName = splittedURL[splittedURL.length - 1];
+  const [menuItems, setMenuItems] = useState([]);
+  const [filterName, setFilterName] = useState(url.split("/").pop());
+  const [selectedKey, setSelectedKey] = useState(null);
+
+  const setDropDownItems = (items) => {
+    console.log(items)
+    const filteredItems = items.filter((item) => item.active)
+      .map((item) => ({
+        key: item.id,
+        label: item.name,
+      }));
+      console.log(filteredItems)
+    setMenuItems(filteredItems);
+  };
 
   useEffect(() => {
     const fetchDropDownData = async () => {
-      if (globalState.length > 0) return;
-      const token = localStorage.getItem("adminToken");
-      try {
-        const result = await fetchData({
-          url,
-          method,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const items = result
-          .filter((item) => item.active)
-          .map((item) => ({
-            key: item.id,
-            label: item.name,
-          }));
-        setGlobalState(items);
-      } catch (error) {
-        console.error(error);
+      if (globalState.length === 0) {
+        const token = localStorage.getItem("adminToken");
+        try {
+          const result = await fetchData({
+            url,
+            method,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          console.log(result)
+          setDropDownItems(result);
+          setGlobalState(result);
+        } catch (error) {
+          console.error(error);
+        }
+        return;
       }
+      setDropDownItems(globalState);
     };
     fetchDropDownData();
   }, []);
 
-  const handleItemClick = (e) => {
-    setter((prev) => (prev === e.key ? "" : e.key));
+  const handleItemClick = ({ key }) => {
+    if (key === selectedKey) {
+      setSelectedKey(null);
+      setter("");
+      setFilterName(url.split("/").pop());
+    } else {
+      setSelectedKey(key);
+      setter(key);
+      const selectedItem = globalState.find((item) => item.id === key);
+      setFilterName(selectedItem?.name || url.split("/").pop());
+    }
   };
 
   return (
     <Dropdown
-      menu={{ items: globalState, onClick: handleItemClick }}
+      menu={{
+        items: menuItems,
+        onClick: handleItemClick,
+        selectable: true,
+        selectedKeys: selectedKey ? [selectedKey] : [],
+      }}
       arrow
       className="border rounded p-3"
     >

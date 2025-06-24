@@ -6,14 +6,15 @@ import useAxios from "../../../hooks/useAxios/useAxios";
 import { useSnackbar } from "../../../contexts/SnackbarContexts";
 import DropDown from "../../../components/admin/DropDown";
 import { PlusOutlined } from "@ant-design/icons";
-import { Modal } from "antd";
+import { Modal, Select } from "antd";
 
 const Outlet = () => {
   const [input, setInput] = useState("");
-  const [outletId,setOutletId] = useState(null);
+  const [outletId, setOutletId] = useState(null);
   const [outletFormData, setOutletFormData] = useState({
     name: "",
     address: "",
+    active: true,
   });
 
   const [warehouses, setWarehouses] = useRecoilState(warehouseAtom);
@@ -37,7 +38,7 @@ const Outlet = () => {
 
   const handleSaveOutlet = async () => {
     if (
-      (isEditMode && !outletFormData.id) || 
+      (isEditMode && (!outletFormData.id.trim() || !outletFormData.active)) || 
       !outletFormData.name.trim() ||
       !outletFormData.address.trim() ||
       !formWarehouseId
@@ -102,6 +103,7 @@ const Outlet = () => {
       setOutletFormData({
         name: "",
         address: "",
+        active: true,
       });
     }
   };
@@ -165,6 +167,22 @@ const Outlet = () => {
               globalState={warehouses}
               setGlobalState={setWarehouses}
             />
+
+            {isEditMode && (
+              <Select
+                value={outletFormData.active ? "Active" : "Inactive"}
+                onChange={(value) =>
+                  setOutletFormData((prev) => ({
+                    ...prev,
+                    active: value === "Active",
+                  }))
+                }
+                className="w-full"
+              >
+                <Select.Option value="Active">Active</Select.Option>
+                <Select.Option value="Inactive">Inactive</Select.Option>
+              </Select>
+            )}
           </div>
         </Modal>
       </div>
@@ -177,7 +195,7 @@ const Outlet = () => {
           setFormWarehouseId(outlet.warehouseId);
           setModalOpen(true);
           setIsEditMode(true);
-          setOutletId(outlet.id)
+          setOutletId(outlet.id);
         }}
       />
     </div>

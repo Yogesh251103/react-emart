@@ -77,9 +77,9 @@ const Product = () => {
     } = productFormData;
 
     if (
-      (isEditMode && !productId.trim()) || 
+      (isEditMode && !productId.trim()) ||
       !currency.trim() ||
-      !manufacture_date ||  // need to send manufacture and expiration date from backend
+      !manufacture_date || // need to send manufacture and expiration date from backend
       !expiration_date ||
       !name.trim() ||
       !price ||
@@ -87,13 +87,16 @@ const Product = () => {
       !image.trim() ||
       !formSupplierId
     ) {
-      console.log(currency,
-      manufacture_date,
-      expiration_date,
-      name,
-      price,
-      threshold,
-      image,formSupplierId)
+      console.log(
+        currency,
+        manufacture_date,
+        expiration_date,
+        name,
+        price,
+        threshold,
+        image,
+        formSupplierId
+      );
       showSnackBar("Please fill all required fields", "error");
       return;
     }
