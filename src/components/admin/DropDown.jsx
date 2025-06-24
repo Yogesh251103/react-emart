@@ -18,6 +18,7 @@ const DropDown = ({ url, method, setter, globalState, setGlobalState }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(result)
       const items = result
         .filter((item) => item.active)
         .map((item) => ({

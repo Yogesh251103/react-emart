@@ -5,7 +5,7 @@ import { useRecoilState } from "recoil";
 import { productList } from "../../atoms/sampleAtom";
 import useAxios from "../../hooks/useAxios/useAxios";
 
-const CustomTable = ({ supplierId, productName, onEdit }) => {
+const ProductTable = ({ supplierId, productName, onEdit }) => {
   const [dataSource, setDataSource] = useRecoilState(productList);
   const { fetchData } = useAxios();
 
@@ -22,14 +22,14 @@ const CustomTable = ({ supplierId, productName, onEdit }) => {
       dataIndex: "currency",
     },
     {
-      title: "Expiration Date",
-      key: "expiration_date",
-      dataIndex: "expiration_date",
-    },
-    {
       title: "Manufacture Date",
       key: "manufacture_date",
       dataIndex: "manufacture_date",
+    },
+    {
+      title: "Expiration Date",
+      key: "expiration_date",
+      dataIndex: "expiration_date",
     },
     {
       title: "Name",
@@ -112,4 +112,4 @@ const CustomTable = ({ supplierId, productName, onEdit }) => {
   return <Table columns={columns} dataSource={filteredData} rowKey="id" />;
 };
 
-export default CustomTable;
+export default ProductTable;

@@ -155,15 +155,6 @@ const AdminSidebar = () => {
             </MenuIcon>
           ),
         },
-        {
-          key: "product",
-          label: "Product",
-          icon: (
-            <MenuIcon>
-              <PlusOutlined />
-            </MenuIcon>
-          ),
-        },
       ],
     },
     { type: "divider" },
