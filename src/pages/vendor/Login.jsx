@@ -58,11 +58,15 @@ function Login() {
     }
   };
   return (
-    <div className="flex bg-[#FF4C4B] w-full h-screen justify-center items-center ">
-      <div className="bg-[#EAEBED] w-[400px] p-6 rounded-2xl shadow-lg text-white">
-        <h3 className="text-3xl font-bold text-center mb-4 text-black">
-          Emart Grocery Shop
+    <div className="flex bg-gradient-to-br from-brown to-dark-red w-full h-screen justify-center items-center ">
+      <div className="bg-grey w-[400px] p-6 rounded-2xl shadow-lg text-white">
+        <h3 className="text-2xl text-dark-red font-black text-center mb-3">
+          E-Mart Grocery Shop
         </h3>
+        <p className="text-black text-center mb-4">
+          Welcome to E-Mart Inventory Management. Please login using your
+          credentials
+        </p>
         <div className="flex flex-col space-y-4">
           <input
             type="text"
@@ -72,7 +76,7 @@ function Login() {
             }
             value={auth.userName}
             required
-            className="p-2 rounded-md border-2 border-gray-300 text-black placeholder-gray-500"
+            className="p-2 focus:outline-none rounded-md border-2 border-gray-300 focus:border-dark-red text-black placeholder-gray-500"
           />
           <input
             type="password"
@@ -82,11 +86,11 @@ function Login() {
               setAuth((prev) => ({ ...prev, password: e.target.value }))
             }
             required
-            className="p-2 rounded-md border-2 border-gray-300 text-black placeholder-gray-500"
+            className="p-2 focus:outline-none rounded-md border-2 border-gray-300 focus:border-dark-red text-black placeholder-gray-500"
           />
           <button
             onClick={handleLogin}
-            className="bg-white text-[#FF4C4B] font-semibold py-2 rounded-md hover:bg-gray-200 transition"
+            className="bg-dark-red hover:bg-light-red focus:outline-none focus:border-light-red text-white cursor-pointer rounded-md font-semibold py-2 rounded-mdtransition"
           >
             Login As Vendor
           </button>

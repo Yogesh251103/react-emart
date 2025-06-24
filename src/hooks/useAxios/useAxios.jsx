@@ -30,9 +30,9 @@ const useAxios = () => {
   (response) => response, 
   async (error) => {
     const originalRequest = error.config;
-
     if (
       error.response?.status === 401 &&
+      error.response?.data.message !== "Invalid Credentials" &&
       !originalRequest._retry &&
       !originalRequest.url.includes("/auth/refresh-token")
     ) {
@@ -77,7 +77,6 @@ const useAxios = () => {
     params = {},
     headers = {},
   }) => {
-    console.log(headers);
     setAxiosState((prev) => {
       return {
         ...prev,
@@ -108,6 +107,7 @@ const useAxios = () => {
       if (axios.isCancel(err)) {
         console.error("Request has been cancelled ", err.message);
       } else {
+        console.log(err)
         setAxiosState((prev) => ({
           ...prev,
           error: err.response ? err.response.data : err.message,

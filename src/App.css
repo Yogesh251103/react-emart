@@ -1,0 +1,48 @@
+* {
+  font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
+}
+
+/* Sidebar background */
+.custom-sidebar {
+  background-color: #8a0000 !important; /* your desired bg */
+}
+
+.custom-sidebar .ant-menu-item-disabled {
+  color: white !important;
+  background-color: transparent !important;
+  pointer-events: none;
+  font-weight: 700 !important;
+  opacity: 1 !important;
+  margin-top: 0.5rem;
+  margin-bottom: 1.4rem;
+}
+/* Menu item default style */
+.custom-sidebar .ant-menu-item {
+  color: white; /* text color */
+}
+
+/* Menu item hover */
+.custom-sidebar .ant-menu-item:hover {
+  background-color: #fff !important; /* hover bg */
+  color: #000;
+}
+.custom-sidebar .ant-menu-item-selected {
+  background-color: #fff !important; /* hover bg */
+  color: #000;
+}
+/* Selected menu item */
+.custom-sidebar .ant-menu-submenu-title {
+  /* selected bg */
+  color: #fff !important;
+}
+/* Selected item text */
+.custom-sidebar .ant-menu-item-selected a {
+  color: white !important;
+}
+/* Text styles */
+.custom-sidebar .ant-menu-submenu-title,
+.custom-sidebar .ant-menu-item {
+  font-size: medium;
+  font-weight: 300;
+}

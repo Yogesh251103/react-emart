@@ -1,21 +1,31 @@
-import {PullRequestOutlined} from '@ant-design/icons';
-import { Menu } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import useAxios from '../../hooks/useAxios/useAxios';
-import { authAtom } from '../../atoms/sampleAtom';
-import { useRecoilState,useRecoilValue } from 'recoil';
-import {MdOutlineDashboard, MdOutlineInventory2, MdOutlineShoppingCart, MdLogout } from 'react-icons/md';
-import { PiInvoice } from 'react-icons/pi';
-import { FaUserCircle } from 'react-icons/fa';
-import { LuScrollText } from 'react-icons/lu';
-import './Sidebar.css';
-import { useSnackbar } from '../../contexts/SnackbarContexts';
+import { PullRequestOutlined } from "@ant-design/icons";
+import { Menu } from "antd";
+import { useNavigate } from "react-router-dom";
+import useAxios from "../../hooks/useAxios/useAxios";
+import { authAtom } from "../../atoms/sampleAtom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  MdOutlineDashboard,
+  MdOutlineInventory2,
+  MdOutlineShoppingCart,
+  MdLogout,
+} from "react-icons/md";
+import { PiInvoice } from "react-icons/pi";
+import { FaUserCircle } from "react-icons/fa";
+import { LuScrollText } from "react-icons/lu";
+import { useSnackbar } from "../../contexts/SnackbarContexts";
+import MenuIcon from "../MenuIcon";
+
 const items = [
   {
     key: "shopname",
     label: "EMart Grocerry Shop",
-    icon: <MdOutlineShoppingCart />,
-    disabled: true
+    icon: (
+      <MenuIcon>
+        <MdOutlineShoppingCart />
+      </MenuIcon>
+    ),
+    disabled: true,
   },
   {
     type: "divider",
@@ -23,7 +33,11 @@ const items = [
   {
     key: "dashboard",
     label: "Dashboard",
-    icon: <MdOutlineDashboard />,
+    icon: (
+      <MenuIcon>
+        <MdOutlineDashboard />
+      </MenuIcon>
+    ),
   },
   {
     type: "divider",
@@ -31,7 +45,11 @@ const items = [
   {
     key: "request",
     label: "Requests",
-    icon: <PullRequestOutlined />,
+    icon: (
+      <MenuIcon>
+        <PullRequestOutlined />
+      </MenuIcon>
+    ),
   },
   {
     type: "divider",
@@ -39,16 +57,23 @@ const items = [
   {
     key: "outlet",
     label: "Manage Outlet",
-    icon: <MdOutlineInventory2 />,
+    icon: (
+      <MenuIcon>
+        <MdOutlineInventory2 />
+      </MenuIcon>
+    ),
   },
   {
     type: "divider",
   },
-
   {
     key: "billing",
     label: "Billing",
-    icon: <LuScrollText />,
+    icon: (
+      <MenuIcon>
+        <LuScrollText />
+      </MenuIcon>
+    ),
   },
   {
     type: "divider",
@@ -56,7 +81,11 @@ const items = [
   {
     key: "invoice",
     label: "Invoice",
-    icon: <PiInvoice />,
+    icon: (
+      <MenuIcon>
+        <PiInvoice />
+      </MenuIcon>
+    ),
   },
   {
     type: "divider",
@@ -64,7 +93,11 @@ const items = [
   {
     key: "profile",
     label: "My Profile",
-    icon: <FaUserCircle />,
+    icon: (
+      <MenuIcon>
+        <FaUserCircle />
+      </MenuIcon>
+    ),
   },
   {
     type: "divider",
@@ -72,9 +105,14 @@ const items = [
   {
     key: "logout",
     label: "Logout",
-    icon: <MdLogout />,
+    icon: (
+      <MenuIcon>
+        <MdLogout />
+      </MenuIcon>
+    ),
   },
 ];
+
 const VendorSidebar = () => {
   const navigate = useNavigate();
   const showSnackBar = useSnackbar();
@@ -92,31 +130,28 @@ const VendorSidebar = () => {
 
       console.log("Logout response:", response);
 
-      if(
-        response === "Logged out user successfully"
-      ){
-        setAuth((prev)=>({
+      if (response === "Logged out user successfully") {
+        setAuth((prev) => ({
           ...prev,
           userName: "",
           password: "",
           isLoggedIn: false,
-          tokenVendor: ""
-        }))
-        navigate("/login")
+          tokenVendor: "",
+        }));
+        navigate("/login");
       }
       localStorage.removeItem("vendorToken");
-      showSnackBar("You were logged out",'success')
-      
+      showSnackBar("You were logged out", "success");
     } catch (err) {
       console.error("Logout error:", err);
-      showSnackBar("Something went wrong during logout.",'error');
+      showSnackBar("Something went wrong during logout.", "error");
     }
   };
 
   const routeMap = {
     dashboard: "/",
     request: "/request",
-    outlet : "/manage-outlet",
+    outlet: "/manage-outlet",
     billing: "/billing",
     invoice: "/invoice",
     profile: "/profile",
@@ -135,8 +170,7 @@ const VendorSidebar = () => {
       className="custom-sidebar"
       onClick={onClick}
       style={{ width: 256, height: "100vh" }}
-      defaultSelectedKeys={["shopname"]}
-      defaultOpenKeys={["sub1"]}
+      defaultSelectedKeys={["dashboard"]}
       mode="inline"
       items={items}
     />
