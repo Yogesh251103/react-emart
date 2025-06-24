@@ -32,7 +32,8 @@ const AdminSidebar = () => {
     warehouse: "/admin/warehouse",
     "user-outlet": "/admin/user-management/outlet",
     "user-suplier": "/admin/user-management/supplier",
-    "user-warehouse": "/admin/user-management/warehouse",
+    "user-vendor": "/admin/user-management/vendor",
+    product: "/admin/user-management/product",
     "invoice-outlet": "/admin/invoice/outlet",
     "invoice-suplier": "/admin/invoice/supplier",
     profile: "/admin/profile",
@@ -138,15 +139,6 @@ const AdminSidebar = () => {
       ),
       children: [
         {
-          key: "user-warehouse",
-          label: "Warehouse",
-          icon: (
-            <MenuIcon>
-              <PlusOutlined />
-            </MenuIcon>
-          ),
-        },
-        {
           key: "user-outlet",
           label: "Outlet",
           icon: (
@@ -154,6 +146,15 @@ const AdminSidebar = () => {
               <PlusOutlined />
             </MenuIcon>
           ),
+        },
+        {
+          key: "user-vendor",
+          label: "Vendor",
+          icon: (
+            <MenuIcon>
+              <PlusOutlined/>
+            </MenuIcon>
+          )
         },
         {
           key: "user-suplier",

@@ -46,3 +46,16 @@
   font-size: medium;
   font-weight: 300;
 }
+
+.ant-menu-submenu-popup {
+  background-color: #991b1b !important; 
+}
+
+.ant-menu-dark .ant-menu-submenu-title {
+  background-color: #991b1b !important;
+}
+
+.ant-menu-dark .ant-menu-item-selected,
+.ant-menu-dark .ant-menu-item-active {
+  background-color: #7f1d1d !important; 
+}

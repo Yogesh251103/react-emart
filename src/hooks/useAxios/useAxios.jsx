@@ -12,56 +12,6 @@ const useAxios = () => {
     baseURL: import.meta.env.VITE_APP_API_URL,
   });
 
-  axiosInstance.interceptors.request.use(
-    (config) => {
-      const isAdmin = config.url.includes("/admin");
-      const token = localStorage.getItem(isAdmin ? "adminToken" : "vendorToken");
-      if (token){
-        config.headers.Authorization = `Bearer ${token}`
-      }
-      return config
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
-
-  axiosInstance.interceptors.response.use(
-  (response) => response, 
-  async (error) => {
-    const originalRequest = error.config;
-    if (
-      error.response?.status === 401 &&
-      error.response?.data.message !== "Invalid Credentials" &&
-      !originalRequest._retry &&
-      !originalRequest.url.includes("/auth/refresh-token")
-    ) {
-      originalRequest._retry = true;
-      const isAdmin = originalRequest.url.includes("/admin");
-      const refreshUrl = `${import.meta.env.VITE_APP_API_URL}/auth/refresh-token`;
-      const tokenKey = isAdmin ? "adminToken" : "vendorToken";
-
-      try {
-        const refreshResponse = await axios.post(refreshUrl);
-        const newAccessToken = refreshResponse.data.accessToken;
-
-        if (newAccessToken) {
-          localStorage.setItem(tokenKey, newAccessToken);
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return axiosInstance(originalRequest);
-        }
-      } catch (refreshErr) {
-        localStorage.removeItem("adminToken");
-        localStorage.removeItem("vendorToken");
-        window.location.href = "/login";
-      }
-    }
-
-    return Promise.reject(error); 
-  }
-);
-
-
   let controller = new AbortController();
 
   useEffect(() => {
@@ -76,15 +26,19 @@ const useAxios = () => {
     data = {},
     params = {},
     headers = {},
+    role = "vendor", // "admin" or "vendor"
+    retry = true,
   }) => {
-    setAxiosState((prev) => {
-      return {
-        ...prev,
-        loading: true,
-      };
-    });
+    setAxiosState((prev) => ({ ...prev, loading: true }));
+
     controller.abort();
     controller = new AbortController();
+
+    const tokenKey = role === "admin" ? "adminToken" : "vendorToken";
+    const token = localStorage.getItem(tokenKey);
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
 
     try {
       const result = await axiosInstance({
@@ -92,22 +46,68 @@ const useAxios = () => {
         method,
         data,
         params,
-        headers,
+        headers: {
+          ...authHeader,
+          ...headers,
+        },
         signal: controller.signal,
       });
-      setAxiosState((prev) => {
-        return {
-          ...prev,
-          response: result.data,
-          error: "",
-        };
-      });
+
+      setAxiosState((prev) => ({
+        ...prev,
+        response: result.data,
+        error: "",
+      }));
+
       return result.data;
     } catch (err) {
-      if (axios.isCancel(err)) {
-        console.error("Request has been cancelled ", err.message);
-      } else {
-        console.log(err)
+      const status = err.response?.status;
+      const message = err.response?.data?.message;
+
+      if (
+        status === 401 &&
+        message !== "Invalid Credentials" &&
+        retry &&
+        !url.includes("/auth/refresh-token")
+      ) {
+        // attempt token refresh
+        try {
+          const refreshResult = await axios.post(
+            `${import.meta.env.VITE_APP_API_URL}/auth/refresh-token`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${refreshToken}`,
+              },
+            }
+          );
+
+          const newAccessToken = refreshResult.data.accessToken;
+          if (newAccessToken) {
+            localStorage.setItem(tokenKey, newAccessToken);
+
+            // Retry original request with new token
+            return fetchData({
+              url,
+              method,
+              data,
+              params,
+              headers,
+              role,
+              retry: false, // avoid infinite loop
+            });
+          }
+        } catch (refreshErr) {
+          // refresh token failed
+          localStorage.removeItem("adminToken");
+          localStorage.removeItem("vendorToken");
+          localStorage.removeItem("refreshToken");
+          window.location.href = "/login";
+          return;
+        }
+      }
+
+      if (!axios.isCancel(err)) {
         setAxiosState((prev) => ({
           ...prev,
           error: err.response ? err.response.data : err.message,
@@ -120,6 +120,7 @@ const useAxios = () => {
       }));
     }
   };
+
   const { response, error, loading } = axiosState;
   return { response, error, loading, fetchData };
 };
