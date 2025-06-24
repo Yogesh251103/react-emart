@@ -158,7 +158,7 @@ const VendorSidebar = () => {
     <Menu
       className="custom-sidebar"
       onClick={onClick}
-      style={{ width: 256, height: "100vh" }}
+      style={{ width: '25%', height: "100vh" }}
       selectedKeys={[selectedKey]} 
       mode="inline"
       items={items}

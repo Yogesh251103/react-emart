@@ -40,7 +40,8 @@ const AdminSidebar = () => {
   };
 
   const activeKey =
-    Object.keys(routeMap).find((key) => routeMap[key] === pathname) ?? "dashboard";
+    Object.keys(routeMap).find((key) => routeMap[key] === pathname) ??
+    "dashboard";
 
   const handleLogout = async () => {
     try {
@@ -152,9 +153,9 @@ const AdminSidebar = () => {
           label: "Vendor",
           icon: (
             <MenuIcon>
-              <PlusOutlined/>
+              <PlusOutlined />
             </MenuIcon>
-          )
+          ),
         },
         {
           key: "user-suplier",
@@ -223,7 +224,7 @@ const AdminSidebar = () => {
     <Menu
       className="custom-sidebar"
       onClick={onClick}
-      style={{ width: 256, height: "100vh" }}
+      style={{ width: "25%", height: "100vh" }}
       selectedKeys={[activeKey]}
       mode="inline"
       items={items}
