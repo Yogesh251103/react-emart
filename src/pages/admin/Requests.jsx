@@ -1,3 +1,4 @@
+import RequestTable from '@/components/admin/RequestTable';
 import { Modal } from 'antd';
 import React, { useState } from 'react'
 
@@ -10,7 +11,7 @@ function Requests() {
       <Modal>
 
       </Modal>
-      
+      <RequestTable />
     </div>
     </>
   )
