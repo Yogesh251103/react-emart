@@ -1,11 +1,11 @@
 import { Table } from "antd"
 import { MdOutlineAdd, MdOutlineEdit } from "react-icons/md"
 import { useRecoilState } from "recoil"
-import { supplierAtom } from "../../../atoms/sampleAtom"
+import { supplierList } from "../../../atoms/sampleAtom"
 import useAxios from "../../../hooks/useAxios/useAxios"
 
 function Supplier() {
-  const [supplierData,setSupplierData] = useRecoilState(supplierAtom)
+  const [supplierData,setSupplierData] = useRecoilState(supplierList)
   const {response , error , loading , fetchData} = useAxios();
   const columns = [
     {

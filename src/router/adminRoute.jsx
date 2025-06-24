@@ -7,6 +7,7 @@ import Requests from "@/pages/admin/Requests";
 import Product from "@/pages/admin/User Management/Product";
 import Warehouse from "@/pages/admin/Warehouse";
 import Supplier from "@/pages/admin/User Management/Supplier";
+import Outlet from "../pages/admin/User Management/Outlet";
 import InvOutlet from "@/pages/admin/Invoice/InvOutlet";
 import InvSupplier from "@/pages/admin/Invoice/InvSupplier";
 import Profile from "@/pages/admin/Profile";
@@ -22,16 +23,15 @@ const adminRoute = [
         element: <AdminLayout />,
         children: [
           { path: "", element: <Dashboard /> },
-          { path: "inventory", element: <Inventory /> },
+          { path: "inventory", element: <Product /> },
           { path: "request", element: <Requests /> },
           { path: "warehouse", element: <Warehouse /> },
-          { path: "user-management/outlet", element: <div>Outlet Page</div> },
+          { path: "user-management/outlet", element: <Outlet/>},
           { path: "user-management/supplier", element: <Supplier /> },
           {
             path: "user-management/warehouse",
             element: <div>Warehouse Page</div>,
           },
-          { path: "user-management/product", element: <Product /> },
           { path: "invoice/outlet", element: <InvOutlet /> },
           {
             path: "invoice/supplier",

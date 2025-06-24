@@ -51,6 +51,11 @@ export const supplierAtom = atom({
   default: [],
 });
 
+export const outletList = atom({
+  key:"outletList",
+  default: []
+})
+
 export const outletInvoice = atom({
   key: "outletInvoice",
   default: {

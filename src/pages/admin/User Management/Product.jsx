@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DropDown from "../../../components/admin/DropDown";
 import { PlusOutlined } from "@ant-design/icons";
-import CustomTable from "../../../components/admin/Table";
+import ProductTable from "../../../components/admin/ProductTable";
 import { Modal } from "antd";
 import { productList, supplierList } from "../../../atoms/sampleAtom";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -10,11 +10,13 @@ import { useSnackbar } from "../../../contexts/SnackbarContexts";
 
 const Product = () => {
   const [input, setInput] = useState("");
+  const [productId, setProductId] = useState(null);
   const [productFormData, setProductFormData] = useState({
     currency: "",
     manufacture_date: "",
     expiration_date: "",
     name: "",
+    image: "",
     price: "",
     supplier_id: "",
     category: "",
@@ -22,13 +24,13 @@ const Product = () => {
     threshold: "",
     wholesale_price: "",
   });
+
   const [suppliers, setSuppliers] = useRecoilState(supplierList);
   const setProductList = useSetRecoilState(productList);
   const [supplierId, setSupplierId] = useState("");
   const [formSupplierId, setFormSupplierId] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [editingProduct, setEditingProduct] = useState(null);
 
   const { error, fetchData } = useAxios();
   const showSnackBar = useSnackbar();
@@ -44,11 +46,63 @@ const Product = () => {
     });
   };
 
+  const handleModalCancel = () => {
+    setModalOpen(false);
+    setIsEditMode(false);
+    setProductFormData({
+      currency: "",
+      manufacture_date: "",
+      expiration_date: "",
+      name: "",
+      image: "",
+      price: "",
+      supplier_id: "",
+      category: "",
+      description: "",
+      threshold: "",
+      wholesale_price: "",
+    });
+    setFormSupplierId("");
+  };
+
   const handleSaveProduct = async () => {
+    const {
+      currency,
+      manufacture_date,
+      expiration_date,
+      name,
+      price,
+      threshold,
+      image,
+    } = productFormData;
+
+    if (
+      (isEditMode && !productId.trim()) || 
+      !currency.trim() ||
+      !manufacture_date ||  // need to send manufacture and expiration date from backend
+      !expiration_date ||
+      !name.trim() ||
+      !price ||
+      !threshold ||
+      !image.trim() ||
+      !formSupplierId
+    ) {
+      console.log(currency,
+      manufacture_date,
+      expiration_date,
+      name,
+      price,
+      threshold,
+      image,formSupplierId)
+      showSnackBar("Please fill all required fields", "error");
+      return;
+    }
+
     const token = localStorage.getItem("adminToken");
     const payload = {
       ...productFormData,
       supplierId: formSupplierId,
+      ...(isEditMode && { id: productId }),
     };
 
     const method = isEditMode ? "PUT" : "POST";
@@ -90,21 +144,7 @@ const Product = () => {
       return;
     }
 
-    setModalOpen(false);
-    setIsEditMode(false);
-    setEditingProduct(null);
-    setProductFormData({
-      currency: "",
-      manufacture_date: "",
-      expiration_date: "",
-      name: "",
-      price: "",
-      supplier_id: "",
-      category: "",
-      description: "",
-      threshold: "",
-      wholesale_price: "",
-    });
+    handleModalCancel();
   };
 
   return (
@@ -136,7 +176,7 @@ const Product = () => {
           centered
           open={modalOpen}
           onOk={handleSaveProduct}
-          onCancel={() => setModalOpen(false)}
+          onCancel={handleModalCancel}
           okButtonProps={{ style: { backgroundColor: "#FC4C4B" } }}
         >
           <div className="flex flex-col gap-2">
@@ -150,7 +190,20 @@ const Product = () => {
               required
             />
 
+            <label htmlFor="manufacture_date">Manufacture date</label>
             <input
+              type="date"
+              className="p-2 border-2 border-gray-200 rounded-md"
+              placeholder="Manufacture Date"
+              name="manufacture_date"
+              value={productFormData.manufacture_date}
+              onChange={handleChange}
+              required
+            />
+
+            <label htmlFor="expiration_date">Expiration date</label>
+            <input
+              id="expiration_date"
               type="date"
               className="p-2 border-2 border-gray-200 rounded-md"
               placeholder="Expiration Date"
@@ -166,16 +219,6 @@ const Product = () => {
               placeholder="Image URL"
               name="image"
               value={productFormData.image}
-              onChange={handleChange}
-              required
-            />
-
-            <input
-              type="date"
-              className="p-2 border-2 border-gray-200 rounded-md"
-              placeholder="Manufacture Date"
-              name="manufacture_date"
-              value={productFormData.manufacture_date}
               onChange={handleChange}
               required
             />
@@ -248,13 +291,13 @@ const Product = () => {
           </div>
         </Modal>
       </div>
-      <CustomTable
+      <ProductTable
         supplierId={supplierId}
         productName={input}
         onEdit={(product) => {
-          setEditingProduct(product);
           setProductFormData(product);
           setFormSupplierId(product.supplierId);
+          setProductId(product.id);
           setModalOpen(true);
           setIsEditMode(true);
         }}
