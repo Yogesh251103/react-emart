@@ -16,6 +16,8 @@ import { authAtom } from "../../atoms/sampleAtom";
 import { useRecoilState } from "recoil";
 import { useSnackbar } from "../../contexts/SnackbarContexts";
 import MenuIcon from "../MenuIcon";
+import { FaFileInvoice, FaShop } from "react-icons/fa6";
+import { BsPersonVcardFill } from "react-icons/bs";
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
@@ -180,7 +182,7 @@ const AdminSidebar = () => {
       label: "Invoice",
       icon: (
         <MenuIcon>
-          <PiInvoice />
+          <FaFileInvoice />
         </MenuIcon>
       ),
       children: [
@@ -189,7 +191,7 @@ const AdminSidebar = () => {
           label: "Outlet",
           icon: (
             <MenuIcon>
-              <PlusOutlined />
+              <FaShop />
             </MenuIcon>
           ),
         },
@@ -198,7 +200,7 @@ const AdminSidebar = () => {
           label: "Supplier",
           icon: (
             <MenuIcon>
-              <PlusOutlined />
+              <BsPersonVcardFill />
             </MenuIcon>
           ),
         },

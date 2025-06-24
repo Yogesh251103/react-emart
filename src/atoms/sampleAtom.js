@@ -1,51 +1,61 @@
 import { atom } from "recoil";
-const adminToken = localStorage.getItem("adminToken")  || " ";
+const adminToken = localStorage.getItem("adminToken") || " ";
 const vendorToken = localStorage.getItem("vendorToken") || "";
 
 export const axiosAtom = atom({
-  key: 'axiosState',
+  key: "axiosState",
   default: {
     loading: false,
     response: null,
-    error: '',
+    error: "",
   },
 });
 
 export const authAtom = atom({
-  key: 'authState',
-  default:{
+  key: "authState",
+  default: {
     userName: "",
     password: "",
     isLoggedIn: !!adminToken || !!vendorToken,
     tokenAdmin: adminToken,
-    tokenVendor: vendorToken
-  }
-})
+    tokenVendor: vendorToken,
+  },
+});
 
 export const snackBarAtom = atom({
   key: "snackBar",
   default: {
     open: false,
     message: "",
-    type: "info"
-  }
-})
+    type: "info",
+  },
+});
 
 export const productList = atom({
-  key:"productList",
-  default:[],
-})
+  key: "productList",
+  default: [],
+});
 
 export const warehouseAtom = atom({
   key: "warehouseList",
-  default: []
-})
+  default: [],
+});
 
 export const supplierList = atom({
-  key:"supplierList",
-  default: []
-})
+  key: "supplierList",
+  default: [],
+});
+
 export const supplierAtom = atom({
-  key: supplierData,
-  default: []
-})
+  key: "supplierData",
+  default: [],
+});
+
+export const outletInvoice = atom({
+  key: "outletInvoice",
+  default: {
+    loaded: false,
+    data: [],
+  },
+  dangerouslyAllowMutability: true,
+});

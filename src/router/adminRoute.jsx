@@ -7,6 +7,7 @@ import Requests from "../pages/admin/Requests";
 import Product from "../pages/admin/User Management/Product";
 import Warehouse from "../pages/admin/Warehouse";
 import Supplier from "../pages/admin/User Management/Supplier";
+import InvOutlet from "../pages/admin/Invoice/InvOutlet";
 
 const adminRoute = [
   { path: "admin/login", element: <Login /> },
@@ -21,19 +22,24 @@ const adminRoute = [
           { path: "", element: <Dashboard /> },
           { path: "inventory", element: <Inventory /> },
           { path: "request", element: <Requests /> },
-          {path: "warehouse", element: <Warehouse/>},
+          { path: "warehouse", element: <Warehouse /> },
           { path: "user-management/outlet", element: <div>Outlet Page</div> },
-          { path: "user-management/supplier", element: <Supplier/> },
-          { path: "user-management/warehouse", element: <div>Warehouse Page</div> },
-          { path: "user-management/product", element: <Product/> },
-          { path: "invoice/outlet", element: <div>Invoice Outlet Page</div> },
-          { path: "invoice/supplier", element: <div>Invoice Supplier Page</div> },
+          { path: "user-management/supplier", element: <Supplier /> },
+          {
+            path: "user-management/warehouse",
+            element: <div>Warehouse Page</div>,
+          },
+          { path: "user-management/product", element: <Product /> },
+          { path: "invoice/outlet", element: <InvOutlet /> },
+          {
+            path: "invoice/supplier",
+            element: <div>Invoice Supplier Page</div>,
+          },
           { path: "profile", element: <div>Profile Page</div> },
         ],
       },
     ],
   },
 ];
-
 
 export default adminRoute;
