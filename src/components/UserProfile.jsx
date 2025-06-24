@@ -178,6 +178,12 @@ const EditProfileModal = ({
       onOk={form.submit}
       title="Edit Profile"
       confirmLoading={uploading}
+      okButtonProps={{
+        style: { backgroundColor: "#8a0000", borderColor: "#8a0000" },
+      }}
+      cancelButtonProps={{
+        style: { borderColor: "#8a0000", color: "#8a0000" },
+      }}
     >
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Form.Item name="name" label="Name">
@@ -247,6 +253,12 @@ const ChangePasswordModal = ({
       open={open}
       onCancel={onCancel}
       onOk={form.submit}
+      okButtonProps={{
+        style: { backgroundColor: "#8a0000", borderColor: "#8a0000" },
+      }}
+      cancelButtonProps={{
+        style: { borderColor: "#8a0000", color: "#8a0000" },
+      }}
       title="Change Password"
     >
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
