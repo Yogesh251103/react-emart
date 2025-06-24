@@ -5,6 +5,7 @@ import Dashboard from "../pages/admin/Dashboard";
 import Inventory from "../pages/admin/Inventory";
 import Requests from "../pages/admin/Requests";
 import Warehouse from "../pages/admin/Warehouse";
+import Supplier from "../pages/admin/User Management/Supplier";
 
 const adminRoute = [
   { path: "admin/login", element: <Login /> },
@@ -21,7 +22,7 @@ const adminRoute = [
           { path: "request", element: <Requests /> },
           {path: "warehouse", element: <Warehouse/>},
           { path: "user-management/outlet", element: <div>Outlet Page</div> },
-          { path: "user-management/supplier", element: <div>Supplier Page</div> },
+          { path: "user-management/supplier", element: <Supplier/> },
           { path: "user-management/warehouse", element: <div>Warehouse Page</div> },
           { path: "invoice/outlet", element: <div>Invoice Outlet Page</div> },
           { path: "invoice/supplier", element: <div>Invoice Supplier Page</div> },

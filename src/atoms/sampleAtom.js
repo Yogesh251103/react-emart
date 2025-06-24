@@ -40,3 +40,7 @@ export const warehouseAtom = atom({
   key: "warehouse",
   default: []
 })
+export const supplierAtom = atom({
+  key: supplierData,
+  default: []
+})
