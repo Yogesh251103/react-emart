@@ -7,6 +7,7 @@ import Requests from "../pages/admin/Requests";
 import Product from "../pages/admin/User Management/Product";
 import Warehouse from "../pages/admin/Warehouse";
 import Supplier from "../pages/admin/User Management/Supplier";
+import Outlet from "../pages/admin/User Management/Outlet";
 
 const adminRoute = [
   { path: "admin/login", element: <Login /> },
@@ -22,7 +23,7 @@ const adminRoute = [
           { path: "inventory", element: <Inventory /> },
           { path: "request", element: <Requests /> },
           {path: "warehouse", element: <Warehouse/>},
-          { path: "user-management/outlet", element: <div>Outlet Page</div> },
+          { path: "user-management/outlet", element: <Outlet/>},
           { path: "user-management/supplier", element: <Supplier/> },
           { path: "user-management/warehouse", element: <div>Warehouse Page</div> },
           { path: "user-management/product", element: <Product/> },

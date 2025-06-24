@@ -45,7 +45,8 @@ export const supplierList = atom({
   key:"supplierList",
   default: []
 })
-export const supplierAtom = atom({
-  key: supplierData,
+
+export const outletList = atom({
+  key:"outletList",
   default: []
 })
