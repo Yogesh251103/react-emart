@@ -10,6 +10,7 @@ import { useSnackbar } from "../../../contexts/SnackbarContexts";
 
 const Product = () => {
   const [input, setInput] = useState("");
+  const [productId, setProductId] = useState(null);
   const [productFormData, setProductFormData] = useState({
     currency: "",
     manufacture_date: "",
@@ -23,7 +24,7 @@ const Product = () => {
     threshold: "",
     wholesale_price: "",
   });
-  
+
   const [suppliers, setSuppliers] = useRecoilState(supplierList);
   const setProductList = useSetRecoilState(productList);
   const [supplierId, setSupplierId] = useState("");
@@ -76,8 +77,9 @@ const Product = () => {
     } = productFormData;
 
     if (
+      (isEditMode && !productId.trim()) || 
       !currency.trim() ||
-      !manufacture_date ||
+      !manufacture_date ||  // need to send manufacture and expiration date from backend
       !expiration_date ||
       !name.trim() ||
       !price ||
@@ -85,6 +87,13 @@ const Product = () => {
       !image.trim() ||
       !formSupplierId
     ) {
+      console.log(currency,
+      manufacture_date,
+      expiration_date,
+      name,
+      price,
+      threshold,
+      image,formSupplierId)
       showSnackBar("Please fill all required fields", "error");
       return;
     }
@@ -93,6 +102,7 @@ const Product = () => {
     const payload = {
       ...productFormData,
       supplierId: formSupplierId,
+      ...(isEditMode && { id: productId }),
     };
 
     const method = isEditMode ? "PUT" : "POST";
@@ -180,7 +190,20 @@ const Product = () => {
               required
             />
 
+            <label htmlFor="manufacture_date">Manufacture date</label>
             <input
+              type="date"
+              className="p-2 border-2 border-gray-200 rounded-md"
+              placeholder="Manufacture Date"
+              name="manufacture_date"
+              value={productFormData.manufacture_date}
+              onChange={handleChange}
+              required
+            />
+
+            <label htmlFor="expiration_date">Expiration date</label>
+            <input
+              id="expiration_date"
               type="date"
               className="p-2 border-2 border-gray-200 rounded-md"
               placeholder="Expiration Date"
@@ -196,16 +219,6 @@ const Product = () => {
               placeholder="Image URL"
               name="image"
               value={productFormData.image}
-              onChange={handleChange}
-              required
-            />
-
-            <input
-              type="date"
-              className="p-2 border-2 border-gray-200 rounded-md"
-              placeholder="Manufacture Date"
-              name="manufacture_date"
-              value={productFormData.manufacture_date}
               onChange={handleChange}
               required
             />
@@ -284,6 +297,7 @@ const Product = () => {
         onEdit={(product) => {
           setProductFormData(product);
           setFormSupplierId(product.supplierId);
+          setProductId(product.id);
           setModalOpen(true);
           setIsEditMode(true);
         }}

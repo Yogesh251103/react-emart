@@ -37,9 +37,7 @@ const OutletTable = ({ warehouseId, outletName, onEdit }) => {
       render: (active) => (
         <span
           className={`px-2 py-1 text-xs rounded-full font-medium ${
-            active
-              ? "bg-green-100 text-green-800"
-              : "bg-red-100 text-red-800"
+            active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
           }`}
         >
           {active ? "Active" : "Inactive"}
@@ -50,14 +48,15 @@ const OutletTable = ({ warehouseId, outletName, onEdit }) => {
       title: "Edit",
       key: "edit",
       render: (_, record) => {
-          console.log(record);
-          return (<button
-          className="text-blue-500 underline"
-          onClick={() => onEdit(record)}
-        >
-          Edit
-        </button>)
-    },
+        return (
+          <button
+            className="text-blue-500 underline"
+            onClick={() => onEdit(record)}
+          >
+            Edit
+          </button> 
+        );
+      },
     },
   ];
 

@@ -22,14 +22,14 @@ const ProductTable = ({ supplierId, productName, onEdit }) => {
       dataIndex: "currency",
     },
     {
-      title: "Expiration Date",
-      key: "expiration_date",
-      dataIndex: "expiration_date",
-    },
-    {
       title: "Manufacture Date",
       key: "manufacture_date",
       dataIndex: "manufacture_date",
+    },
+    {
+      title: "Expiration Date",
+      key: "expiration_date",
+      dataIndex: "expiration_date",
     },
     {
       title: "Name",

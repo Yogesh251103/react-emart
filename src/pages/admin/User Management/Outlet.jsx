@@ -10,12 +10,12 @@ import { Modal } from "antd";
 
 const Outlet = () => {
   const [input, setInput] = useState("");
+  const [outletId,setOutletId] = useState(null);
   const [outletFormData, setOutletFormData] = useState({
     name: "",
     address: "",
   });
 
-  const [outletId,setOutletId] = useState(null)
   const [warehouses, setWarehouses] = useRecoilState(warehouseAtom);
   const setOutletList = useSetRecoilState(outletList);
   const [warehouseId, setWarehouseId] = useState("");
@@ -37,6 +37,7 @@ const Outlet = () => {
 
   const handleSaveOutlet = async () => {
     if (
+      (isEditMode && !outletFormData.id) || 
       !outletFormData.name.trim() ||
       !outletFormData.address.trim() ||
       !formWarehouseId
@@ -49,6 +50,7 @@ const Outlet = () => {
     const payload = {
       ...outletFormData,
       warehouseId: formWarehouseId,
+      ...(isEditMode && { id: outletId }),
     };
 
     const method = isEditMode ? "PUT" : "POST";
