@@ -9,6 +9,7 @@ import Supplier from "@/pages/admin/User Management/Supplier";
 import Outlet from "../pages/admin/User Management/Outlet";
 import InvOutlet from "@/pages/admin/Invoice/InvOutlet";
 import InvSupplier from "@/pages/admin/Invoice/InvSupplier";
+import Profile from "@/pages/admin/Profile";
 import Vendor from "@/pages/admin/User Management/Vendor";
 
 const adminRoute = [
@@ -34,7 +35,7 @@ const adminRoute = [
             path: "invoice/supplier",
             element: <InvSupplier />,
           },
-          { path: "profile", element: <div>Profile Page</div> },
+          { path: "profile", element: <Profile /> },
         ],
       },
     ],

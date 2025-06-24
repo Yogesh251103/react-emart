@@ -19,7 +19,7 @@ import MenuIcon from "@/components/MenuIcon";
 const items = [
   {
     key: "shopname",
-    label: "EMart Grocery Shop",
+    label: "E-Mart Grocery Shop",
     icon: (
       <MenuIcon>
         <MdOutlineShoppingCart />
