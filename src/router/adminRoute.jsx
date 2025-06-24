@@ -22,7 +22,7 @@ const adminRoute = [
         element: <AdminLayout />,
         children: [
           { path: "", element: <Dashboard /> },
-          { path: "inventory", element: <Inventory /> },
+          { path: "inventory", element: <Product /> },
           { path: "request", element: <Requests /> },
           { path: "warehouse", element: <Warehouse /> },
           { path: "user-management/outlet", element: <Outlet/>},
@@ -31,7 +31,6 @@ const adminRoute = [
             path: "user-management/warehouse",
             element: <div>Warehouse Page</div>,
           },
-          { path: "user-management/product", element: <Product /> },
           { path: "invoice/outlet", element: <InvOutlet /> },
           {
             path: "invoice/supplier",
