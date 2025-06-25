@@ -4,6 +4,7 @@ import { outletStock } from "@/atoms/vendor-profile";
 import useAxios from "@/hooks/useAxios/useAxios";
 import { useSnackbar } from "@/contexts/SnackbarContexts";
 import { Spin } from "antd";
+import Barcode from "react-barcode";
 
 function OutletStock() {
   const [stock, setStock] = useRecoilState(outletStock);
@@ -67,6 +68,7 @@ function OutletStock() {
                 <p className="mt-2 font-medium">
                   ₹{product.price.toFixed(2)} {product.currency}
                 </p>
+                <Barcode className="w-full h-fit" value={product.id} />
                 <div className="mt-4 text-sm text-left w-full">
                   <p className="w-full flex justify-between items-center">
                     <strong>Category:</strong> {product.category}

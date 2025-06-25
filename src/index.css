@@ -4,7 +4,7 @@
   --color-brown: #3b060a;
   --color-dark-red: #8a0000;
   --color-light-red: #ff4c4b;
-  --color-grey: #eaebed;
+  --color-grey: #DDDDDD;
 }
 .h1 {
   @apply font-bold text-3xl pb-5;
