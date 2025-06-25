@@ -172,126 +172,122 @@ function Warehouse() {
   ];
 
   return (
-    <div>
-      <h1 className="md:text-2xl md:pl-5 font-bold">Warehouse Listing</h1>
-      <div className="flex justify-between p-5">
-        <div>
+    <div className="p-4 sm:p-6 md:p-8 bg-white min-h-screen">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4">Warehouse Listing</h1>
+
+      <div className="flex flex-col sm:flex-row justify-between gap-4 sm:items-center mb-6">
+        <input
+          type="search"
+          className="border border-gray-300 rounded-md p-2 w-full sm:w-[30vw]"
+          placeholder="Search"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button
+          className="w-full sm:w-auto flex justify-center gap-2 items-center px-4 py-2 bg-[#8a0000] rounded-md text-white"
+          onClick={() => setModalOpen(true)}
+        >
+          Add New Warehouse <MdOutlineAdd />
+        </button>
+      </div>
+
+      <Modal
+        title="Add New Warehouse"
+        centered
+        open={modalOpen}
+        onOk={addWarehouse}
+        onCancel={() => {
+          setModalOpen(false);
+          setWarehouseData({ name: "", address: "" });
+        }}
+        okButtonProps={{ style: { backgroundColor: "#FC4C4B" } }}
+      >
+        <div className="flex flex-col gap-2">
           <input
-            type="search"
-            className="border-2 border-gray-200 rounded-md p-2 w-[30vw]"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            type="text"
+            className="p-2 border border-gray-300 rounded-md w-full"
+            placeholder="Name"
+            autoFocus
+            onChange={(e) =>
+              setWarehouseData((prev) => ({
+                ...prev,
+                name: e.target.value,
+              }))
+            }
+            value={warehouseData.name}
+            required
+          />
+          <input
+            type="text"
+            className="p-2 border border-gray-300 rounded-md w-full"
+            placeholder="Address"
+            onChange={(e) =>
+              setWarehouseData((prev) => ({
+                ...prev,
+                address: e.target.value,
+              }))
+            }
+            value={warehouseData.address}
+            required
           />
         </div>
-        <div>
-          <button
-            className="flex justify-center gap-2 items-center md:p-2 bg-[#8a0000] rounded-md text-white cursor-pointer"
-            onClick={() => setModalOpen(true)}
+      </Modal>
+
+      <Modal
+        title="Edit Warehouse"
+        centered
+        open={editModalOpen}
+        onOk={updateWarehouse}
+        onCancel={() => {
+          setEditModalOpen(false);
+          setEditingWarehouse(false);
+        }}
+        okButtonProps={{ style: { backgroundColor: "#FC4C4B" } }}
+      >
+        <div className="flex flex-col gap-2">
+          <input
+            type="text"
+            placeholder="Name"
+            className="p-2 border border-gray-300 rounded-md w-full"
+            value={editingWarehouse?.name || ""}
+            onChange={(e) =>
+              setEditingWarehouse((prev) => ({
+                ...prev,
+                name: e.target.value,
+              }))
+            }
+          />
+          <input
+            type="text"
+            placeholder="Address"
+            className="p-2 border border-gray-300 rounded-md w-full"
+            value={editingWarehouse?.address || ""}
+            onChange={(e) =>
+              setEditingWarehouse((prev) => ({
+                ...prev,
+                address: e.target.value,
+              }))
+            }
+          />
+          <select
+            className="p-2 border border-gray-300 rounded-md w-full"
+            value={editingWarehouse?.active ? "active" : "inactive"}
+            onChange={(e) =>
+              setEditingWarehouse((prev) => ({
+                ...prev,
+                active: e.target.value === "active",
+              }))
+            }
           >
-            Add New Warehouse <MdOutlineAdd />
-          </button>
-          <Modal
-            title="Add New Warehouse"
-            centered
-            open={modalOpen}
-            onOk={addWarehouse}
-            onCancel={() => {
-              setModalOpen(false);
-              setWarehouseData({ name: "", address: "" }); // reset form on cancel
-            }}
-            okButtonProps={{ style: { backgroundColor: "#FC4C4B" } }}
-            // confirmLoading={loading} // optional: show loading on submit
-          >
-            <div className="flex flex-col gap-2">
-              <input
-                type="text"
-                className="p-2 border-2 border-gray-200 rounded-md"
-                placeholder="Name"
-                autoFocus
-                onChange={(e) =>
-                  setWarehouseData((prev) => ({
-                    ...prev,
-                    name: e.target.value,
-                  }))
-                }
-                value={warehouseData.name}
-                required
-              />
-              <input
-                type="text"
-                className="p-2 border-2 border-gray-200 rounded-md"
-                onChange={(e) =>
-                  setWarehouseData((prev) => ({
-                    ...prev,
-                    address: e.target.value,
-                  }))
-                }
-                value={warehouseData.address}
-                placeholder="Address"
-                required
-              />
-            </div>
-          </Modal>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
         </div>
-      </div>
-      {/* EDIT WAREHOUSE MODAL */}
-      <div>
-        <Modal
-          title="Edit Warehouse"
-          centered
-          open={editModalOpen}
-          onOk={updateWarehouse}
-          onCancel={() => {
-            setEditModalOpen(false);
-            setEditingWarehouse(false);
-          }}
-          okButtonProps={{ style: { backgroundColor: "#FC4C4B" } }}
-        >
-          <div className="flex flex-col gap-2">
-            <input
-              type="text"
-              placeholder="Name"
-              className="p-2 border-2 border-gray-200 rounded-md"
-              value={editingWarehouse?.name || "Name"}
-              onChange={(e) =>
-                setEditingWarehouse((prev) => ({
-                  ...prev,
-                  name: e.target.value,
-                }))
-              }
-            />
-            <input
-              type="text"
-              placeholder="Name"
-              className="p-2 border-2 border-gray-200 rounded-md"
-              value={editingWarehouse?.address || "Name"}
-              onChange={(e) =>
-                setEditingWarehouse((prev) => ({
-                  ...prev,
-                  address: e.target.value,
-                }))
-              }
-            />
-            <select
-              className="p-2 border-2 border-gray-200 rounded-md"
-              value={editingWarehouse?.active ? "active" : "inactive"}
-              onChange={(e) =>
-                setEditingWarehouse((prev) => ({
-                  ...prev,
-                  active: e.target.value === "active",
-                }))
-              }
-            >
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-          </div>
-        </Modal>
-      </div>
-      <div className="pl-4">
+      </Modal>
+
+      <div className="overflow-x-auto">
         <Table
-          className="border-2 border-grey shadow-sm rounded-lg"
+          className="border border-gray-200 shadow-sm rounded-lg"
           components={{
             header: {
               cell: (props) => (
