@@ -86,7 +86,10 @@ function SaleInsights() {
       <h1 className="text-2xl font-bold mb-6">Sale Insights</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-        <Card title="Stock Quantity per Product">
+        <Card
+          style={{ border: "2px solid #DDDDDD" }}
+          title="Stock Quantity per Product"
+        >
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={uniqueData}>
               <XAxis dataKey="Product Name" />
@@ -97,7 +100,10 @@ function SaleInsights() {
           </ResponsiveContainer>
         </Card>
 
-        <Card title="Sales Velocity (Units/Day)">
+        <Card
+          style={{ border: "2px solid #DDDDDD" }}
+          title="Sales Velocity (Units/Day)"
+        >
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={uniqueData}>
               <XAxis dataKey="Product Name" />
@@ -108,7 +114,10 @@ function SaleInsights() {
           </ResponsiveContainer>
         </Card>
 
-        <Card title="Product Expiry Status">
+        <Card
+          style={{ border: "2px solid #DDDDDD" }}
+          title="Product Expiry Status"
+        >
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={uniqueData}>
               <XAxis dataKey="Product Name" />
@@ -119,7 +128,10 @@ function SaleInsights() {
           </ResponsiveContainer>
         </Card>
 
-        <Card title="Category Distribution">
+        <Card
+          style={{ border: "2px solid #DDDDDD" }}
+          title="Category Distribution"
+        >
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
@@ -140,7 +152,11 @@ function SaleInsights() {
         </Card>
       </div>
 
-      <Card title="Product Inventory Table" className="mt-6">
+      <Card
+        title="Product Inventory Table"
+        style={{ border: "2px solid #DDDDDD" }}
+        className="mt-6"
+      >
         <Table
           dataSource={uniqueData}
           columns={columns}
