@@ -6,7 +6,7 @@ import Billing from "@/pages/vendor/Billing";
 import Invoice from "@/pages/vendor/Invoice";
 import ManageOutlet from "@/pages/vendor/ManageOutlet";
 import Profile from "@/pages/vendor/Profile";
-import Requests from "@/pages/admin/Requests";
+import Requests from "@/pages/vendor/Requests";
 const vendorRoute = [
   { path: "/login", element: <Login /> },
   {

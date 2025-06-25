@@ -31,3 +31,30 @@ export const outletStock = atom({
   },
   dangerouslyAllowMutability: true,
 });
+
+export const productsList = atom({
+  key: "productsList",
+  default: {
+    loaded: false,
+    data: [],
+  },
+  dangerouslyAllowMutability: true,
+});
+
+export const restockingRequest = atom({
+  key: "restockingRequest",
+  default: {
+    loaded: false,
+    data: [],
+  },
+  dangerouslyAllowMutability: true,
+});
+
+export const replacementRequest = atom({
+  key: "replacementRequest",
+  default: {
+    loaded: false,
+    data: [],
+  },
+  dangerouslyAllowMutability: true,
+});

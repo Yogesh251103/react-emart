@@ -37,49 +37,54 @@ function UserProfile({ title, user, setUser, token }) {
   }, [user.loaded]);
 
   return (
-    <div className="p-8 min-h-screen bg-white">
-      <h1 className="text-3xl font-semibold mb-6 text-center">{title}</h1>
+    <div className="p-4 sm:p-8 min-h-screen bg-white">
+      <h1 className="text-2xl sm:text-3xl font-semibold mb-6 text-center">
+        {title}
+      </h1>
 
       {loading ? (
         <div className="flex justify-center items-center h-60">
           <Spin size="large" />
         </div>
       ) : (
-        <div className="flex flex-col items-center gap-6 w-1/2 mx-auto">
+        <div className="flex flex-col items-center gap-6 w-full max-w-xl mx-auto px-4">
           <img
             src={user.data?.image || "/default-avatar.png"}
             alt="Profile"
-            className="w-36 h-36 rounded-full object-cover border shadow-md"
+            className="w-28 h-28 sm:w-36 sm:h-36 rounded-full object-cover border shadow-md"
             onError={(e) => (e.target.src = "/default-avatar.png")}
           />
-          <div className="text-lg space-y-1 text-center w-full">
-            <p className="w-full flex items-center justify-between">
-              <strong>Name:</strong> {user.data.name}
-            </p>
-            <p className="w-full flex items-center justify-between">
-              <strong>Email:</strong> {user.data.email}
-            </p>
-            <p className="w-full flex items-center justify-between">
-              <strong>Phone:</strong> {user.data.phone}
-            </p>
-            <p className="w-full flex items-center justify-between">
-              <strong>Username:</strong> {user.data.username}
-            </p>
+
+          <div className="text-base sm:text-lg space-y-2 w-full">
+            <div className="flex flex-col sm:flex-row sm:justify-between">
+              <strong>Name:</strong> <span>{user.data.name}</span>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:justify-between">
+              <strong>Email:</strong> <span>{user.data.email}</span>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:justify-between">
+              <strong>Phone:</strong> <span>{user.data.phone}</span>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:justify-between">
+              <strong>Username:</strong> <span>{user.data.username}</span>
+            </div>
           </div>
 
-          <div className="mt-4 flex gap-4">
+          <div className="mt-4 flex flex-col sm:flex-row gap-4 w-full justify-center">
             <Button
-              style={{ background: "#8a0000", padding: 20 }}
+              className="w-full sm:w-auto"
+              style={{ background: "#8a0000", padding: "0 20px" }}
               onClick={() => setShowEdit(true)}
               type="primary"
             >
               Edit Profile
             </Button>
             <Button
+              className="w-full sm:w-auto"
               style={{
                 color: "#8a0000",
                 border: "1px solid #8a0000",
-                padding: 20,
+                padding: "0 20px",
               }}
               onClick={() => setShowChangePassword(true)}
               type="default"

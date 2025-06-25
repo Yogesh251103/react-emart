@@ -4,8 +4,23 @@
   --color-brown: #3b060a;
   --color-dark-red: #8a0000;
   --color-light-red: #ff4c4b;
-  --color-grey: #eaebed;
+  --color-grey: #dddddd;
 }
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #8a0000;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
 .h1 {
   @apply font-bold text-3xl pb-5;
 }
