@@ -31,3 +31,12 @@ export const outletStock = atom({
   },
   dangerouslyAllowMutability: true,
 });
+
+export const productsList = atom({
+  key: "productsList",
+  default: {
+    loaded: false,
+    data: [],
+  },
+  dangerouslyAllowMutability: true,
+});
