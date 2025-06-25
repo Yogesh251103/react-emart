@@ -188,7 +188,7 @@ function Billing() {
       title: "Date",
       dataIndex: "date",
       key: "date",
-      render: (text) => dayjs(text).format("YYYY-MM-DD HH:mm"),
+      render: (text) => dayjs(text).format("YYYY-MM-DD HH:mm A"),
     },
     {
       title: "Vendor",

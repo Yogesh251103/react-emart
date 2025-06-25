@@ -129,22 +129,9 @@ function Supplier() {
     }
 
     try {
-      const reqData =  {
-          id,
-          logo,
-          name,
-          email,
-          phone,
-          address,
-          taxNumber,
-          ...(isEditing && { active }),
-        }
-      console.log(reqData)
       const response = await fetchData({
         method: isEditing ? "PUT" : "POST",
-        url: isEditing
-          ? "/admin/supplier"
-          : "/admin/supplier",
+        url: "/admin/supplier",
         data: {
           id,
           logo,
