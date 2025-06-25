@@ -66,7 +66,7 @@ const DropDown = ({ url, method, setter, globalState, setGlobalState }) => {
         selectedKeys: selectedKey ? [selectedKey] : [],
       }}
       arrow
-      className="border rounded p-3"
+      className="border rounded p-3 cursor-pointer"
     >
       <a onClick={(e) => e.preventDefault()}>
         <Space>{filterName}</Space>

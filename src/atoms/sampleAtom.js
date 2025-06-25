@@ -73,3 +73,8 @@ export const supplierInvoice = atom({
   },
   dangerouslyAllowMutability: true,
 });
+
+export const requestsList = atom({
+  key:"requestsList",
+  default:[]
+})
