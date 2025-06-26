@@ -158,7 +158,7 @@ const Product = () => {
           type="text"
           className="input"
           placeholder="Enter product name here"
-          onChange={(e) => setInput(e.target.value)} 
+          onChange={(e) => setInput(e.target.value)}
         />
         <DropDown
           url="/admin/supplier"
@@ -290,6 +290,7 @@ const Product = () => {
               setter={setFormSupplierId}
               globalState={suppliers}
               setGlobalState={setSuppliers}
+              selectedValue={formSupplierId}
             />
           </div>
         </Modal>

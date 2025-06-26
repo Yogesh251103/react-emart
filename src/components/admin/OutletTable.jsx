@@ -75,7 +75,6 @@ const OutletTable = ({ warehouseId, outletName, onEdit }) => {
       });
 
       if (response) {
-        console.log(response);
         setDataSource(response);
       }
     };

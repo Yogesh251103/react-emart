@@ -36,15 +36,7 @@ function Warehouse() {
       });
 
       if (response) {
-        setWarehouse(
-          response.map((w, index) => ({
-            key: index + 1,
-            warehouse_name: w.name,
-            id: w.id,
-            location: w.address,
-            status: w.active ? "Active" : "Inactive",
-          }))
-        );
+        setWarehouse(response);
       }
     } catch (err) {
       showSnackBar("Error Fetching Data", "error");
@@ -127,7 +119,7 @@ function Warehouse() {
   const columns = [
     {
       title: "Warehouse Name",
-      dataIndex: "warehouse_name",
+      dataIndex: "name",
       key: "warehouse_name",
     },
     {
@@ -137,22 +129,22 @@ function Warehouse() {
     },
     {
       title: "Location",
-      dataIndex: "location",
-      key: "location",
+      dataIndex: "address",
+      key: "address",
     },
     {
       title: "Status",
-      dataIndex: "status",
-      key: "status",
+      dataIndex: "active",
+      key: "active",
       render: (status) => (
         <span
           className={`px-2 py-1 text-xs rounded-full font-medium ${
-            status === "Active"
+            status
               ? "bg-green-100 text-green-800"
               : "bg-red-100 text-red-800"
           }`}
         >
-          {status}
+          {status ? "Active" : "Inactive"}
         </span>
       ),
     },
