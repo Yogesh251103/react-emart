@@ -81,91 +81,97 @@ function SaleInsights() {
     }, {})
   ).map(([name, value]) => ({ name, value }));
 
-  return (
-    <div className="p-5">
-      <h1 className="text-2xl font-bold mb-6">Sale Insights</h1>
+return (
+  <div className="p-4 sm:p-6">
+    <h1 className="text-xl sm:text-2xl font-bold text-[#8a0000] mb-6">Sale Insights</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-        <Card
-          style={{ border: "2px solid #DDDDDD" }}
-          title="Stock Quantity per Product"
-        >
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={uniqueData}>
-              <XAxis dataKey="Product Name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="Stock Qty" fill="#8a0000" />
-            </BarChart>
-          </ResponsiveContainer>
-        </Card>
-
-        <Card
-          style={{ border: "2px solid #DDDDDD" }}
-          title="Sales Velocity (Units/Day)"
-        >
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={uniqueData}>
-              <XAxis dataKey="Product Name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="Units/Day" fill="#ffb300" />
-            </BarChart>
-          </ResponsiveContainer>
-        </Card>
-
-        <Card
-          style={{ border: "2px solid #DDDDDD" }}
-          title="Product Expiry Status"
-        >
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={uniqueData}>
-              <XAxis dataKey="Product Name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="Product Expiry Days" fill="#2196f3" />
-            </BarChart>
-          </ResponsiveContainer>
-        </Card>
-
-        <Card
-          style={{ border: "2px solid #DDDDDD" }}
-          title="Category Distribution"
-        >
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={categoryData}
-                dataKey="value"
-                nameKey="name"
-                outerRadius={100}
-                fill="#8884d8"
-                label
-              >
-                {categoryData.map((_, index) => (
-                  <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </Card>
-      </div>
+    {/* Responsive Grid of Cards */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+      <Card
+        style={{ border: "2px solid #DDDDDD" }}
+        title="Stock Quantity per Product"
+      >
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={uniqueData}>
+            <XAxis dataKey="Product Name" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="Stock Qty" fill="#8a0000" />
+          </BarChart>
+        </ResponsiveContainer>
+      </Card>
 
       <Card
-        title="Product Inventory Table"
         style={{ border: "2px solid #DDDDDD" }}
-        className="mt-6"
+        title="Sales Velocity (Units/Day)"
       >
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={uniqueData}>
+            <XAxis dataKey="Product Name" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="Units/Day" fill="#ffb300" />
+          </BarChart>
+        </ResponsiveContainer>
+      </Card>
+
+      <Card
+        style={{ border: "2px solid #DDDDDD" }}
+        title="Product Expiry Status"
+      >
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={uniqueData}>
+            <XAxis dataKey="Product Name" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="Product Expiry Days" fill="#2196f3" />
+          </BarChart>
+        </ResponsiveContainer>
+      </Card>
+
+      <Card
+        style={{ border: "2px solid #DDDDDD" }}
+        title="Category Distribution"
+      >
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie
+              data={categoryData}
+              dataKey="value"
+              nameKey="name"
+              outerRadius={100}
+              fill="#8884d8"
+              label
+            >
+              {categoryData.map((_, index) => (
+                <Cell key={index} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
+        </ResponsiveContainer>
+      </Card>
+    </div>
+
+    {/* Table Section */}
+    <Card
+      title="Product Inventory Table"
+      style={{ border: "2px solid #DDDDDD" }}
+      className="mt-6"
+    >
+      <div className="overflow-x-auto">
         <Table
           dataSource={uniqueData}
           columns={columns}
           rowKey="Product ID"
           pagination={{ pageSize: 6 }}
+          className="min-w-[700px]"
         />
-      </Card>
-    </div>
-  );
+      </div>
+    </Card>
+  </div>
+);
+
 }
 
 export default SaleInsights;
