@@ -231,51 +231,61 @@ function Billing() {
   ];
 
   return (
-    <div>
-      <h1 className="md:text-2xl md:pl-5 font-bold mb-4">Product Sales</h1>
-      <div className="flex justify-end px-5 mb-4">
-        <Button
-          style={{ border: "2px solid #8a0000", color: "#8a0000", padding: 15 }}
-          onClick={() => setModalOpen(true)}
-        >
-          Add Sale <MdOutlineAdd />
-        </Button>
-      </div>
-      <div className="px-5">
-        <Table
-          className="border-2 border-grey shadow-sm rounded-lg"
-          loading={loading}
-          dataSource={sales}
-          rowKey={(record) => record.id}
-          columns={columns}
-          components={{
-            header: {
-              cell: (props) => (
-                <th
-                  {...props}
-                  className="bg-red-100 text-black"
-                  style={{
-                    ...props.style,
-                    backgroundColor: "#8a0000",
-                    color: "white",
-                    fontWeight: "bold",
-                  }}
-                />
-              ),
-            },
-          }}
-        />
-      </div>
+  <div className="p-4 sm:p-6 md:p-8">
+    {/* Title */}
+    <h1 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 text-center sm:text-left">
+      Product Sales
+    </h1>
 
-      {/* Add Sale Modal */}
-      <AddSaleModal
-        open={modalOpen}
-        onCancel={() => setModalOpen(false)}
-        onSave={handleCreateSale}
-        allProducts={products.data || []}
+    {/* Add Button */}
+    <div className="w-full flex justify-end mb-4">
+      <Button
+        className="w-full sm:w-auto flex items-center justify-center gap-2 border-2"
+        style={{ borderColor: "#8a0000", color: "#8a0000", padding: 15 }}
+        onClick={() => setModalOpen(true)}
+      >
+        Add Sale <MdOutlineAdd />
+      </Button>
+    </div>
+
+    {/* Table */}
+    <div className="overflow-x-auto">
+      <Table
+        className="min-w-full border-2 border-gray-300 shadow-sm rounded-lg"
+        loading={loading}
+        dataSource={sales}
+        rowKey={(record) => record.id}
+        columns={columns}
+        scroll={{ x: "max-content" }}
+        components={{
+          header: {
+            cell: (props) => (
+              <th
+                {...props}
+                className="text-center"
+                style={{
+                  ...props.style,
+                  backgroundColor: "#8a0000",
+                  color: "white",
+                  fontWeight: "bold",
+                }}
+              />
+            ),
+          },
+        }}
       />
     </div>
-  );
+
+    {/* Add Sale Modal */}
+    <AddSaleModal
+      open={modalOpen}
+      onCancel={() => setModalOpen(false)}
+      onSave={handleCreateSale}
+      allProducts={products.data || []}
+    />
+  </div>
+);
+
 }
 
 export default Billing;

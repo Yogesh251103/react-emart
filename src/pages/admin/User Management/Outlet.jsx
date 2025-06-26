@@ -110,7 +110,7 @@ const Outlet = () => {
 
   return (
     <div className="flex flex-col">
-      <h1 className="h1">Products</h1>
+      <h1 className="h1">Outlet</h1>
       <div className="w-full flex items-center justify-around pb-10">
         <input
           type="text"
