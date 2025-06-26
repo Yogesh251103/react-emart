@@ -259,13 +259,15 @@ const RequestTable = ({ tabKey, warehouseId }) => {
       : []),
   ];
 
-  return (
+ return (
+  <div className="overflow-x-auto mt-6 rounded-lg border border-gray-300 shadow-md">
     <Table
       columns={columns}
       dataSource={requests}
       rowKey="id"
       pagination={{ pageSize: 5 }}
-      className="mt-6 border border-grey shadow-md rounded-lg"
+      scroll={{ x: 'max-content' }} // 👈 for horizontal scroll on smaller screens
+      className="min-w-full"
       components={{
         header: {
           cell: (props) => (
@@ -283,7 +285,9 @@ const RequestTable = ({ tabKey, warehouseId }) => {
         },
       }}
     />
-  );
+  </div>
+);
+
 };
 
 export default RequestTable;

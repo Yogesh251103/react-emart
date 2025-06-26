@@ -29,7 +29,7 @@ function Requests() {
     },
   ];
   return (
-    <div>
+     <div className="p-4 sm:p-6">
       <h1 className="text-2xl font-bold mb-6">My Requests</h1>
       <ConfigProvider
         theme={{
@@ -41,6 +41,7 @@ function Requests() {
         <Tabs defaultActiveKey="restock" items={items} />
       </ConfigProvider>
     </div>
+
   );
 }
 
