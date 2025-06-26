@@ -1,18 +1,22 @@
 import { outletList } from "@/atoms/sampleAtom";
 import { useSnackbar } from "@/contexts/SnackbarContexts";
 import useAxios from "@/hooks/useAxios/useAxios";
-import { Table, Modal, Select } from "antd";
+import { Table, Modal, Select , Upload ,Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { MdOutlineAdd, MdOutlineEdit } from "react-icons/md";
 import { useRecoilState } from "recoil";
 import DropDown from "@/components/admin/DropDown";
+import uploadImage from "@/utils/uploadImage";
 const { Option } = Select;
+import { UploadOutlined } from "@ant-design/icons";
+
 
 function Vendor() {
   const { fetchData, loading } = useAxios();
   const token = localStorage.getItem("adminToken");
   const showSnackBar = useSnackbar();
   const [outletId, setOutletId] = useState("");
+
   const [outletsList, setOutletsList] = useRecoilState(outletList);
   const [vendorList, setVendorList] = useState([]);
   const [vendorData, setVendorData] = useState({
@@ -243,8 +247,34 @@ function Vendor() {
         okButtonProps={{ style: { backgroundColor: "#fc4c4b" } }}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+          <div className="flex flex-col md:col-span-2">
+            <label className="mb-1 font-medium">Vendor Logo:</label>
+            <div className="flex items-center gap-4">
+              <img
+                src={vendorData.image || "/default-avatar.png"}
+                alt="Vendor Logo Preview"
+                className="w-20 h-20 object-cover rounded-md border"
+              />
+              <Upload
+                accept="image/*"
+                showUploadList={false}
+                customRequest={async ({ file, onSuccess, onError }) => {
+                  try {
+                    const url = await uploadImage("vendorImages", file);
+                    setVendorData((prev) => ({ ...prev, image: url }));
+                    onSuccess(null, file);
+                  } catch (err) {
+                    console.error("Upload failed", err);
+                    onError(err);
+                  }
+                }}
+              >
+                <Button icon={<UploadOutlined />}>Upload</Button>
+              </Upload>
+            </div>
+          </div>
+
           {[
-            ["Logo URL", "image", "text"],
             ["Username", "username", "text"],
             ["Name", "name", "text"],
             ["Phone", "phone", "number"],

@@ -1,34 +1,28 @@
-import { Modal, Table, Select } from "antd";
+import { Modal, Table, Select, Upload, Button } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import { MdOutlineAdd, MdOutlineEdit } from "react-icons/md";
 import { useRecoilState } from "recoil";
 import { supplierList } from "../../../atoms/sampleAtom";
 import useAxios from "../../../hooks/useAxios/useAxios";
 import { useEffect, useState } from "react";
 import { useSnackbar } from "../../../contexts/SnackbarContexts";
+import uploadImage from "@/utils/uploadImage";
 
 const { Option } = Select;
 
 function Supplier() {
-  const [suppliersList, setsuppliersList] = useRecoilState(supplierList);
-  const [searchQuery,setSearchQuery] = useState("");
-  const [supplierData, setSupplierData] = useState({
-    id: "",
-    logo: "",
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    taxNumber: "",
-    active: true,
-  });
+  const [suppliersList, setSuppliersList] = useRecoilState(supplierList);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [supplierData, setSupplierData] = useState(getInitialFormState());
   const [modalOpen, setModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const { fetchData, loading } = useAxios();
   const showSnackBar = useSnackbar();
   const token = localStorage.getItem("adminToken");
 
-  const resetForm = () => {
-    setSupplierData({
+  function getInitialFormState() {
+    return {
       id: "",
       logo: "",
       name: "",
@@ -37,7 +31,11 @@ function Supplier() {
       address: "",
       taxNumber: "",
       active: true,
-    });
+    };
+  }
+
+  const resetForm = () => {
+    setSupplierData(getInitialFormState());
     setIsEditing(false);
     setModalOpen(false);
   };
@@ -49,7 +47,7 @@ function Supplier() {
       key: "logo",
       render: (logo) => (
         <img
-          src={logo}
+          src={logo || "/default-avatar.png"}
           alt="Supplier Logo"
           className="w-12 h-12 object-cover rounded-md"
         />
@@ -83,7 +81,16 @@ function Supplier() {
         <button
           className="p-2 text-lg text-[#fc4c4b] hover:text-red-800 cursor-pointer"
           onClick={() => {
-            setSupplierData(record);
+            setSupplierData({
+              id: record.id || "",
+              logo: record.logo || "",
+              name: record.name || "",
+              email: record.email || "",
+              phone: record.phone || "",
+              address: record.address || "",
+              taxNumber: record.taxNumber || "",
+              active: record.active ?? true,
+            });
             setIsEditing(true);
             setModalOpen(true);
           }}
@@ -100,6 +107,7 @@ function Supplier() {
         method: "GET",
         url: "/admin/supplier",
         headers: { Authorization: `Bearer ${token}` },
+        params: { timestamp: Date.now() },
       });
 
       if (response) {
@@ -107,26 +115,32 @@ function Supplier() {
           ...supplier,
           status: supplier.active ? "Active" : "Inactive",
         }));
-        setsuppliersList(formatted);
+        setSuppliersList(formatted);
       }
     } catch (error) {
       showSnackBar(error.message || "Failed to fetch suppliers", "error");
     }
   };
-  const filteredSuppliers = suppliersList.filter((supplier)=>
-    `${supplier.name} ${supplier.email} ${supplier.phone}`.toLowerCase().includes(searchQuery.toLowerCase())
-  )
-  useEffect(() => {
-    getSuppliers();
-  }, []);
 
   const addOrEditSupplier = async () => {
-    const { id,logo, name, email, phone, address, taxNumber, active } = supplierData;
-
-    if (!logo || !name || !email || !phone || !address || !taxNumber) {
-      showSnackBar("Please fill in all fields", "error");
+    if (uploading) {
+      showSnackBar("Please wait for the logo to finish uploading", "error");
       return;
     }
+
+    const { id, logo, name, email, phone, address, taxNumber, active } =
+      supplierData;
+
+    console.log("Submitting data:", {
+      id,
+      logo,
+      name,
+      email,
+      phone,
+      address,
+      taxNumber,
+      active,
+    });
 
     try {
       const response = await fetchData({
@@ -140,12 +154,13 @@ function Supplier() {
           phone,
           address,
           taxNumber,
-          ...(isEditing && { active }),
+          active: isEditing ? active : true,
         },
-        
         headers: { Authorization: `Bearer ${token}` },
       });
-      
+
+      console.log("Server response:", response);
+
       if (response) {
         showSnackBar(
           isEditing
@@ -157,83 +172,142 @@ function Supplier() {
         resetForm();
       }
     } catch (error) {
+      console.error("Error:", error);
       showSnackBar(error.message || "Operation failed", "error");
     }
   };
+
+  const filteredSuppliers = suppliersList.filter((supplier) =>
+    `${supplier.name} ${supplier.email} ${supplier.phone}`
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
+
+  useEffect(() => {
+    getSuppliers();
+  }, []);
 
   return (
     <div>
       <h1 className="p-2 text-2xl font-bold">Suppliers</h1>
 
-      <div className="">
-        <div className="flex justify-between gap-2 p-5">
-          <input type="search" className="p-2 border-2 w-[30vw] border-gray-200 rounded-md" onChange={(e)=>setSearchQuery(e.target.value)} value={searchQuery} placeholder="Search" name="" id="" />
-          <button
-            onClick={() => {
-              resetForm();
-              setModalOpen(true);
-            }}
-            className="flex flex-row justify-center items-center p-2 bg-[#FC4C4B] rounded-md text-white cursor-pointer"
-          >
-            Add New Supplier <MdOutlineAdd />
-          </button>
-        </div>
-
-        <Modal
-          title={isEditing ? "Edit Supplier" : "Add New Supplier"}
-          centered
-          open={modalOpen}
-          onOk={addOrEditSupplier}
-          onCancel={resetForm}
-          okButtonProps={{ style: { backgroundColor: "#fc4c4b" } }}
+      <div className="flex justify-between gap-2 p-5">
+        <input
+          type="search"
+          className="p-2 border-2 w-[30vw] border-gray-200 rounded-md"
+          onChange={(e) => setSearchQuery(e.target.value)}
+          value={searchQuery}
+          placeholder="Search"
+        />
+        <button
+          onClick={() => {
+            resetForm();
+            setModalOpen(true);
+          }}
+          className="flex items-center gap-2 px-4 py-2 bg-[#FC4C4B] text-white rounded-md"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-            {[
-              ["Logo URL", "logo", "text"],
-              ["Name", "name", "text"],
-              ["Email", "email", "email"],
-              ["Phone", "phone", "number"],
-              ["Address", "address", "text"],
-              ["Tax Number", "taxNumber", "text"],
-            ].map(([label, field, type]) => (
-              <div className="flex flex-col" key={field}>
-                <label className="mb-1 font-medium">{label}:</label>
-                <input
-                  type={type}
-                  placeholder={label}
-                  value={supplierData[field]}
-                  onChange={(e) =>
-                    setSupplierData((prev) => ({
-                      ...prev,
-                      [field]: e.target.value,
-                    }))
-                  }
-                  className="p-2 border-2 border-gray-200 rounded-md"
-                />
-              </div>
-            ))}
-
-            {isEditing && (
-              <div className="flex flex-col">
-                <label className="mb-1 font-medium">Status:</label>
-                <Select
-                  value={supplierData.active ? "Active" : "Inactive"}
-                  onChange={(value) =>
-                    setSupplierData((prev) => ({
-                      ...prev,
-                      active: value === "Active",
-                    }))
-                  }
-                  className="w-full"
-                >
-                  <Option value="Active">Active</Option>
-                  <Option value="Inactive">Inactive</Option>
-                </Select>
-              </div>
-            )}
-          </div>
-        </Modal>
+          Add New Supplier <MdOutlineAdd />
+        </button>
       </div>
+
+      <Modal
+        title={isEditing ? "Edit Supplier" : "Add New Supplier"}
+        centered
+        open={modalOpen}
+        onOk={addOrEditSupplier}
+        onCancel={resetForm}
+        okButtonProps={{
+          style: { backgroundColor: "#fc4c4b" },
+          disabled: uploading,
+        }}
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+          <div className="flex flex-col md:col-span-2">
+            <label className="mb-1 font-medium">Supplier Logo:</label>
+            <div className="flex items-center gap-4">
+              <img
+                src={supplierData.logo || "/default-avatar.png"}
+                alt="Supplier Logo Preview"
+                className="w-20 h-20 object-cover rounded-md border"
+              />
+              <Upload
+                accept="image/*"
+                showUploadList={false}
+                customRequest={async ({ file, onSuccess, onError }) => {
+                  try {
+                    setUploading(true);
+                    console.log("Uploading file:", file.name);
+                    const url = await uploadImage("supplierImage", file);
+                    console.log("Received URL from upload:", url);
+
+                    if (!url) {
+                      throw new Error("No URL returned from upload");
+                    }
+
+                    setSupplierData((prev) => {
+                      console.log("Updating logo from", prev.logo, "to", url);
+                      return { ...prev, logo: url };
+                    });
+                    onSuccess(null, file);
+                  } catch (err) {
+                    console.error("Upload error:", err);
+                    onError?.(err);
+                    showSnackBar("Failed to upload image", "error");
+                  } finally {
+                    setUploading(false);
+                  }
+                }}
+              >
+                <Button icon={<UploadOutlined />} loading={uploading}>
+                  Upload
+                </Button>
+              </Upload>
+            </div>
+          </div>
+
+          {[
+            ["Name", "name", "text"],
+            ["Email", "email", "email"],
+            ["Phone", "phone", "number"],
+            ["Address", "address", "text"],
+            ["Tax Number", "taxNumber", "text"],
+          ].map(([label, field, type]) => (
+            <div className="flex flex-col" key={field}>
+              <label className="mb-1 font-medium">{label}:</label>
+              <input
+                type={type}
+                placeholder={label}
+                value={supplierData[field]}
+                onChange={(e) =>
+                  setSupplierData((prev) => ({
+                    ...prev,
+                    [field]: e.target.value,
+                  }))
+                }
+                className="p-2 border-2 border-gray-200 rounded-md"
+              />
+            </div>
+          ))}
+
+          {isEditing && (
+            <div className="flex flex-col">
+              <label className="mb-1 font-medium">Status:</label>
+              <Select
+                value={supplierData.active ? "Active" : "Inactive"}
+                onChange={(value) =>
+                  setSupplierData((prev) => ({
+                    ...prev,
+                    active: value === "Active",
+                  }))
+                }
+              >
+                <Option value="Active">Active</Option>
+                <Option value="Inactive">Inactive</Option>
+              </Select>
+            </div>
+          )}
+        </div>
+      </Modal>
 
       <div className="overflow-x-scroll mt-4">
         <Table
