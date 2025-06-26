@@ -107,6 +107,7 @@ function Supplier() {
         method: "GET",
         url: "/admin/supplier",
         headers: { Authorization: `Bearer ${token}` },
+        params: { timestamp: Date.now() },
       });
 
       if (response) {
@@ -122,62 +123,59 @@ function Supplier() {
   };
 
   const addOrEditSupplier = async () => {
-  // Disable submission while uploading
-  if (uploading) {
-    showSnackBar("Please wait for the logo to finish uploading", "error");
-    return;
-  }
+    if (uploading) {
+      showSnackBar("Please wait for the logo to finish uploading", "error");
+      return;
+    }
 
-  const { id, logo, name, email, phone, address, taxNumber, active } =
-    supplierData;
-  
-  console.log("Data being submitted:", {
-    id,
-    logo,
-    name,
-    email,
-    phone,
-    address,
-    taxNumber,
-    active
-  });
+    const { id, logo, name, email, phone, address, taxNumber, active } =
+      supplierData;
 
-  if (!logo || !name || !email || !phone || !address || !taxNumber) {
-    showSnackBar("Please fill in all fields", "error");
-    return;
-  }
-
-  try {
-    const response = await fetchData({
-      method: isEditing ? "PUT" : "POST",
-      url: "/admin/supplier",
-      data: {
-        id,
-        logo,
-        name,
-        email,
-        phone,
-        address,
-        taxNumber,
-        active: isEditing ? active : true, // Always include active status for edits
-      },
-      headers: { Authorization: `Bearer ${token}` },
+    console.log("Submitting data:", {
+      id,
+      logo,
+      name,
+      email,
+      phone,
+      address,
+      taxNumber,
+      active,
     });
 
-    if (response) {
-      showSnackBar(
-        isEditing
-          ? "Supplier updated successfully"
-          : "Supplier added successfully",
-        "success"
-      );
-      getSuppliers();
-      resetForm();
+    try {
+      const response = await fetchData({
+        method: isEditing ? "PUT" : "POST",
+        url: "/admin/supplier",
+        data: {
+          id,
+          logo,
+          name,
+          email,
+          phone,
+          address,
+          taxNumber,
+          active: isEditing ? active : true,
+        },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log("Server response:", response);
+
+      if (response) {
+        showSnackBar(
+          isEditing
+            ? "Supplier updated successfully"
+            : "Supplier added successfully",
+          "success"
+        );
+        getSuppliers();
+        resetForm();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      showSnackBar(error.message || "Operation failed", "error");
     }
-  } catch (error) {
-    showSnackBar(error.message || "Operation failed", "error");
-  }
-};
+  };
 
   const filteredSuppliers = suppliersList.filter((supplier) =>
     `${supplier.name} ${supplier.email} ${supplier.phone}`
@@ -225,11 +223,11 @@ function Supplier() {
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
           <div className="flex flex-col md:col-span-2">
-            <label className="mb-1 font-medium">Vendor Logo:</label>
+            <label className="mb-1 font-medium">Supplier Logo:</label>
             <div className="flex items-center gap-4">
               <img
                 src={supplierData.logo || "/default-avatar.png"}
-                alt="Vendor Logo Preview"
+                alt="Supplier Logo Preview"
                 className="w-20 h-20 object-cover rounded-md border"
               />
               <Upload
@@ -238,13 +236,23 @@ function Supplier() {
                 customRequest={async ({ file, onSuccess, onError }) => {
                   try {
                     setUploading(true);
+                    console.log("Uploading file:", file.name);
                     const url = await uploadImage("supplierImage", file);
-                    setSupplierData((prev) => ({ ...prev, logo: url }));
-                    console.log("Updated supplier data with new logo:", url);
+                    console.log("Received URL from upload:", url);
+
+                    if (!url) {
+                      throw new Error("No URL returned from upload");
+                    }
+
+                    setSupplierData((prev) => {
+                      console.log("Updating logo from", prev.logo, "to", url);
+                      return { ...prev, logo: url };
+                    });
                     onSuccess(null, file);
                   } catch (err) {
-                    console.error("Upload failed", err);
+                    console.error("Upload error:", err);
                     onError?.(err);
+                    showSnackBar("Failed to upload image", "error");
                   } finally {
                     setUploading(false);
                   }
