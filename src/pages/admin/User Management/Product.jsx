@@ -290,31 +290,30 @@ const Product = () => {
           onChange={handleChange}
         />
 
-        <DropDown
-          url="/admin/supplier"
-          method="GET"
-          setter={setFormSupplierId}
-          globalState={suppliers}
-          setGlobalState={setSuppliers}
-        />
+            <DropDown
+              url="/admin/supplier"
+              method="GET"
+              setter={setFormSupplierId}
+              globalState={suppliers}
+              setGlobalState={setSuppliers}
+              selectedValue={formSupplierId}
+            />
+          </div>
+        </Modal>
       </div>
-    </Modal>
-
-    {/* Product Table */}
-    <ProductTable
-      supplierId={supplierId}
-      productName={input}
-      onEdit={(product) => {
-        setProductFormData(product);
-        setFormSupplierId(product.supplierId);
-        setProductId(product.id);
-        setModalOpen(true);
-        setIsEditMode(true);
-      }}
-    />
-  </div>
-);
-
+      <ProductTable
+        supplierId={supplierId}
+        productName={input}
+        onEdit={(product) => {
+          setProductFormData(product);
+          setFormSupplierId(product.supplierId);
+          setProductId(product.id);
+          setModalOpen(true);
+          setIsEditMode(true);
+        }}
+      />
+    </div>
+  );
 };
 
 export default Product;

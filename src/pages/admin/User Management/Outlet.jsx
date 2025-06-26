@@ -17,10 +17,10 @@ const Outlet = () => {
     active: true,
   });
 
-  const [warehouses, setWarehouses] = useRecoilState(warehouseAtom);
+  const [warehouseGlobal, setWarehouseGlobal] = useRecoilState(warehouseAtom);
   const setOutletList = useSetRecoilState(outletList);
-  const [warehouseId, setWarehouseId] = useState("");
-  const [formWarehouseId, setFormWarehouseId] = useState("");
+  const [warehouseId, setWarehouseId] = useState(null);
+  const [formWarehouseId, setFormWarehouseId] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -38,7 +38,7 @@ const Outlet = () => {
 
   const handleSaveOutlet = async () => {
     if (
-      (isEditMode && (!outletFormData.id.trim() || !outletFormData.active)) || 
+      (isEditMode && (!outletFormData.id.trim() || !outletFormData.active)) ||
       !outletFormData.name.trim() ||
       !outletFormData.address.trim() ||
       !formWarehouseId
@@ -110,7 +110,7 @@ const Outlet = () => {
 
   return (
     <div className="flex flex-col">
-      <h1 className="h1">Outlet</h1>
+      <h1 className="h1">Outlets</h1>
       <div className="w-full flex items-center justify-around pb-10">
         <input
           type="text"
@@ -122,8 +122,8 @@ const Outlet = () => {
           url="/admin/warehouse"
           method="GET"
           setter={setWarehouseId}
-          globalState={warehouses}
-          setGlobalState={setWarehouses}
+          globalState={warehouseGlobal}
+          setGlobalState={setWarehouseGlobal}
         />
         <button
           onClick={() => setModalOpen(true)}
@@ -164,8 +164,9 @@ const Outlet = () => {
               url="/admin/warehouse"
               method="GET"
               setter={setFormWarehouseId}
-              globalState={warehouses}
-              setGlobalState={setWarehouses}
+              globalState={warehouseGlobal}
+              setGlobalState={setWarehouseGlobal}
+              selectedValue={formWarehouseId}
             />
 
             {isEditMode && (
@@ -191,6 +192,7 @@ const Outlet = () => {
         warehouseId={warehouseId}
         outletName={input}
         onEdit={(outlet) => {
+          console.log(outlet)
           setOutletFormData(outlet);
           setFormWarehouseId(outlet.warehouseId);
           setModalOpen(true);

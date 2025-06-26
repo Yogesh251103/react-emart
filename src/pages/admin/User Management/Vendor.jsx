@@ -1,7 +1,7 @@
 import { outletList } from "@/atoms/sampleAtom";
 import { useSnackbar } from "@/contexts/SnackbarContexts";
 import useAxios from "@/hooks/useAxios/useAxios";
-import { Table, Modal, Select , Upload ,Button } from "antd";
+import { Table, Modal, Select, Upload, Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { MdOutlineAdd, MdOutlineEdit } from "react-icons/md";
 import { useRecoilState } from "recoil";
@@ -9,7 +9,6 @@ import DropDown from "@/components/admin/DropDown";
 import uploadImage from "@/utils/uploadImage";
 const { Option } = Select;
 import { UploadOutlined } from "@ant-design/icons";
-
 
 function Vendor() {
   const { fetchData, loading } = useAxios();
@@ -165,9 +164,9 @@ function Vendor() {
       ),
     },
     {
-      title: "Outlet ID",
-      key: "outletId",
-      dataIndex: "outletId",
+      title: "Outlet Name",
+      key: "outletName",
+      dataIndex: "outletName",
     },
     {
       title: "Status",
