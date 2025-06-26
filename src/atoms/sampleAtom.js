@@ -47,9 +47,9 @@ export const supplierList = atom({
 });
 
 export const outletList = atom({
-  key:"outletList",
-  default: []
-})
+  key: "outletList",
+  default: [],
+});
 
 export const outletInvoice = atom({
   key: "outletInvoice",
@@ -67,4 +67,24 @@ export const supplierInvoice = atom({
     data: [],
   },
   dangerouslyAllowMutability: true,
+});
+
+export const restockingRequestList = atom({
+  key: "restockingRequestList",
+  default: [],
+});
+
+export const replacementRequestList = atom({
+  key: "replacementRequestList",
+  default: [],
+});
+
+export const approvedRequestList = atom({
+  key: "approvedRequestList",
+  default: [],
+});
+
+export const rejectedRequestList = atom({
+  key: "rejectedRequestList",
+  default: [],
 });

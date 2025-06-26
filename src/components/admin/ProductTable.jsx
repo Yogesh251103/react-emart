@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { Table } from "antd";
+import { MdOutlineEdit } from "react-icons/md";
 import Barcode from "react-barcode";
 import { useRecoilState } from "recoil";
 import { productList } from "../../atoms/sampleAtom";
@@ -56,10 +57,10 @@ const ProductTable = ({ supplierId, productName, onEdit }) => {
       key: "edit",
       render: (_, record) => (
         <button
-          className="text-blue-500 underline"
+          className="cursor-pointer"
           onClick={() => onEdit(record)}
         >
-          Edit
+          <MdOutlineEdit size={20} color="#FC4C4B" />
         </button>
       ),
     },

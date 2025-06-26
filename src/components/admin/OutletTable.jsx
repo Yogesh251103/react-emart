@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { Table } from "antd";
-import Barcode from "react-barcode";
+import { MdOutlineEdit } from "react-icons/md";
 import { useRecoilState } from "recoil";
 import { outletList } from "../../atoms/sampleAtom";
 import useAxios from "../../hooks/useAxios/useAxios";
@@ -50,11 +50,11 @@ const OutletTable = ({ warehouseId, outletName, onEdit }) => {
       render: (_, record) => {
         return (
           <button
-            className="text-blue-500 underline"
+            className="cursor-pointer"
             onClick={() => onEdit(record)}
           >
-            Edit
-          </button> 
+            <MdOutlineEdit size={20} color="#FC4C4B" />
+          </button>
         );
       },
     },
