@@ -68,9 +68,7 @@ const DropDown = ({ url, method, setter, globalState, setGlobalState }) => {
       arrow
       className="border rounded p-3 cursor-pointer"
     >
-      <a onClick={(e) => e.preventDefault()}>
         <Space>{filterName}</Space>
-      </a>
     </Dropdown>
   );
 };

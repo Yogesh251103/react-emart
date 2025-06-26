@@ -153,12 +153,12 @@ const Product = () => {
   return (
     <div className="flex flex-col">
       <h1 className="h1">Products</h1>
-      <div className="w-full flex items-center justify-around pb-10">
+      <div className="w-full flex items-center justify-between pb-10">
         <input
           type="text"
           className="input"
           placeholder="Enter product name here"
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => setInput(e.target.value)} 
         />
         <DropDown
           url="/admin/supplier"

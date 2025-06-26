@@ -67,7 +67,7 @@ function Login() {
           Welcome to E-Mart Inventory Management. Please login using your
           credentials
         </p>
-        <div className="flex flex-col space-y-4">
+        <form className="flex flex-col space-y-4" onSubmit={handleLogin}>
           <input
             type="text"
             placeholder="Enter Your Username"
@@ -89,12 +89,12 @@ function Login() {
             className="p-2 focus:outline-none rounded-md border-2 border-gray-300 focus:border-dark-red text-black placeholder-gray-500"
           />
           <button
-            onClick={handleLogin}
+            type="submit"
             className="bg-dark-red hover:bg-light-red focus:outline-none focus:border-light-red text-white cursor-pointer rounded-md font-semibold py-2 rounded-mdtransition"
           >
             Login As Vendor
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );
