@@ -45,7 +45,7 @@ const AdminSidebar = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetchData({
+      await fetchData({
         url: "/auth/logout",
         method: "POST",
         data: {
@@ -53,17 +53,15 @@ const AdminSidebar = () => {
         },
       });
 
-      if (response === "Logged out user successfully") {
-        setAuth({
-          userName: "",
-          password: "",
-          isLoggedIn: false,
-          tokenAdmin: "",
-        });
-        localStorage.removeItem("adminToken");
-        navigate("/admin/login");
-        showSnackBar("You were logged out", "success");
-      }
+      setAuth({
+        userName: "",
+        password: "",
+        isLoggedIn: false,
+        tokenAdmin: "",
+      });
+      localStorage.removeItem("adminToken");
+      navigate("/admin/login");
+      showSnackBar("You were logged out", "success");
     } catch (err) {
       console.error("Logout error:", err);
       showSnackBar("Something went wrong during logout.", "error");
