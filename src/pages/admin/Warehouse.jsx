@@ -42,8 +42,9 @@ function Warehouse() {
       showSnackBar("Error Fetching Data", "error");
     }
   };
+
   const filteredWarehouse = warehouse.filter((w) => {
-    return `${w.warehouse_name} ${w.location}`
+    return `${w.name} ${w.address}`
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
   });
@@ -79,11 +80,12 @@ function Warehouse() {
     }
   };
   const handleEdit = (record) => {
+    console.log(record)
     setEditingWarehouse({
       id: record.id,
-      name: record.warehouse_name,
-      address: record.location,
-      active: record.status === "Active",
+      name: record.name,
+      address: record.address,
+      active: record.active,
     });
     setEditModalOpen(true);
   };
