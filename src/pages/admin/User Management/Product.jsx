@@ -150,35 +150,34 @@ const Product = () => {
     handleModalCancel();
   };
 
-  return (
-  <div className="flex flex-col px-4 sm:px-6 md:px-8 py-6">
-    <h1 className="text-lg sm:text-xl md:text-2xl font-bold mb-4">Products</h1>
+return (
+  <div className="p-4">
+    {/* Title */}
+    <h1 className="text-lg sm:text-2xl font-bold text-[#8a0000] mb-6">Products</h1>
 
-    {/* Top control section */}
-    <div className="w-full flex flex-col sm:flex-row sm:flex-wrap gap-4 sm:items-center justify-between pb-10">
+    {/* Controls */}
+    <div className="w-full flex flex-col sm:flex-row items-stretch sm:items-center sm:gap-4 gap-3 pb-6">
       <input
         type="text"
-        className="input w-full sm:w-[30%]"
+        className="input flex-1"
         placeholder="Enter product name here"
         onChange={(e) => setInput(e.target.value)}
       />
 
-      <div className="w-full sm:w-[30%]">
-        <DropDown
-          url="/admin/supplier"
-          method="GET"
-          setter={setSupplierId}
-          globalState={suppliers}
-          setGlobalState={setSuppliers}
-        />
-      </div>
+      <DropDown
+        url="/admin/supplier"
+        method="GET"
+        setter={setSupplierId}
+        globalState={suppliers}
+        setGlobalState={setSuppliers}
+      />
 
       <button
         onClick={() => setModalOpen(true)}
-        className="w-full sm:w-auto flex justify-center items-center gap-2 px-4 py-2 bg-[#8a0000] text-white rounded-md"
+        className="add-button flex items-center justify-center gap-2"
       >
         <PlusOutlined />
-        Add new product
+        <span className="hidden sm:inline">Add new product</span>
       </button>
     </div>
 
@@ -190,72 +189,69 @@ const Product = () => {
       onOk={handleSaveProduct}
       onCancel={handleModalCancel}
       okButtonProps={{ style: { backgroundColor: "#FC4C4B" } }}
+      bodyStyle={{ maxHeight: "70vh", overflowY: "auto" }}
     >
       <div className="flex flex-col gap-4">
         <input
           type="text"
-          className="p-2 border-2 border-gray-200 rounded-md"
+          className="input"
           placeholder="Currency"
           name="currency"
           value={productFormData.currency}
           onChange={handleChange}
-          required
         />
 
         <label htmlFor="manufacture_date">Manufacture date</label>
         <input
           type="date"
-          className="p-2 border-2 border-gray-200 rounded-md"
+          id="manufacture_date"
+          className="input"
           name="manufacture_date"
           value={productFormData.manufacture_date}
           onChange={handleChange}
-          required
         />
 
         <label htmlFor="expiration_date">Expiration date</label>
         <input
           type="date"
-          className="p-2 border-2 border-gray-200 rounded-md"
+          id="expiration_date"
+          className="input"
           name="expiration_date"
           value={productFormData.expiration_date}
           onChange={handleChange}
-          required
         />
 
         <input
           type="text"
-          className="p-2 border-2 border-gray-200 rounded-md"
+          className="input"
           placeholder="Image URL"
           name="image"
           value={productFormData.image}
           onChange={handleChange}
-          required
         />
 
         <input
           type="text"
-          className="p-2 border-2 border-gray-200 rounded-md"
+          className="input"
           placeholder="Product Name"
           name="name"
           value={productFormData.name}
           onChange={handleChange}
-          required
         />
 
         <input
           type="number"
           step="0.01"
-          className="p-2 border-2 border-gray-200 rounded-md"
+          className="input"
           placeholder="Price"
           name="price"
           value={productFormData.price}
           onChange={handleChange}
-          required
         />
 
         <input
           type="text"
-          className="p-2 border-2 border-gray-200 rounded-md"
+          className="input"
           placeholder="Category"
           name="category"
           value={productFormData.category}
@@ -263,7 +259,7 @@ const Product = () => {
         />
 
         <textarea
-          className="p-2 border-2 border-gray-200 rounded-md"
+          className="input"
           placeholder="Description"
           name="description"
           value={productFormData.description}
@@ -272,48 +268,49 @@ const Product = () => {
 
         <input
           type="number"
-          className="p-2 border-2 border-gray-200 rounded-md"
+          className="input"
           placeholder="Threshold"
           name="threshold"
           value={productFormData.threshold}
           onChange={handleChange}
-          required
         />
 
         <input
           type="number"
           step="0.01"
-          className="p-2 border-2 border-gray-200 rounded-md"
+          className="input"
           placeholder="Wholesale Price"
           name="wholesale_price"
           value={productFormData.wholesale_price}
           onChange={handleChange}
         />
 
-            <DropDown
-              url="/admin/supplier"
-              method="GET"
-              setter={setFormSupplierId}
-              globalState={suppliers}
-              setGlobalState={setSuppliers}
-              selectedValue={formSupplierId}
-            />
-          </div>
-        </Modal>
+        <DropDown
+          url="/admin/supplier"
+          method="GET"
+          setter={setFormSupplierId}
+          globalState={suppliers}
+          setGlobalState={setSuppliers}
+          selectedValue={formSupplierId}
+        />
       </div>
-      <ProductTable
-        supplierId={supplierId}
-        productName={input}
-        onEdit={(product) => {
-          setProductFormData(product);
-          setFormSupplierId(product.supplierId);
-          setProductId(product.id);
-          setModalOpen(true);
-          setIsEditMode(true);
-        }}
-      />
-    </div>
-  );
+    </Modal>
+
+    {/* Product Table */}
+    <ProductTable
+      supplierId={supplierId}
+      productName={input}
+      onEdit={(product) => {
+        setProductFormData(product);
+        setFormSupplierId(product.supplierId);
+        setProductId(product.id);
+        setModalOpen(true);
+        setIsEditMode(true);
+      }}
+    />
+  </div>
+);
+
 };
 
 export default Product;
