@@ -12,10 +12,6 @@ function InvSupplier() {
   const { fetchData, loading } = useAxios();
   const [supplies, setSupplies] = useRecoilState(supplierInvoice);
   const showSnackBar = useSnackbar();
-  const [modalOpen, setModalOpen] = useState(false);const [productsGlobal, setProductsGlobal] = useRecoilState(productList);
-  const [productId, setProductId] = useState(null);
-  const [reason, setReason] = useState("");
-  const [quantity,setQuantity] = useState(0)
 
   useEffect(() => {
     if (!supplies.loaded) {

@@ -106,7 +106,7 @@ const WarehouseStock = () => {
 
         setFormProductId(null);
         setFormSupplierId(null);
-        setWarehouseId(null);
+        setFormWarehouseId(null);
         setStockQuantity(0);
         setManufactureDate("");
         setExpirationDate("");
