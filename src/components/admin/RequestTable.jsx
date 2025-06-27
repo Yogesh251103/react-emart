@@ -49,6 +49,8 @@ const RequestTable = ({ tabKey, warehouseId }) => {
   }, [tabKey, warehouseId]);
 
   const loadData = async () => {
+    console.log(requests)
+    console.log("hi")
     const token = localStorage.getItem("adminToken");
     try {
       const response = await fetchData({
@@ -59,6 +61,7 @@ const RequestTable = ({ tabKey, warehouseId }) => {
         },
       });
       if (response) {
+        console.log(response)
         const filtered = response.filter(
           (req) => req.warehouseId === warehouseId
         );

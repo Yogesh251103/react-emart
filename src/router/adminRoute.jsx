@@ -11,6 +11,7 @@ import InvOutlet from "@/pages/admin/Invoice/InvOutlet";
 import InvSupplier from "@/pages/admin/Invoice/InvSupplier";
 import Profile from "@/pages/admin/Profile";
 import Vendor from "@/pages/admin/User Management/Vendor";
+import WarehouseStock from "@/pages/admin/WarehouseStock";
 
 const adminRoute = [
   { path: "admin/login", element: <Login /> },
@@ -26,6 +27,7 @@ const adminRoute = [
           { path: "inventory", element: <Product /> },
           { path: "request", element: <Requests /> },
           { path: "warehouse", element: <Warehouse /> },
+          { path: "warehouse-stock", element: <WarehouseStock /> },
           { path: "user-management/outlet", element: <Outlet /> },
           { path: "user-management/supplier", element: <Supplier /> },
           {

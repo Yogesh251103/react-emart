@@ -14,8 +14,9 @@ const DropDown = ({
   const [options, setOptions] = useState([]);
   const [selected, setSelected] = useState(selectedValue);
 
+  const resourceType = url.split("/").pop();
+
   useEffect(() => {
-    console.log(selectedValue)
     const fetchDropDownData = async () => {
       const token = localStorage.getItem("adminToken");
       try {
@@ -35,21 +36,29 @@ const DropDown = ({
           setGlobalState(result);
         }
 
-        const activeItems = result
-          .filter((item) => item.active)
-          .map((item) => ({
-            label: item.name,
-            value: item.id,
-          }));
-        console.log(url.split("/").pop(), activeItems);
+        const formattedData = result.map((item) => ({
+          label: item.name,
+          value: item.id,
+          active: item?.id,
+        }));
 
-        setOptions(activeItems);
+        const activeItems = formattedData.filter((item) => item.active);
+        setOptions(resourceType === "product" ? formattedData : activeItems);
+
+        // if (resourceType === "product" && formattedData.length > 0) {
+        //   if (selectedValue) {
+        //     setSelected(selectedValue);
+        //   } else {
+        //     setSelected(formattedData[0].value);
+        //     setter(formattedData[0].value);
+        //   }
+        //   return;
+        // }
 
         if (activeItems.length > 0) {
           if (selectedValue) {
             setSelected(selectedValue);
-          }
-          else {
+          } else {
             setSelected(activeItems[0].value);
             setter(activeItems[0].value);
           }
@@ -70,7 +79,7 @@ const DropDown = ({
   return (
     <div>
       <label className="block mb-1 font-semibold">
-        Select {url.split("/").pop()}
+        Select {resourceType}
       </label>
       <Select
         placeholder="Select option"

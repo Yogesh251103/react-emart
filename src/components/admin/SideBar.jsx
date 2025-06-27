@@ -60,6 +60,7 @@ const AdminSidebar = () => {
     inventory: "/admin/inventory",
     request: "/admin/request",
     warehouse: "/admin/warehouse",
+    "warehouse-stock" : "/admin/warehouse-stock",
     "user-outlet": "/admin/user-management/outlet",
     "user-suplier": "/admin/user-management/supplier",
     "user-vendor": "/admin/user-management/vendor",
@@ -156,6 +157,16 @@ const AdminSidebar = () => {
     {
       key: "warehouse",
       label: "Warehouse",
+      icon: (
+        <MenuIcon>
+          <MdOutlineWarehouse />
+        </MenuIcon>
+      ),
+    },
+    { type: "divider" },
+    {
+      key: "warehouse-stock",
+      label: "Stock",
       icon: (
         <MenuIcon>
           <MdOutlineWarehouse />
