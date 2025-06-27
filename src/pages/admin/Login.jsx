@@ -13,17 +13,21 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (!auth.userName.trim() || !auth.password.trim()) {
+    const userName = auth.userName.trim();
+    const password = auth.password.trim();
+
+    if (!userName || !password) {
       showSnackBar("Fill in all the fields", "error");
       return;
     }
+
     try {
       const response = await fetchData({
         url: "/auth/login",
         method: "POST",
         data: {
-          username: auth.userName,
-          password: auth.password,
+          username: userName,
+          password: password,
         },
       });
 
