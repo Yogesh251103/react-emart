@@ -1,4 +1,4 @@
-// Mock useAxios BEFORE importing the component
+
 vi.mock("@/hooks/useAxios/useAxios", () => ({
   default: vi.fn(() => ({
     fetchData: vi.fn(() => Promise.resolve(mockUserData)),
@@ -6,12 +6,10 @@ vi.mock("@/hooks/useAxios/useAxios", () => ({
   })),
 }));
 
-// Mock snackbar BEFORE imports
 vi.mock("@/contexts/SnackbarContexts", () => ({
   useSnackbar: () => vi.fn(),
 }));
 
-// Add window.getComputedStyle fallback for AntD + JSDOM
 beforeAll(() => {
   window.getComputedStyle = () => ({
     getPropertyValue: () => "",
@@ -48,8 +46,7 @@ describe("UserProfile Component", () => {
   });
 
   test("shows loader when loading is true", () => {
-    // 👇 Override the mock for this test
-    useAxios.mockReturnValueOnce({
+     useAxios.mockReturnValueOnce({
       fetchData: vi.fn(),
       loading: true,
     });
@@ -63,8 +60,7 @@ describe("UserProfile Component", () => {
       />
     );
 
-    // Ant Design Spin loader renders a `role="status"` element
-    expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
+     expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
     
   });
 
