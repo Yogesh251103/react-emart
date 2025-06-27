@@ -32,7 +32,8 @@ const RequestTable = ({ tabKey, warehouseId }) => {
   const atom = atomMap[tabKey];
   const url = endpointMap[tabKey];
 
-  const [requests, setRequests] = useRecoilState(atom);
+  const [requestsGlobal, setRequestsGlobal] = useRecoilState(atom);
+  const [requests, setRequests] = useState([]);
   const setApprovedList = useSetRecoilState(approvedRequestList);
   const setRejectedList = useSetRecoilState(rejectedRequestList);
 
@@ -43,9 +44,17 @@ const RequestTable = ({ tabKey, warehouseId }) => {
 
   useEffect(() => {
     if (!warehouseId?.trim()) return;
-    if (requests.length > 0) return;
 
-    loadData();
+    if (requestsGlobal.length === 0) loadData();
+    else {
+      console.log(requestsGlobal)
+      console.log(warehouseId)
+      const filtered = requestsGlobal.filter(
+        (req) => req.warehouseId === warehouseId
+      );
+      console.log(filtered)
+      setRequests(filtered);
+    }
   }, [tabKey, warehouseId]);
 
   const loadData = async () => {
@@ -59,6 +68,7 @@ const RequestTable = ({ tabKey, warehouseId }) => {
         },
       });
       if (response) {
+        setRequestsGlobal(response);
         const filtered = response.filter(
           (req) => req.warehouseId === warehouseId
         );
@@ -102,6 +112,7 @@ const RequestTable = ({ tabKey, warehouseId }) => {
         },
         ...(!approveRequest ? { data: { reason } } : {}),
       });
+      console.log(response)
 
       if (!response) {
         snackbar("No stocks available in warehouse", "error");
@@ -109,7 +120,6 @@ const RequestTable = ({ tabKey, warehouseId }) => {
         return;
       }
 
-      // Clear UI state
       setSelectedRecord(null);
       setReason("");
       approveRequest ? setApproveModalOpen(false) : setRejectModalOpen(false);
@@ -119,7 +129,6 @@ const RequestTable = ({ tabKey, warehouseId }) => {
         "success"
       );
 
-      // Refresh appropriate recoil atom
       const updatedListUrl = approveRequest
         ? "/admin/outlet/request/approved"
         : "/admin/outlet/request/rejected";
@@ -132,11 +141,11 @@ const RequestTable = ({ tabKey, warehouseId }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(updatedList)
+      setListFn(updatedList);
 
-      setListFn(updatedList || []);
-
-      // Remove from current requests list
       setRequests((prev) => prev.filter((r) => r.id !== selectedRecord.id));
+      setRequestsGlobal((prev) => prev.filter((r) => r.id !== selectedRecord.id));
     } catch (error) {
       console.error(error);
       snackbar("An error occurred while updating the request", "error");
@@ -259,37 +268,35 @@ const RequestTable = ({ tabKey, warehouseId }) => {
       : []),
   ];
 
- return (
-  <div className="w-full overflow-x-auto mt-6 rounded-lg border border-gray-300 shadow-md">
-    <Table
-      columns={columns}
-      dataSource={requests}
-      rowKey="id"
-      pagination={{ pageSize: 5 }}
-      scroll={{ x: 'max-content' }}
-      className="min-w-[600px] sm:min-w-full"
-      components={{
-        header: {
-          cell: (props) => (
-            <th
-              {...props}
-              style={{
-                ...props.style,
-                backgroundColor: "#8a0000",
-                color: "white",
-                fontWeight: "bold",
-                textAlign: "center",
-                whiteSpace: "nowrap", // ensures header text doesn't wrap weirdly
-              }}
-            />
-          ),
-        },
-      }}
-    />
-  </div>
-);
-
-
+  return (
+    <div className="w-full overflow-x-auto mt-6 rounded-lg border border-gray-300 shadow-md">
+      <Table
+        columns={columns}
+        dataSource={requests}
+        rowKey="id"
+        pagination={{ pageSize: 5 }}
+        scroll={{ x: "max-content" }}
+        className="min-w-[600px] sm:min-w-full"
+        components={{
+          header: {
+            cell: (props) => (
+              <th
+                {...props}
+                style={{
+                  ...props.style,
+                  backgroundColor: "#8a0000",
+                  color: "white",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  whiteSpace: "nowrap", 
+                }}
+              />
+            ),
+          },
+        }}
+      />
+    </div>
+  );
 };
 
 export default RequestTable;

@@ -41,6 +41,11 @@ export const warehouseAtom = atom({
   default: [],
 });
 
+export const warehouseStockList = atom({
+  key: "warehouseStockList",
+  default: {}, 
+});
+
 export const supplierList = atom({
   key: "supplierList",
   default: [],
