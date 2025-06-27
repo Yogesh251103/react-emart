@@ -13,6 +13,10 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!auth.userName.trim() || !auth.password.trim()) {
+      showSnackBar("Fill in all the fields", "error");
+      return;
+    }
     try {
       const response = await fetchData({
         url: "/auth/login",

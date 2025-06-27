@@ -49,8 +49,8 @@ const ProductTable = ({ supplierId, productName, onEdit }) => {
     },
     {
       title: "Wholesale Price",
-      key: "wholesale_price",
-      dataIndex: "wholesale_price",
+      key: "wholesalePrice",
+      dataIndex: "wholesalePrice",
     },
     {
       title: "Edit",

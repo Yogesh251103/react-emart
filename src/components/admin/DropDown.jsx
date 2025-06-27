@@ -48,7 +48,7 @@ const DropDown = ({
         if (activeItems.length > 0) {
           const valueToSet = selectedValue || activeItems[0].value;
           setSelected(valueToSet);
-          setter(valueToSet); 
+          setter(valueToSet);
         }
       } catch (error) {
         console.error(error);
@@ -68,6 +68,8 @@ const DropDown = ({
     <div>
       <label className="block mb-1 font-semibold">Select {resourceType}</label>
       <Select
+        showSearch
+        optionFilterProp="label"
         placeholder="Select option"
         value={selected}
         onChange={handleChange}
