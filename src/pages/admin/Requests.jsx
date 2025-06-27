@@ -4,7 +4,6 @@ import RequestTable from "@/components/admin/RequestTable";
 import { ConfigProvider, Input, InputNumber, Modal, Tabs } from "antd";
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
-import { PlusOutlined } from "@ant-design/icons";
 
 function Requests() {
   const [warehouseGlobal, setWarehouseGlobal] = useRecoilState(warehouseAtom);
@@ -45,46 +44,12 @@ function Requests() {
         <DropDown
           url="/admin/warehouse"
           method="GET"
-          setter={setProductId}
+          setter={setWarehouseId}
           globalState={warehouseGlobal}
           setGlobalState={setWarehouseGlobal}
         />
-        <button
-          onClick={() => setModalOpen(true)}
-          className="add-button cursor-pointer space-x-2"
-        >
-          <PlusOutlined />
-          Make request
-        </button>
+        
       </div>
-      <Modal
-        title="Make supply request to supplier"
-        centered
-        open={modalOpen}
-        // onOk={handleSaveProduct}
-        onCancel={()=>setModalOpen(false)}
-        okButtonProps={{ style: { backgroundColor: "#FC4C4B" } }}
-      >
-        <DropDown
-          url="/admin/supplier"
-          method="GET"
-          setter={setProductId}
-          globalState={productsGlobal}
-          setGlobalState={setProductsGlobal}
-        />
-        <InputNumber
-            min={1}
-            value={quantity}
-            onChange={setQuantity}
-            className="w-full"
-          />
-        <Input.TextArea
-          rows={3}
-          placeholder="Enter reason"
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-        />
-      </Modal>
       <ConfigProvider
         theme={{
           token: {

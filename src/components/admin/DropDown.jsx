@@ -45,23 +45,10 @@ const DropDown = ({
         const activeItems = formattedData.filter((item) => item.active);
         setOptions(resourceType === "product" ? formattedData : activeItems);
 
-        // if (resourceType === "product" && formattedData.length > 0) {
-        //   if (selectedValue) {
-        //     setSelected(selectedValue);
-        //   } else {
-        //     setSelected(formattedData[0].value);
-        //     setter(formattedData[0].value);
-        //   }
-        //   return;
-        // }
-
         if (activeItems.length > 0) {
-          if (selectedValue) {
-            setSelected(selectedValue);
-          } else {
-            setSelected(activeItems[0].value);
-            setter(activeItems[0].value);
-          }
+          const valueToSet = selectedValue || activeItems[0].value;
+          setSelected(valueToSet);
+          setter(valueToSet); 
         }
       } catch (error) {
         console.error(error);
@@ -69,6 +56,7 @@ const DropDown = ({
     };
 
     fetchDropDownData();
+    return () => console.log("unmounted dropdown");
   }, []);
 
   const handleChange = (value) => {
@@ -78,9 +66,7 @@ const DropDown = ({
 
   return (
     <div>
-      <label className="block mb-1 font-semibold">
-        Select {resourceType}
-      </label>
+      <label className="block mb-1 font-semibold">Select {resourceType}</label>
       <Select
         placeholder="Select option"
         value={selected}

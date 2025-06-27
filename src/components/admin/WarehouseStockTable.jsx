@@ -1,6 +1,5 @@
 import { useEffect, useMemo } from "react";
 import { Table } from "antd";
-import Barcode from "react-barcode";
 import { useRecoilState } from "recoil";
 import { warehouseStockList } from "@/atoms/sampleAtom";
 import useAxios from "@/hooks/useAxios/useAxios";
@@ -12,7 +11,8 @@ const WarehouseStockTable = ({ warehouseId, productName }) => {
   const stockData = stockDataMap[warehouseId] || [];
 
   useEffect(() => {
-    if (!warehouseId|| stockData.length > 0) return;
+    console.log(warehouseId, Object.keys(stockDataMap).length);
+    if (!warehouseId || stockData.length > 0) return;
 
     const token = localStorage.getItem("adminToken");
 
@@ -38,21 +38,20 @@ const WarehouseStockTable = ({ warehouseId, productName }) => {
     };
 
     fetchStock();
-  }, [warehouseId]);
+  }, [warehouseId,stockDataMap]);
 
   const filteredData = useMemo(() => {
     if (!productName.trim()) return stockData;
     return stockData.filter((item) =>
-      item.productName?.toLowerCase().includes(productName.trim().toLowerCase())
+      item.productDTO.name?.toLowerCase().includes(productName.trim().toLowerCase())
     );
   }, [stockData, productName]);
 
   const columns = [
     {
-      title: "Product ID",
-      key: "product_id",
-      dataIndex: "productId",
-      render: (text) => <Barcode className="h-10 w-fit" value={text} />,
+      title: "Product name",
+      key: "product_name",
+      dataIndex: ["productDTO","name"],
     },
     {
       title: "Quantity",

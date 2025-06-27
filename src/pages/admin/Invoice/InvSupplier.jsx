@@ -1,17 +1,21 @@
-import { useEffect } from "react";
-import { Table, Button } from "antd";
+import { useEffect, useState } from "react";
+import { Table, Button, Modal, InputNumber, Input } from "antd";
 import jsPDF from "jspdf";
 import useAxios from "@/hooks/useAxios/useAxios";
 import { useSnackbar } from "@/contexts/SnackbarContexts";
 import { useRecoilState } from "recoil";
-import { supplierInvoice } from "@/atoms/sampleAtom";
+import { productList, supplierInvoice } from "@/atoms/sampleAtom";
 import seal from "@/assets/seal.png";
+import DropDown from "@/components/admin/DropDown";
 
 function InvSupplier() {
   const { fetchData, loading } = useAxios();
   const [supplies, setSupplies] = useRecoilState(supplierInvoice);
   const showSnackBar = useSnackbar();
-  const token = localStorage.getItem("adminToken");
+  const [modalOpen, setModalOpen] = useState(false);const [productsGlobal, setProductsGlobal] = useRecoilState(productList);
+  const [productId, setProductId] = useState(null);
+  const [reason, setReason] = useState("");
+  const [quantity,setQuantity] = useState(0)
 
   useEffect(() => {
     if (!supplies.loaded) {
@@ -20,6 +24,7 @@ function InvSupplier() {
   }, [supplies]);
 
   const getSupplies = async () => {
+    const token = localStorage.getItem("adminToken")
     try {
       const response = await fetchData({
         method: "GET",

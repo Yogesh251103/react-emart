@@ -2,8 +2,14 @@ import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { InputNumber, Modal } from "antd";
-import { productList, supplierList, warehouseAtom } from "@/atoms/sampleAtom";
-import { useRecoilState } from "recoil";
+import {
+  productList,
+  supplierInvoice,
+  supplierList,
+  warehouseAtom,
+  warehouseStockList,
+} from "@/atoms/sampleAtom";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import useAxios from "@/hooks/useAxios/useAxios";
 import { useSnackbar } from "@/contexts/SnackbarContexts";
 import WarehouseStockTable from "@/components/admin/WarehouseStockTable";
@@ -14,13 +20,16 @@ const WarehouseStock = () => {
   const [warehouseId, setWarehouseId] = useState("");
 
   const [warehouseGlobal, setWarehouseGlobal] = useRecoilState(warehouseAtom);
+  const setWarehouseStockGlobal = useSetRecoilState(warehouseStockList);
   const [productGlobal, setProductGlobal] = useRecoilState(productList);
   const [supplierGlobal, setSupplierGlobal] = useRecoilState(supplierList);
 
-  const [formWarehouseId, setFormWarehouseId] = useState("");
-  const [formProductId, setFormProductId] = useState("");
-  const [formSupplierId, setFormSupplierId] = useState("");
-  const [stockQuantity, setStockQuantity] = useState(0);
+  const [supplierInvoiceList, setSupplierInvoiceList] =
+    useRecoilState(supplierInvoice);
+  const [formWarehouseId, setFormWarehouseId] = useState(null);
+  const [formProductId, setFormProductId] = useState(null);
+  const [formSupplierId, setFormSupplierId] = useState(null);
+  const [stockQuantity, setStockQuantity] = useState("");
   const [manufactureDate, setManufactureDate] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
 
@@ -40,44 +49,74 @@ const WarehouseStock = () => {
   };
 
   const handleSaveStock = async () => {
+    // Validate all fields
     if (
       !formProductId ||
       !formSupplierId ||
-      !formWarehouseId ||
-      !stockQuantity ||
+      !warehouseId ||
+      stockQuantity <= 0 ||
       !manufactureDate ||
       !expirationDate
     ) {
-      console.log(payload);
-      showSnackBar("Please fill all required fields", "error");
+      console.log(
+        "product_id:" + formProductId,
+        "supplier id:" + formSupplierId,
+        "warehouse id:" + warehouseId,
+        "quantity:" + stockQuantity,
+        "manufactire :" + manufactureDate,
+        "expiration :" + expirationDate
+      );
+      showSnackBar("All fields must be filled correctly", "error");
+      return;
+    }
+
+    const mfg = new Date(manufactureDate);
+    const exp = new Date(expirationDate);
+    if (mfg >= exp) {
+      showSnackBar("Expiry date must be after manufacture date", "error");
       return;
     }
 
     const token = localStorage.getItem("adminToken");
+    const now = new Date();
 
     const payload = {
       productDTO: { id: formProductId },
       supplierDTO: { id: formSupplierId },
-      warehouseDTO: { id: formWarehouseId },
-      date: dayjs().toISOString(), // current timestamp with offset
-      manufactureDate: dayjs(manufactureDate).toISOString(),
-      expiryDate: dayjs(expirationDate).toISOString(),
+      warehouseDTO: { id: warehouseId },
       quantity: stockQuantity,
+      date: now.toISOString(),
+      manufactureDate: new Date(manufactureDate).toISOString(),
+      expiryDate: new Date(expirationDate).toISOString(),
     };
-    const response = await fetchData({
-      url: "/admin/warehouse/stock",
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      data: payload,
-    });
 
-    if (response) {
-      showSnackBar("Supply added successfully", "success");
-      handleModalCancel();
-    } else if (error) {
-      showSnackBar("Failed to add supply", "error");
+    try {
+      const response = await fetchData({
+        method: "PUT",
+        url: "/admin/warehouse/stock",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: payload,
+      });
+
+      if (response) {
+        showSnackBar("Stock entry added successfully", "success");
+        setModalOpen(false);
+
+        setFormProductId(null);
+        setFormSupplierId(null);
+        setWarehouseId(null);
+        setStockQuantity(0);
+        setManufactureDate("");
+        setExpirationDate("");
+        setWarehouseGlobal
+        setWarehouseStockGlobal({})
+        setSupplierInvoiceList((prev)=>({...prev,loaded:false}));
+      }
+    } catch (error) {
+      console.error(error);
+      showSnackBar("Failed to save stock entry", "error");
     }
   };
 
@@ -111,6 +150,7 @@ const WarehouseStock = () => {
           open={modalOpen}
           onOk={handleSaveStock}
           onCancel={handleModalCancel}
+          destroyOnClose={true}
           okButtonProps={{ style: { backgroundColor: "#FC4C4B" } }}
         >
           <div className="flex flex-col gap-2">
@@ -120,6 +160,7 @@ const WarehouseStock = () => {
               setter={setFormProductId}
               globalState={productGlobal}
               setGlobalState={setProductGlobal}
+              selectedValue={formProductId}
             />
             <DropDown
               url="/admin/supplier"
@@ -127,6 +168,7 @@ const WarehouseStock = () => {
               setter={setFormSupplierId}
               globalState={supplierGlobal}
               setGlobalState={setSupplierGlobal}
+              selectedValue={formSupplierId}
             />
             <DropDown
               url="/admin/warehouse"
@@ -134,6 +176,7 @@ const WarehouseStock = () => {
               setter={setFormWarehouseId}
               globalState={warehouseGlobal}
               setGlobalState={setWarehouseGlobal}
+              selectedValue={formWarehouseId}
             />
 
             <InputNumber
