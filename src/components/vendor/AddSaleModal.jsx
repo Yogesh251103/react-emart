@@ -61,87 +61,106 @@ const AddSaleModal = ({ open, onCancel, onSave, allProducts }) => {
     (p) => !selectedProducts.find((item) => item.product.id === p.id)
   );
 
-  return (
-    <Modal
-      title="Create New Sale"
-      open={open}
-      onCancel={onCancel}
-      onOk={handleSave}
-      okButtonProps={{ style: { backgroundColor: "#FC4C4B" } }}
-      width={600}
-    >
-      <div className="flex flex-col gap-4">
-        <Select
-          placeholder="Select a product"
-          onSelect={handleAddProduct}
-          className="w-full"
-        >
-          {availableOptions.map((product) => (
-            <Select.Option key={product.id} value={product.id}>
-              {product.name}
-            </Select.Option>
-          ))}
-        </Select>
-
-        {selectedProducts.map((item) => (
-          <div
-            key={item.product.id}
-            className="flex items-center justify-between bg-gray-50 p-3 rounded-md border"
-          >
-            <div className="flex items-center gap-3">
-              <img
-                src={item.product.image}
-                alt={item.product.name}
-                className="w-12 h-12 object-cover rounded-md"
-              />
-              <div>
-                <h3 className="font-semibold">{item.product.name}</h3>
-                <p className="text-sm text-gray-500">
-                  Price: Rs {item.product.price}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button
-                size="small"
-                icon={<MinusOutlined />}
-                onClick={() =>
-                  updateQuantity(item.product.id, item.quantity - 1)
-                }
-              />
-              <InputNumber
-                min={1}
-                value={item.quantity}
-                onChange={(val) => updateQuantity(item.product.id, val)}
-                style={{ width: "60px" }}
-              />
-              <Button
-                size="small"
-                icon={<PlusOutlined />}
-                onClick={() =>
-                  updateQuantity(item.product.id, item.quantity + 1)
-                }
-              />
-            </div>
-            <div className="w-20 text-right font-medium">Rs {item.total}</div>
-            <Button
-              danger
-              type="text"
-              onClick={() => handleRemoveProduct(item.product.id)}
-            >
-              ✕
-            </Button>
-          </div>
+ return (
+  <Modal
+    title="Create New Sale"
+    open={open}
+    onCancel={onCancel}
+    onOk={handleSave}
+    okButtonProps={{ style: { backgroundColor: "#FC4C4B" } }}
+    width={600}
+  >
+    <div className="flex flex-col gap-4 max-h-[65vh] overflow-y-auto pr-2">
+      {/* Product Selector */}
+      <Select
+        placeholder="Select a product"
+        onSelect={handleAddProduct}
+        className="w-full"
+      >
+        {availableOptions.map((product) => (
+          <Select.Option key={product.id} value={product.id}>
+            {product.name}
+          </Select.Option>
         ))}
+      </Select>
 
-        {selectedProducts.length > 0 && (
-          <div className="text-right mt-4 font-semibold text-lg">
-            Total: Rs {totalPrice}
+      {/* Selected Products */}
+      {selectedProducts.map((item) => (
+        <div
+          key={item.product.id}
+          className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50 p-3 rounded-md border"
+        >
+          {/* Product Info */}
+          <div className="flex items-center gap-3 w-full sm:w-[40%]">
+            <img
+              src={item.product.image}
+              alt={item.product.name}
+              className="w-12 h-12 object-cover rounded-md"
+            />
+            <div className="text-sm">
+              <h3 className="font-semibold text-sm sm:text-base">
+                {item.product.name}
+              </h3>
+              <p className="text-xs text-gray-500">
+                Price: ₹{item.product.price}
+              </p>
+            </div>
           </div>
-        )}
-      </div>
-    </Modal>
-  );
+
+          {/* Quantity Controls */}
+          <div className="flex items-center gap-2">
+            <Button
+              size="small"
+              className="!w-7 !h-7 flex justify-center items-center"
+              icon={<MinusOutlined style={{ fontSize: "12px" }} />}
+              onClick={() =>
+                updateQuantity(item.product.id, item.quantity - 1)
+              }
+            />
+            <InputNumber
+              min={1}
+              value={item.quantity}
+              onChange={(val) => updateQuantity(item.product.id, val)}
+              className="!w-14 text-center"
+              size="small"
+            />
+            <Button
+              size="small"
+              className="!w-7 !h-7 flex justify-center items-center"
+              icon={<PlusOutlined style={{ fontSize: "12px" }} />}
+              onClick={() =>
+                updateQuantity(item.product.id, item.quantity + 1)
+              }
+            />
+          </div>
+
+          {/* Total Price */}
+          <div className="text-sm font-medium sm:text-right sm:w-[80px]">
+            ₹{item.total}
+          </div>
+
+          {/* Remove Button */}
+          <Button
+            danger
+            type="text"
+            className="sm:ml-2 text-sm"
+            onClick={() => handleRemoveProduct(item.product.id)}
+          >
+            ✕
+          </Button>
+        </div>
+      ))}
+
+      {/* Total Price */}
+      {selectedProducts.length > 0 && (
+        <div className="text-right mt-4 font-semibold text-base sm:text-lg">
+          Total: ₹{totalPrice}
+        </div>
+      )}
+    </div>
+  </Modal>
+);
+
 };
 
 export default AddSaleModal;

@@ -263,14 +263,14 @@ const RequestTable = ({ tabKey, warehouseId }) => {
   ];
 
  return (
-  <div className="overflow-x-auto mt-6 rounded-lg border border-gray-300 shadow-md">
+  <div className="w-full overflow-x-auto mt-6 rounded-lg border border-gray-300 shadow-md">
     <Table
       columns={columns}
       dataSource={requests}
       rowKey="id"
       pagination={{ pageSize: 5 }}
-      scroll={{ x: 'max-content' }} // 👈 for horizontal scroll on smaller screens
-      className="min-w-full"
+      scroll={{ x: 'max-content' }}
+      className="min-w-[600px] sm:min-w-full"
       components={{
         header: {
           cell: (props) => (
@@ -282,6 +282,7 @@ const RequestTable = ({ tabKey, warehouseId }) => {
                 color: "white",
                 fontWeight: "bold",
                 textAlign: "center",
+                whiteSpace: "nowrap", // ensures header text doesn't wrap weirdly
               }}
             />
           ),
@@ -290,6 +291,7 @@ const RequestTable = ({ tabKey, warehouseId }) => {
     />
   </div>
 );
+
 
 };
 

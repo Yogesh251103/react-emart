@@ -100,7 +100,19 @@ const ProductTable = ({ supplierId, productName, onEdit }) => {
     );
   }, [supplierId, productName, dataSource]);
 
-  return <Table columns={columns} dataSource={filteredData} rowKey="id" />;
+  return (
+  <div className="overflow-x-auto">
+    <Table
+      columns={columns}
+      dataSource={filteredData}
+      rowKey="id"
+      scroll={{ x: 'max-content' }} // Enables horizontal scroll if needed
+      pagination={{ pageSize: 5 }} // Optional: you can adjust
+      className="min-w-full"
+    />
+  </div>
+);
+
 };
 
 export default ProductTable;
