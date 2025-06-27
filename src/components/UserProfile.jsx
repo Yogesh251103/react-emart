@@ -43,9 +43,9 @@ function UserProfile({ title, user, setUser, token }) {
       </h1>
 
       {loading ? (
-        <div className="flex justify-center items-center h-60">
-          <Spin size="large" />
-        </div>
+         <div className="flex justify-center items-center h-60" data-testid="loading-spinner">
+    <Spin size="large" />
+  </div>
       ) : (
         <div className="flex flex-col items-center gap-6 w-full max-w-xl mx-auto px-4">
           <img
