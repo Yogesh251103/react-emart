@@ -105,14 +105,20 @@ function IncomingSupply() {
   ];
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Incoming Supplies</h1>
+  <div className="p-4 sm:p-6">
+    <h1 className="text-xl sm:text-2xl font-bold mb-4 text-[#8a0000]">
+      Incoming Supplies
+    </h1>
+
+    <div className="overflow-x-auto">
       <Table
         dataSource={supplies}
         columns={columns}
         rowKey="id"
-        pagination={{ pageSize: 5 }}
-        className="mt-6 border border-gray-200 shadow rounded"
+        pagination={{ pageSize: 5, simple: true }}
+        scroll={{ x: "max-content" }}
+        size="small"
+        className="mt-4 border border-gray-200 shadow rounded min-w-[600px]"
         components={{
           header: {
             cell: (props) => (
@@ -131,7 +137,9 @@ function IncomingSupply() {
         }}
       />
     </div>
-  );
+  </div>
+);
+
 }
 
 export default IncomingSupply;

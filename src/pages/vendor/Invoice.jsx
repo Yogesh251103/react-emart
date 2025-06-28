@@ -1,25 +1,29 @@
-import { useEffect } from "react";
-import { Table, Button } from "antd";
+import { useEffect, useState } from "react";
+import { Table, Button, Modal, Descriptions, Grid } from "antd";
 import jsPDF from "jspdf";
+import seal from "@/assets/seal.png";
 import useAxios from "@/hooks/useAxios/useAxios";
 import { useSnackbar } from "@/contexts/SnackbarContexts";
 import { useRecoilState } from "recoil";
-import seal from "@/assets/seal.png";
 import { outletInvoice } from "@/atoms/vendor-profile";
 
+const { useBreakpoint } = Grid;
+
 function Invoice() {
-  const { fetchData, loading } = useAxios();
+  const { fetchData, loading: fetchLoading } = useAxios();
   const [supplies, setSupplies] = useRecoilState(outletInvoice);
+  const [viewing, setViewing] = useState(null);
   const showSnackBar = useSnackbar();
+  const screens = useBreakpoint();
+  const loading = !supplies.loaded || fetchLoading;
   const token = localStorage.getItem("vendorToken");
 
   useEffect(() => {
-    if (!supplies.loaded) {
-      getSupplies();
-    }
-  }, [supplies]);
+    if (!supplies.loaded) fetchSupplies();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [supplies.loaded]);
 
-  const getSupplies = async () => {
+  const fetchSupplies = async () => {
     try {
       const response = await fetchData({
         method: "GET",
@@ -29,24 +33,20 @@ function Invoice() {
         },
       });
 
-      console.log(response);
-
       if (response) {
-        setSupplies({
-          loaded: true,
-          data: response.map((item, index) => ({
-            key: index + 1,
-            id: item.id,
-            product: item.productDTO?.name || "N/A",
-            warehouse: item.warehouseDTO?.name || "N/A",
-            outlet: item.outletDTO?.name || "N/A",
-            type: item.type || "N/A",
-            quantity: item.quantity || 0,
-            manufactureDate: item.manufactureDate?.slice(0, 10) || "N/A",
-            expiryDate: item.expiryDate?.slice(0, 10) || "N/A",
-            date: item.date?.slice(0, 10) || "N/A",
-          })),
-        });
+        const formatted = response.map((item, index) => ({
+          key: index + 1,
+          id: item.id,
+          product: item.productDTO?.name || "N/A",
+          warehouse: item.warehouseDTO?.name || "N/A",
+          outlet: item.outletDTO?.name || "N/A",
+          type: item.type || "N/A",
+          quantity: item.quantity || 0,
+          manufactureDate: item.manufactureDate?.slice(0, 10) || "N/A",
+          expiryDate: item.expiryDate?.slice(0, 10) || "N/A",
+          date: item.date?.slice(0, 10) || "N/A",
+        }));
+        setSupplies({ loaded: true, data: formatted });
       }
     } catch (err) {
       showSnackBar("Failed to fetch outlet invoice data", "error");
@@ -72,32 +72,20 @@ function Invoice() {
     currentY += 20;
 
     const pairs = [
-      [
-        ["Product", supply.product],
-        ["Warehouse", supply.warehouse],
-      ],
-      [
-        ["Outlet", supply.outlet],
-        ["Type", supply.type],
-      ],
-      [
-        ["Quantity", `${supply.quantity} units`],
-        ["Mfg Date", supply.manufactureDate],
-      ],
-      [
-        ["Exp Date", supply.expiryDate],
-        ["Supplied On", supply.date],
-      ],
+      [["Product", supply.product], ["Warehouse", supply.warehouse]],
+      [["Outlet", supply.outlet], ["Type", supply.type]],
+      [["Quantity", `${supply.quantity} units`], ["Mfg Date", supply.manufactureDate]],
+      [["Exp Date", supply.expiryDate], ["Supplied On", supply.date]],
     ];
 
-    pairs.forEach(([leftPair, rightPair]) => {
+    pairs.forEach(([left, right]) => {
       doc.setFont(undefined, "bold");
-      doc.text(`${leftPair[0]}:`, leftX, currentY);
-      doc.text(`${rightPair[0]}:`, rightX, currentY);
+      doc.text(`${left[0]}:`, leftX, currentY);
+      doc.text(`${right[0]}:`, rightX, currentY);
 
       doc.setFont(undefined, "normal");
-      doc.text(leftPair[1].toString(), leftX + 40, currentY);
-      doc.text(rightPair[1].toString(), rightX + 40, currentY);
+      doc.text(left[1].toString(), leftX + 40, currentY);
+      doc.text(right[1].toString(), rightX + 40, currentY);
 
       currentY += gap;
     });
@@ -114,12 +102,9 @@ function Invoice() {
         sealY
       );
 
-      // Add seal image
       doc.addImage(img, "PNG", 150, sealY - 5, 40, 40);
 
-      // Footer
-      const now = new Date();
-      const timestamp = now.toLocaleString("en-IN", {
+      const timestamp = new Date().toLocaleString("en-IN", {
         dateStyle: "medium",
         timeStyle: "short",
       });
@@ -134,40 +119,63 @@ function Invoice() {
 
   const columns = [
     { title: "Product", dataIndex: "product", key: "product" },
-    { title: "Warehouse", dataIndex: "warehouse", key: "warehouse" },
-    { title: "Outlet", dataIndex: "outlet", key: "outlet" },
-    { title: "Type", dataIndex: "type", key: "type" },
     { title: "Quantity", dataIndex: "quantity", key: "quantity" },
-    { title: "Mfg Date", dataIndex: "manufactureDate", key: "manufactureDate" },
-    { title: "Exp Date", dataIndex: "expiryDate", key: "expiryDate" },
     { title: "Supplied On", dataIndex: "date", key: "date" },
+    { title: "Warehouse", dataIndex: "warehouse", key: "warehouse", responsive: ["md"] },
+    { title: "Outlet", dataIndex: "outlet", key: "outlet", responsive: ["md"] },
+    { title: "Type", dataIndex: "type", key: "type", responsive: ["md"] },
+    { title: "Mfg Date", dataIndex: "manufactureDate", key: "manufactureDate", responsive: ["md"] },
+    { title: "Exp Date", dataIndex: "expiryDate", key: "expiryDate", responsive: ["md"] },
     {
       title: "Invoice",
       key: "action",
       render: (_, record) => (
-        <Button
-          size="small"
-          type="primary"
-          style={{ background: "#8a0000", color: "white", padding: 14 }}
-          onClick={() => handleDownloadPDF(record)}
-        >
-          Download
-        </Button>
+        <>
+          {!screens.md && (
+            <Button size="small" type="default" className="mr-2" onClick={() => setViewing(record)}>
+              View
+            </Button>
+          )}
+          <Button
+            size="small"
+            type="primary"
+            style={{ background: "#8a0000", color: "white" }}
+            onClick={() => handleDownloadPDF(record)}
+          >
+            Download
+          </Button>
+        </>
       ),
     },
   ];
 
+  const tableClass = screens.md
+    ? "min-w-[800px] border border-gray-300 shadow rounded"
+    : "border border-gray-300 shadow rounded";
+
+  const tableSize = screens.md ? "middle" : "small";
+  const pagination = screens.md ? { pageSize: 5 } : { pageSize: 5, simple: true };
+
   return (
-    <div>
-      <div className="flex justify-between items-center px-5 pt-5">
-        <h1 className="md:text-2xl font-bold">Warehouse to Outlet Invoices</h1>
+    <div className="p-4 sm:p-6">
+      {/* Title */}
+      <div className="flex justify-between items-center pb-4">
+        <h1 className="text-lg sm:text-2xl font-bold text-[#8a0000]">
+          Warehouse to Outlet Invoices
+        </h1>
       </div>
-      <div className="p-5">
+
+      {/* Table */}
+      <div className="overflow-x-auto">
         <Table
-          className="border-2 border-grey shadow-sm rounded-lg"
+          rowKey="key"
+          size={tableSize}
           loading={loading}
           dataSource={supplies.data}
           columns={columns}
+          pagination={pagination}
+          scroll={{ x: screens.md ? "max-content" : false }}
+          className={tableClass}
           components={{
             header: {
               cell: (props) => (
@@ -178,6 +186,7 @@ function Invoice() {
                     backgroundColor: "#8a0000",
                     color: "white",
                     fontWeight: "bold",
+                    textAlign: "center",
                   }}
                 />
               ),
@@ -185,6 +194,27 @@ function Invoice() {
           }}
         />
       </div>
+
+      {/* Mobile Modal View */}
+      <Modal
+        title="Invoice Details"
+        open={!!viewing}
+        onCancel={() => setViewing(null)}
+        footer={null}
+      >
+        {viewing && (
+          <Descriptions bordered size="small" column={1} labelStyle={{ fontWeight: 600 }}>
+            <Descriptions.Item label="Product">{viewing.product}</Descriptions.Item>
+            <Descriptions.Item label="Warehouse">{viewing.warehouse}</Descriptions.Item>
+            <Descriptions.Item label="Outlet">{viewing.outlet}</Descriptions.Item>
+            <Descriptions.Item label="Type">{viewing.type}</Descriptions.Item>
+            <Descriptions.Item label="Quantity">{viewing.quantity}</Descriptions.Item>
+            <Descriptions.Item label="Mfg Date">{viewing.manufactureDate}</Descriptions.Item>
+            <Descriptions.Item label="Exp Date">{viewing.expiryDate}</Descriptions.Item>
+            <Descriptions.Item label="Supplied On">{viewing.date}</Descriptions.Item>
+          </Descriptions>
+        )}
+      </Modal>
     </div>
   );
 }

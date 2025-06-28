@@ -63,7 +63,7 @@ const useAxios = () => {
     } catch (err) {
       const status = err.response?.status;
       const message = err.response?.data?.message;
-
+      console.log(err)
       if (
         status === 401 &&
         message !== "Invalid Credentials" &&
@@ -77,7 +77,7 @@ const useAxios = () => {
             {},
             {
               headers: {
-                Authorization: `Bearer ${refreshToken}`,
+                Authorization: `Bearer ${token}`,
               },
             }
           );
