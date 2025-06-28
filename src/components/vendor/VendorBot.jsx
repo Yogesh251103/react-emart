@@ -5,9 +5,11 @@ import React, { useEffect, useState } from 'react'
 function VendorBot() {
   const { fetchData} = useAxios();
   const showSnackbar = useSnackbar();
-  const [insightData,setInsightData] = useState([])
   const [insights,setInsights] = useState([])
   const token = localStorage.getItem("vendorToken")
+  useEffect(()=>{
+    
+  })
   const fetchInsights = async ()=> {
     try {
       const insightsRes = await fetchData({
@@ -19,13 +21,13 @@ function VendorBot() {
       })
       if (insightsRes){
         console.log(insightsRes)
-        setInsightData(insightsRes)
+        // setInsightData(insightsRes)
         try {
-          console.log("Fetched Data",insightData)
+          console.log("Fetched Data",insightsRes)
           const groqRes = await fetchData({
             method: "POST",
             url: `${import.meta.env.VITE_APP_GROQ_API}/groq`,
-            data: insightData
+            data: insightsRes 
           })
           if(groqRes){
             console.log("Groq response",groqRes);
@@ -39,7 +41,6 @@ function VendorBot() {
     } 
     catch (err) {
       showSnackbar(err?.message || "Error fetching insights", 'error')
-
     }
   }
   return (
@@ -50,5 +51,4 @@ function VendorBot() {
     </div>
   )
 }
-
 export default VendorBot
