@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
+import { FileExcelOutlined, PlusOutlined } from "@ant-design/icons";
 import { InputNumber, Modal } from "antd";
 import {
   productList,
   supplierInvoice,
-  supplierList,
   warehouseAtom,
   warehouseStockList,
 } from "@/atoms/sampleAtom";
@@ -22,17 +20,21 @@ const WarehouseStock = () => {
   const [warehouseGlobal, setWarehouseGlobal] = useRecoilState(warehouseAtom);
   const setWarehouseStockGlobal = useSetRecoilState(warehouseStockList);
   const [productGlobal, setProductGlobal] = useRecoilState(productList);
-  const [supplierInvoiceList, setSupplierInvoiceList] =
-    useRecoilState(supplierInvoice);
+
+  const setSupplierInvoiceList = useSetRecoilState(supplierInvoice);
+
   const [formWarehouseId, setFormWarehouseId] = useState(null);
   const [formProductId, setFormProductId] = useState(null);
   const [stockQuantity, setStockQuantity] = useState("");
   const [manufactureDate, setManufactureDate] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
+  const [csvFile, setCsvFile] = useState(null);
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [csvModalOpen, setCsvModalOpen] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
-  const { fetchData, error } = useAxios();
+  const { fetchData } = useAxios();
   const showSnackBar = useSnackbar();
 
   const handleModalCancel = () => {
@@ -96,11 +98,60 @@ const WarehouseStock = () => {
         setExpirationDate("");
         setWarehouseStockGlobal({});
         setSupplierInvoiceList((prev) => ({ ...prev, loaded: false }));
+
+        setInput("")
       }
     } catch (error) {
       console.error(error);
       showSnackBar("Failed to save stock entry", "error");
     }
+  };
+
+  const handleCSVUpload = async () => {
+    if (!csvFile) {
+      showSnackBar("Select a CSV file to be uploaded", "error");
+      return;
+    }
+    const isCSV = csvFile.type === "text/csv" || csvFile.name.endsWith(".csv");
+    if (!isCSV) {
+      showSnackBar("You can only upload CSV files!", "error");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", csvFile);
+
+    setUploading(true);
+
+    try {
+      const token = localStorage.getItem("adminToken");
+
+      const response = await fetchData({
+        url: "admin/warehouse/upload-csv",
+        method: "PUT",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response);
+
+      showSnackBar("Stocks updated successfully!", "success");
+      setCsvModalOpen(false);
+      setCsvFile(null);
+    } catch (error) {
+      console.error("Upload failed", error);
+      showSnackBar("Stocks update failed!", "error");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleCSVUploadModalCancel = () => {
+    setCsvFile(null);
+    setCsvModalOpen(false);
+    setUploading(false);
   };
 
   return (
@@ -127,13 +178,33 @@ const WarehouseStock = () => {
           <PlusOutlined />
           Add Stock Entry
         </button>
+        <button
+          onClick={() => setCsvModalOpen(true)}
+          className="csv-add-button cursor-pointer"
+        >
+          <FileExcelOutlined />
+          Upload CSV
+        </button>
+        <Modal
+          title="Upload supplies as CSV file"
+          centered
+          open={csvModalOpen}
+          onCancel={handleCSVUploadModalCancel}
+          onOk={handleCSVUpload}
+          confirmLoading={uploading}
+          okText="Upload"
+          destroyOnHidden
+          okButtonProps={{ style: { backgroundColor: "#008236" } }}
+        >
+          <input type="file" onChange={(e) => setCsvFile(e.target.files[0])} className="input"/>
+        </Modal>
         <Modal
           title="Add Stock Entry"
           centered
           open={modalOpen}
           onOk={handleSaveStock}
           onCancel={handleModalCancel}
-          destroyOnClose={true}
+          destroyOnHidden
           okButtonProps={{ style: { backgroundColor: "#FC4C4B" } }}
         >
           <div className="flex flex-col gap-2">
@@ -181,7 +252,7 @@ const WarehouseStock = () => {
         </Modal>
       </div>
 
-      <WarehouseStockTable warehouseId={warehouseId} productName={input} />
+      <WarehouseStockTable warehouseId={warehouseId} productName={input}/>
     </div>
   );
 };

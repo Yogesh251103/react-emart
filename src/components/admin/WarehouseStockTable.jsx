@@ -11,7 +11,6 @@ const WarehouseStockTable = ({ warehouseId, productName }) => {
   const stockData = stockDataMap[warehouseId] || [];
 
   useEffect(() => {
-    console.log(warehouseId, Object.keys(stockDataMap).length);
     if (!warehouseId || stockData.length > 0) return;
 
     const token = localStorage.getItem("adminToken");
@@ -25,7 +24,6 @@ const WarehouseStockTable = ({ warehouseId, productName }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-
         if (response) {
           setStockDataMap((prev) => ({
             ...prev,
