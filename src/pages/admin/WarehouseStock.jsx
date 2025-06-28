@@ -22,13 +22,10 @@ const WarehouseStock = () => {
   const [warehouseGlobal, setWarehouseGlobal] = useRecoilState(warehouseAtom);
   const setWarehouseStockGlobal = useSetRecoilState(warehouseStockList);
   const [productGlobal, setProductGlobal] = useRecoilState(productList);
-  const [supplierGlobal, setSupplierGlobal] = useRecoilState(supplierList);
-
   const [supplierInvoiceList, setSupplierInvoiceList] =
     useRecoilState(supplierInvoice);
   const [formWarehouseId, setFormWarehouseId] = useState(null);
   const [formProductId, setFormProductId] = useState(null);
-  const [formSupplierId, setFormSupplierId] = useState(null);
   const [stockQuantity, setStockQuantity] = useState("");
   const [manufactureDate, setManufactureDate] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
@@ -42,30 +39,19 @@ const WarehouseStock = () => {
     setModalOpen(false);
     setFormWarehouseId("");
     setFormProductId("");
-    setFormSupplierId("");
     setStockQuantity(0);
     setManufactureDate("");
     setExpirationDate("");
   };
 
   const handleSaveStock = async () => {
-    // Validate all fields
     if (
       !formProductId ||
-      !formSupplierId ||
       !warehouseId ||
       stockQuantity <= 0 ||
       !manufactureDate ||
       !expirationDate
     ) {
-      console.log(
-        "product_id:" + formProductId,
-        "supplier id:" + formSupplierId,
-        "warehouse id:" + warehouseId,
-        "quantity:" + stockQuantity,
-        "manufactire :" + manufactureDate,
-        "expiration :" + expirationDate
-      );
       showSnackBar("All fields must be filled correctly", "error");
       return;
     }
@@ -82,7 +68,6 @@ const WarehouseStock = () => {
 
     const payload = {
       productDTO: { id: formProductId },
-      supplierDTO: { id: formSupplierId },
       warehouseDTO: { id: warehouseId },
       quantity: stockQuantity,
       date: now.toISOString(),
@@ -105,14 +90,12 @@ const WarehouseStock = () => {
         setModalOpen(false);
 
         setFormProductId(null);
-        setFormSupplierId(null);
         setFormWarehouseId(null);
         setStockQuantity(0);
         setManufactureDate("");
         setExpirationDate("");
-        setWarehouseGlobal
-        setWarehouseStockGlobal({})
-        setSupplierInvoiceList((prev)=>({...prev,loaded:false}));
+        setWarehouseStockGlobal({});
+        setSupplierInvoiceList((prev) => ({ ...prev, loaded: false }));
       }
     } catch (error) {
       console.error(error);
@@ -161,14 +144,6 @@ const WarehouseStock = () => {
               globalState={productGlobal}
               setGlobalState={setProductGlobal}
               selectedValue={formProductId}
-            />
-            <DropDown
-              url="/admin/supplier"
-              method="GET"
-              setter={setFormSupplierId}
-              globalState={supplierGlobal}
-              setGlobalState={setSupplierGlobal}
-              selectedValue={formSupplierId}
             />
             <DropDown
               url="/admin/warehouse"
