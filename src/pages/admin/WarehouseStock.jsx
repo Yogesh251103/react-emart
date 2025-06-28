@@ -127,7 +127,7 @@ const WarehouseStock = () => {
       const token = localStorage.getItem("adminToken");
 
       const response = await fetchData({
-        url: "admin/warehouse/upload-csv",
+        url: "admin/warehouse/stock/upload-csv",
         method: "PUT",
         data: formData,
         headers: {
