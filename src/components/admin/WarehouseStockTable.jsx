@@ -38,12 +38,14 @@ const WarehouseStockTable = ({ warehouseId, productName }) => {
     };
 
     fetchStock();
-  }, [warehouseId,stockDataMap]);
+  }, [warehouseId, stockDataMap]);
 
   const filteredData = useMemo(() => {
     if (!productName.trim()) return stockData;
     return stockData.filter((item) =>
-      item.productDTO.name?.toLowerCase().includes(productName.trim().toLowerCase())
+      item.productDTO.name
+        ?.toLowerCase()
+        .includes(productName.trim().toLowerCase())
     );
   }, [stockData, productName]);
 
@@ -51,7 +53,7 @@ const WarehouseStockTable = ({ warehouseId, productName }) => {
     {
       title: "Product name",
       key: "product_name",
-      dataIndex: ["productDTO","name"],
+      dataIndex: ["productDTO", "name"],
     },
     {
       title: "Quantity",
@@ -60,7 +62,14 @@ const WarehouseStockTable = ({ warehouseId, productName }) => {
     },
   ];
 
-  return <Table columns={columns} dataSource={filteredData} rowKey="product_id" />;
+  return (
+    <Table
+      columns={columns}
+      pagination={{ pageSize: 6 }}
+      dataSource={filteredData}
+      rowKey="product_id"
+    />
+  );
 };
 
 export default WarehouseStockTable;
