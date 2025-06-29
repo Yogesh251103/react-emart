@@ -9,7 +9,7 @@ import useAxios from "../../../hooks/useAxios/useAxios";
 import { useSnackbar } from "../../../contexts/SnackbarContexts";
 import uploadImage from "@/utils/uploadImage";
 
-const unitOptions = ["kg", "ltr", "pcs", "box", "g", "ml"];
+const unitOptions = ["kg", "ltr", "pkt", "pcs", "g", "ml"];
 const categoryOptions = [
   "Vegetables",
   "Fruits",
