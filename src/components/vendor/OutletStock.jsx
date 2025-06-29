@@ -84,7 +84,7 @@ function OutletStock() {
                   <strong>Category:</strong> <span>{product.category}</span>
                 </p>
                 <p className="flex justify-between">
-                  <strong>Stock:</strong> <span>{item.quantity} Units</span>
+                  <strong>Stock:</strong> <span>{item.quantity} {product.unit.toUpperCase()}</span>
                 </p>
                 <p className="flex justify-between">
                   <strong>Outlet:</strong> <span>{outlet.name}</span>

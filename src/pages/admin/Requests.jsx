@@ -1,7 +1,7 @@
-import { productList, warehouseAtom } from "@/atoms/sampleAtom";
+import { warehouseAtom } from "@/atoms/sampleAtom";
 import DropDown from "@/components/admin/DropDown";
 import RequestTable from "@/components/admin/RequestTable";
-import { ConfigProvider, Input, InputNumber, Modal, Tabs } from "antd";
+import { ConfigProvider, Tabs } from "antd";
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 
@@ -9,11 +9,6 @@ function Requests() {
   const [warehouseGlobal, setWarehouseGlobal] = useRecoilState(warehouseAtom);
   const [warehouseId, setWarehouseId] = useState(null);
   const [activeTabKey, setActiveTabKey] = useState("restocking");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [productsGlobal, setProductsGlobal] = useRecoilState(productList);
-  const [productId, setProductId] = useState(null);
-  const [reason, setReason] = useState("");
-  const [quantity,setQuantity] = useState(0)
 
   const items = [
     {

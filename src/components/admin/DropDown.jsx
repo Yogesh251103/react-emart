@@ -56,7 +56,6 @@ const DropDown = ({
     };
 
     fetchDropDownData();
-    return () => console.log("unmounted dropdown");
   }, []);
 
   const handleChange = (value) => {

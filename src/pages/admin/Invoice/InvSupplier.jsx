@@ -20,7 +20,7 @@ function InvSupplier() {
   }, [supplies]);
 
   const getSupplies = async () => {
-    const token = localStorage.getItem("adminToken")
+    const token = localStorage.getItem("adminToken");
     try {
       const response = await fetchData({
         method: "GET",
@@ -41,6 +41,7 @@ function InvSupplier() {
             warehouse: item.warehouseDTO?.name || "N/A",
             type: item.type || "N/A",
             quantity: item.quantity || 0,
+            unit: item.productDTO?.unit || "units",
             manufactureDate: item.manufactureDate?.slice(0, 10) || "N/A",
             expiryDate: item.expiryDate?.slice(0, 10) || "N/A",
             date: item.date?.slice(0, 10) || "N/A",
@@ -80,7 +81,7 @@ function InvSupplier() {
         ["Type", supply.type],
       ],
       [
-        ["Quantity", `${supply.quantity} units`],
+        ["Quantity", `${supply.quantity} ${supply.unit}`],
         ["Mfg Date", supply.manufactureDate],
       ],
       [
