@@ -30,5 +30,9 @@
 }
 
 .add-button {
-  @apply p-3 bg-red-700 rounded-lg text-white;
+  @apply flex gap-2 p-3 bg-red-700 rounded-lg text-white;
+}
+
+.csv-add-button{
+  @apply flex gap-2 p-3 bg-green-700 rounded-lg text-white;
 }

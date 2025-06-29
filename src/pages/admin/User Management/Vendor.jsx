@@ -11,11 +11,12 @@ const { Option } = Select;
 import { UploadOutlined } from "@ant-design/icons";
 
 function Vendor() {
-  const { fetchData, loading } = useAxios();
+  const { fetchData } = useAxios();
   const token = localStorage.getItem("adminToken");
+  const [loading, setLoading] = useState(false);
   const showSnackBar = useSnackbar();
   const [outletId, setOutletId] = useState("");
-
+  const [imageFile, setImageFile] = useState(null);
   const [outletsList, setOutletsList] = useRecoilState(outletList);
   const [vendorList, setVendorList] = useState([]);
   const [vendorData, setVendorData] = useState({
@@ -74,6 +75,7 @@ function Vendor() {
       outletId: "",
       active: true,
     });
+    setImageFile(null)
     setIsEditing(false);
     setModalOpen(false);
     setOutletId("");
@@ -83,8 +85,14 @@ function Vendor() {
     const { image, name, email, phone, username, password, active, outletId } =
       vendorData;
 
+    let imageUrl = image;
+
+    if (imageFile) {
+      imageUrl = await uploadImage("Vendor Image", imageFile);
+    }
+
     if (
-      !image ||
+      !imageUrl ||
       !name ||
       !email ||
       !phone ||
@@ -97,7 +105,7 @@ function Vendor() {
     }
 
     const reqData = {
-      image: image,
+      image: imageUrl,
       name,
       username,
       email,
@@ -105,7 +113,7 @@ function Vendor() {
       outletId,
       ...(isEditing ? { id: vendorData.id, active } : { password }),
     };
-    console.log(reqData);
+    setLoading(true)
     try {
       const response = await fetchData({
         method: isEditing ? "PUT" : "POST",
@@ -129,7 +137,11 @@ function Vendor() {
     } catch (error) {
       showSnackBar(error.message || "Operation failed", "error");
     }
+    finally{
+      setLoading(false)
+    }
   };
+
   const filteredVendors = vendorList.filter((vendors) =>
     `${vendors.name} ${vendors.username} ${vendors.email}`
       .toLowerCase()
@@ -229,6 +241,7 @@ function Vendor() {
         <button
           onClick={() => {
             resetForm();
+            
             setModalOpen(true);
           }}
           className="flex flex-row justify-center items-center p-2 bg-[#800] rounded-md text-white cursor-pointer"
@@ -242,6 +255,7 @@ function Vendor() {
         centered
         open={modalOpen}
         onOk={addOrEditVendor}
+        confirmLoading={loading}
         onCancel={resetForm}
         okButtonProps={{ style: { backgroundColor: "#fc4c4b" } }}
       >
@@ -249,23 +263,26 @@ function Vendor() {
           <div className="flex flex-col md:col-span-2">
             <label className="mb-1 font-medium">Vendor Logo:</label>
             <div className="flex items-center gap-4">
-              <img
-                src={vendorData.image || "/default-avatar.png"}
-                alt="Vendor Logo Preview"
-                className="w-20 h-20 object-cover rounded-md border"
-              />
+              {imageFile ? (
+                <img
+                  src={URL.createObjectURL(imageFile)}
+                  alt="Preview"
+                  className="w-32 h-32 object-cover rounded"
+                />
+              ) : (
+                vendorData.image && (
+                  <img
+                    src={vendorData.image}
+                    alt="Current"
+                    className="w-32 h-32 object-cover rounded"
+                  />
+                )
+              )}
               <Upload
-                accept="image/*"
                 showUploadList={false}
-                customRequest={async ({ file, onSuccess, onError }) => {
-                  try {
-                    const url = await uploadImage("vendorImages", file);
-                    setVendorData((prev) => ({ ...prev, image: url }));
-                    onSuccess(null, file);
-                  } catch (err) {
-                    console.error("Upload failed", err);
-                    onError(err);
-                  }
+                beforeUpload={(file) => {
+                  setImageFile(file);
+                  return false;
                 }}
               >
                 <Button icon={<UploadOutlined />}>Upload</Button>

@@ -13,11 +13,12 @@ const { Option } = Select;
 function Supplier() {
   const [suppliersList, setSuppliersList] = useRecoilState(supplierList);
   const [searchQuery, setSearchQuery] = useState("");
-  const [uploading, setUploading] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [supplierData, setSupplierData] = useState(getInitialFormState());
   const [modalOpen, setModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const { fetchData, loading } = useAxios();
+  const { fetchData } = useAxios();
   const showSnackBar = useSnackbar();
   const token = localStorage.getItem("adminToken");
 
@@ -123,32 +124,28 @@ function Supplier() {
   };
 
   const addOrEditSupplier = async () => {
-    if (uploading) {
+    if (loading) {
       showSnackBar("Please wait for the logo to finish uploading", "error");
       return;
     }
 
-    const { id, logo, name, email, phone, address, taxNumber, active } =
-      supplierData;
-
-    console.log("Submitting data:", {
-      id,
-      logo,
-      name,
-      email,
-      phone,
-      address,
-      taxNumber,
-      active,
-    });
+    const { id, name, email, phone, address, taxNumber, active } = supplierData;
 
     try {
+      setLoading(true);
+
+      let logoUrl = supplierData.logo;
+
+      if (imageFile) {
+        logoUrl = await uploadImage("Supplier",imageFile);
+      }
+
       const response = await fetchData({
         method: isEditing ? "PUT" : "POST",
         url: "/admin/supplier",
         data: {
           id,
-          logo,
+          logo: logoUrl,
           name,
           email,
           phone,
@@ -158,8 +155,6 @@ function Supplier() {
         },
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      console.log("Server response:", response);
 
       if (response) {
         showSnackBar(
@@ -174,6 +169,9 @@ function Supplier() {
     } catch (error) {
       console.error("Error:", error);
       showSnackBar(error.message || "Operation failed", "error");
+    } finally {
+      setLoading(false);
+      setImageFile(null); // clear after upload
     }
   };
 
@@ -218,49 +216,36 @@ function Supplier() {
         onCancel={resetForm}
         okButtonProps={{
           style: { backgroundColor: "#fc4c4b" },
-          disabled: uploading,
+          loading,
         }}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
           <div className="flex flex-col md:col-span-2">
             <label className="mb-1 font-medium">Supplier Logo:</label>
             <div className="flex items-center gap-4">
-              <img
-                src={supplierData.logo || "/default-avatar.png"}
-                alt="Supplier Logo Preview"
-                className="w-20 h-20 object-cover rounded-md border"
-              />
+              {imageFile ? (
+                <img
+                  src={URL.createObjectURL(imageFile)}
+                  alt="Preview"
+                  className="w-32 h-32 object-cover rounded"
+                />
+              ) : (
+                supplierData.logo && (
+                  <img
+                    src={supplierData.logo}
+                    alt="Current"
+                    className="w-32 h-32 object-cover rounded"
+                  />
+                )
+              )}
               <Upload
-                accept="image/*"
-                showUploadList={false}
-                customRequest={async ({ file, onSuccess, onError }) => {
-                  try {
-                    setUploading(true);
-                    console.log("Uploading file:", file.name);
-                    const url = await uploadImage("supplierImage", file);
-                    console.log("Received URL from upload:", url);
-
-                    if (!url) {
-                      throw new Error("No URL returned from upload");
-                    }
-
-                    setSupplierData((prev) => {
-                      console.log("Updating logo from", prev.logo, "to", url);
-                      return { ...prev, logo: url };
-                    });
-                    onSuccess(null, file);
-                  } catch (err) {
-                    console.error("Upload error:", err);
-                    onError?.(err);
-                    showSnackBar("Failed to upload image", "error");
-                  } finally {
-                    setUploading(false);
-                  }
+                beforeUpload={(file) => {
+                  setImageFile(file);
+                  return false;
                 }}
+                showUploadList={false}
               >
-                <Button icon={<UploadOutlined />} loading={uploading}>
-                  Upload
-                </Button>
+                <Button icon={<UploadOutlined />}>Upload</Button>
               </Upload>
             </div>
           </div>
